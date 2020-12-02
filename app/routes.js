@@ -24,7 +24,7 @@ import TableList from 'containers/Layouts/TableList';
 import Typography from 'containers/Layouts/Typography';
 import UserProfile from 'containers/Layouts/UserProfile';
 
-var routes = [
+const routes = [
   {
     path: '/dashboard',
     name: 'Dashboard',

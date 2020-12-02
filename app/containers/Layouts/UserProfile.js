@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React from 'react';
 
 // reactstrap components
 import {
@@ -29,8 +29,8 @@ import {
   Form,
   Input,
   Row,
-  Col
-} from "reactstrap";
+  Col,
+} from 'reactstrap';
 
 class UserProfile extends React.Component {
   render() {
@@ -175,7 +175,7 @@ class UserProfile extends React.Component {
                       <img
                         alt="..."
                         className="avatar"
-                        src={require("assets/img/emilyz.jpg")}
+                        src={require('assets/img/emilyz.jpg')}
                       />
                       <h5 className="title">Mike Andrew</h5>
                     </a>

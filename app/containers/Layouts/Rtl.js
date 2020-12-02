@@ -57,11 +57,13 @@ class Rtl extends React.Component {
       bigChartData: 'data1',
     };
   }
+
   setBgChartData = name => {
     this.setState({
       bigChartData: name,
     });
   };
+
   render() {
     return (
       <>
@@ -229,7 +231,7 @@ class Rtl extends React.Component {
                   <UncontrolledDropdown className="float-left">
                     <DropdownToggle
                       aria-expanded={false}
-                      aria-haspopup={true}
+                      aria-haspopup
                       caret
                       color="link"
                       data-toggle="dropdown"

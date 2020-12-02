@@ -30,7 +30,7 @@ import routes from 'routes';
 
 import logo from 'assets/img/react-logo.png';
 
-var ps;
+let ps;
 
 class Admin extends React.Component {
   constructor(props) {
@@ -41,12 +41,13 @@ class Admin extends React.Component {
         document.documentElement.className.indexOf('nav-open') !== -1,
     };
   }
+
   componentDidMount() {
     if (navigator.platform.indexOf('Win') > -1) {
       document.documentElement.className += ' perfect-scrollbar-on';
       document.documentElement.classList.remove('perfect-scrollbar-off');
       ps = new PerfectScrollbar(this.refs.mainPanel, { suppressScrollX: true });
-      let tables = document.querySelectorAll('.table-responsive');
+      const tables = document.querySelectorAll('.table-responsive');
       for (let i = 0; i < tables.length; i++) {
         ps = new PerfectScrollbar(tables[i]);
       }
@@ -55,8 +56,8 @@ class Admin extends React.Component {
     document.body.classList.add('rtl', 'menu-on-right');
     // we also need the rtl bootstrap
     // so we add it dynamically to the head
-    let head = document.head;
-    let link = document.createElement('link');
+    const { head } = document;
+    const link = document.createElement('link');
     link.type = 'text/css';
     link.rel = 'stylesheet';
     link.id = 'rtl-id';
@@ -64,6 +65,7 @@ class Admin extends React.Component {
       'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-rtl/3.4.0/css/bootstrap-rtl.css';
     head.appendChild(link);
   }
+
   componentWillUnmount() {
     if (navigator.platform.indexOf('Win') > -1) {
       ps.destroy();
@@ -77,10 +79,11 @@ class Admin extends React.Component {
     // that do not make use of rtl
     document.getElementById('rtl-id').remove();
   }
+
   componentDidUpdate(e) {
     if (e.history.action === 'PUSH') {
       if (navigator.platform.indexOf('Win') > -1) {
-        let tables = document.querySelectorAll('.table-responsive');
+        const tables = document.querySelectorAll('.table-responsive');
         for (let i = 0; i < tables.length; i++) {
           ps = new PerfectScrollbar(tables[i]);
         }
@@ -90,13 +93,15 @@ class Admin extends React.Component {
       this.refs.mainPanel.scrollTop = 0;
     }
   }
+
   // this function opens and closes the sidebar on small devices
   toggleSidebar = () => {
     document.documentElement.classList.toggle('nav-open');
     this.setState({ sidebarOpened: !this.state.sidebarOpened });
   };
-  getRoutes = routes => {
-    return routes.map((prop, key) => {
+
+  getRoutes = routes =>
+    routes.map((prop, key) => {
       if (prop.layout === '/rtl') {
         return (
           <Route
@@ -105,14 +110,14 @@ class Admin extends React.Component {
             key={key}
           />
         );
-      } else {
-        return null;
       }
+      return null;
     });
-  };
+
   handleBgClick = color => {
     this.setState({ backgroundColor: color });
   };
+
   getBrandText = path => {
     for (let i = 0; i < routes.length; i++) {
       if (
@@ -125,6 +130,7 @@ class Admin extends React.Component {
     }
     return 'Brand';
   };
+
   render() {
     return (
       <>

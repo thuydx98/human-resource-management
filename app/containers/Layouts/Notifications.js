@@ -15,9 +15,9 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React from 'react';
 // react plugin for creating notifications over the dashboard
-import NotificationAlert from "react-notification-alert";
+import NotificationAlert from 'react-notification-alert';
 
 // reactstrap components
 import {
@@ -29,35 +29,35 @@ import {
   CardBody,
   CardTitle,
   Row,
-  Col
-} from "reactstrap";
+  Col,
+} from 'reactstrap';
 
 class Notifications extends React.Component {
   notify = place => {
-    var color = Math.floor(Math.random() * 5 + 1);
-    var type;
+    const color = Math.floor(Math.random() * 5 + 1);
+    let type;
     switch (color) {
       case 1:
-        type = "primary";
+        type = 'primary';
         break;
       case 2:
-        type = "success";
+        type = 'success';
         break;
       case 3:
-        type = "danger";
+        type = 'danger';
         break;
       case 4:
-        type = "warning";
+        type = 'warning';
         break;
       case 5:
-        type = "info";
+        type = 'info';
         break;
       default:
         break;
     }
-    var options = {};
+    let options = {};
     options = {
-      place: place,
+      place,
       message: (
         <div>
           <div>
@@ -66,12 +66,13 @@ class Notifications extends React.Component {
           </div>
         </div>
       ),
-      type: type,
-      icon: "tim-icons icon-bell-55",
-      autoDismiss: 7
+      type,
+      icon: 'tim-icons icon-bell-55',
+      autoDismiss: 7,
     };
     this.refs.notificationAlert.notificationAlert(options);
   };
+
   render() {
     return (
       <>
@@ -162,7 +163,8 @@ class Notifications extends React.Component {
                     <Row>
                       <Col className="ml-auto mr-auto text-center" md="6">
                         <CardTitle tag="h4">
-                          Notifications Places<p className="category">
+                          Notifications Places
+                          <p className="category">
                             Click to view notifications
                           </p>
                         </CardTitle>
@@ -175,7 +177,7 @@ class Notifications extends React.Component {
                             <Button
                               block
                               color="primary"
-                              onClick={() => this.notify("tl")}
+                              onClick={() => this.notify('tl')}
                             >
                               Top Left
                             </Button>
@@ -184,7 +186,7 @@ class Notifications extends React.Component {
                             <Button
                               block
                               color="primary"
-                              onClick={() => this.notify("tc")}
+                              onClick={() => this.notify('tc')}
                             >
                               Top Center
                             </Button>
@@ -193,7 +195,7 @@ class Notifications extends React.Component {
                             <Button
                               block
                               color="primary"
-                              onClick={() => this.notify("tr")}
+                              onClick={() => this.notify('tr')}
                             >
                               Top Right
                             </Button>
@@ -208,7 +210,7 @@ class Notifications extends React.Component {
                             <Button
                               block
                               color="primary"
-                              onClick={() => this.notify("bl")}
+                              onClick={() => this.notify('bl')}
                             >
                               Bottom Left
                             </Button>
@@ -217,7 +219,7 @@ class Notifications extends React.Component {
                             <Button
                               block
                               color="primary"
-                              onClick={() => this.notify("bc")}
+                              onClick={() => this.notify('bc')}
                             >
                               Bottom Center
                             </Button>
@@ -226,7 +228,7 @@ class Notifications extends React.Component {
                             <Button
                               block
                               color="primary"
-                              onClick={() => this.notify("br")}
+                              onClick={() => this.notify('br')}
                             >
                               Bottom Right
                             </Button>

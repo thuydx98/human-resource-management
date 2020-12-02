@@ -65,7 +65,7 @@ class Admin extends React.Component {
   componentDidUpdate(e) {
     if (e.history.action === 'PUSH') {
       if (navigator.platform.indexOf('Win') > -1) {
-        let tables = document.querySelectorAll('.table-responsive');
+        const tables = document.querySelectorAll('.table-responsive');
         for (let i = 0; i < tables.length; i++) {
           ps = new PerfectScrollbar(tables[i]);
         }
@@ -82,8 +82,8 @@ class Admin extends React.Component {
     this.setState({ sidebarOpened: !this.state.sidebarOpened });
   };
 
-  getRoutes = routes => {
-    return routes.map((prop, key) => {
+  getRoutes = routes =>
+    routes.map((prop, key) => {
       if (prop.layout === '/admin') {
         return (
           <Route
@@ -92,11 +92,9 @@ class Admin extends React.Component {
             key={key}
           />
         );
-      } else {
-        return null;
       }
+      return null;
     });
-  };
 
   handleBgClick = color => {
     this.setState({ backgroundColor: color });
