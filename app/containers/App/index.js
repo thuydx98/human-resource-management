@@ -11,9 +11,8 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import AdminLayout from 'containers/Layouts/Admin/Admin';
-import RTLLayout from 'containers/Layouts/RTL/RTL';
-import HomePage from 'containers/HomePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
+import LoginPage from 'containers/LoginPage/Loadable';
 
 import GlobalStyle from '../../global-styles';
 import 'assets/scss/black-dashboard-react.scss';
@@ -24,10 +23,9 @@ export default function App() {
   return (
     <div>
       <Switch>
+        <Route path="/login" component={LoginPage} />
         <Route path="/admin" render={props => <AdminLayout {...props} />} />
-        <Route path="/rtl" render={props => <RTLLayout {...props} />} />
         <Redirect from="/" to="/admin/dashboard" />
-        <Route exact path="/" component={HomePage} />
         <Route component={NotFoundPage} />
       </Switch>
       <GlobalStyle />

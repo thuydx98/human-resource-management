@@ -1,59 +1,64 @@
-/**
- *
- * LoginPage
- *
- */
-
 import React, { memo } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import {
+  FormGroup,
+  Label,
+  Input,
+  Button,
+  Card,
+  CardBody,
+  Col,
+  Form,
+} from 'reactstrap';
 import { Helmet } from 'react-helmet';
-import { FormattedMessage } from 'react-intl';
-import { createStructuredSelector } from 'reselect';
-import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
-import { useInjectReducer } from 'utils/injectReducer';
-import makeSelectLoginPage from './selectors';
-import reducer from './reducer';
 import saga from './saga';
-import messages from './messages';
 
 export function LoginPage() {
-  useInjectReducer({ key: 'loginPage', reducer });
   useInjectSaga({ key: 'loginPage', saga });
 
   return (
     <div>
       <Helmet>
-        <title>LoginPage</title>
-        <meta name="description" content="Description of LoginPage" />
+        <title>HRM | Login</title>
       </Helmet>
-      <FormattedMessage {...messages.header} />
+      <Col lg={4} md={12} className="mx-auto mt-4">
+        <Card>
+          <CardBody>
+            <h2 className="text-center">HRM Login</h2>
+            <Form>
+              <FormGroup>
+                <Label for="exampleEmail">Email address</Label>
+                <Input
+                  type="email"
+                  name="email"
+                  id="exampleEmail"
+                  placeholder="Enter email"
+                />
+              </FormGroup>
+              <FormGroup>
+                <Label for="examplePassword">Password</Label>
+                <Input
+                  type="password"
+                  name="password"
+                  id="examplePassword"
+                  placeholder="Password"
+                  autoComplete="off"
+                />
+              </FormGroup>
+              <Button
+                color="primary"
+                type="submit"
+                className="d-block w-50 mt-4 mx-auto"
+              >
+                Submit
+              </Button>
+            </Form>
+          </CardBody>
+        </Card>
+      </Col>
     </div>
   );
 }
 
-LoginPage.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = createStructuredSelector({
-  loginPage: makeSelectLoginPage(),
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-  };
-}
-
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
-
-export default compose(
-  withConnect,
-  memo,
-)(LoginPage);
+export default memo(LoginPage);
