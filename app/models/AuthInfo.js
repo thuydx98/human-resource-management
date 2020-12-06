@@ -10,8 +10,8 @@ class AuthInfo {
 
   constructor(authInfo) {
     if (!isNil(authInfo)) {
-      const { token, loggedInAt } = authInfo;
-      this.accessToken = token;
+      const { token, accessToken, loggedInAt } = authInfo;
+      this.accessToken = token || accessToken;
       this.expiresIn = 63072000;
       this.loggedInAt = loggedInAt || moment().format();
     }

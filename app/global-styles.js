@@ -15,6 +15,21 @@ const GlobalStyle = createGlobalStyle`
     min-height: 100%;
     min-width: 100%;
   }
+
+  .modal .modal-header .close {
+    color: #1d8cf8 !important;
+  }
+
+  .modal-content {
+    background: #27293d !important;
+    .modal-title {
+      color: #fff !important;
+    }
+  }
+
+  .form-control:focus {
+    border-color: #1d8cf8 !important;
+  }
 `;
 
 export default GlobalStyle;

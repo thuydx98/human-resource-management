@@ -11,11 +11,7 @@ class AuthInfoUtils {
   storeAuthInfo(authInfo) {
     CookieStorage.removeItem(AUTH_INFO);
     if (!isNil(authInfo)) {
-      const { accessToken, expiresIn, loggedInAt } = authInfo;
-      CookieStorage.setItem(
-        AUTH_INFO,
-        JSON.stringify({ accessToken, expiresIn, loggedInAt }),
-      );
+      CookieStorage.setItem(AUTH_INFO, JSON.stringify(authInfo));
     }
   }
 

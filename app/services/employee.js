@@ -1,10 +1,10 @@
 import service, { handleGeneralError } from './index';
 
-const BASE_URL = process.env.REACT_APP_API;
+const BASE_URL = process.env.API_URI;
 
 export function getEmployees() {
   return service(BASE_URL, {
-    url: '/manager/listAllUser',
+    url: '/manager/list-all-user',
     method: 'GET',
   })
     .then(response => response.data)
@@ -14,7 +14,7 @@ export function getEmployees() {
 
 export function createEmployee(email, password) {
   return service(BASE_URL, {
-    url: '/manager/register',
+    url: '/manager/create/employee',
     method: 'POST',
     data: { email, password },
   })

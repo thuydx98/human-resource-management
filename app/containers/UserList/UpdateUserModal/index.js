@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import useHooks from './hook';
 
-export const UserModal = props => {
+export const UpdateUserModal = props => {
   const { states, handlers } = useHooks(props);
   const { isOpenModal } = states;
   const { handleCloseModal } = handlers;
@@ -36,4 +36,4 @@ export const UserModal = props => {
   );
 };
 
-export default memo(UserModal);
+export default memo(UpdateUserModal);

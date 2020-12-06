@@ -83,7 +83,7 @@ class Layout extends React.Component {
           />
         );
       }
-      return null;
+      return undefined;
     });
 
   handleBgClick = color => {

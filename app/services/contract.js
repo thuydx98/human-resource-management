@@ -1,6 +1,6 @@
 import service, { handleGeneralError } from './index';
 
-const BASE_URL = process.env.REACT_APP_API;
+const BASE_URL = process.env.API_URI;
 
 export function createContract(state, contractTerm, signingDate) {
   return service(BASE_URL, {

@@ -1,51 +1,81 @@
 import React from 'react';
-import { Button, Table } from 'reactstrap';
+import { Button, CardTitle, Table } from 'reactstrap';
+import moment from 'moment';
+import { useInjectSaga } from 'utils/injectSaga';
+import { useInjectReducer } from 'utils/injectReducer';
+import saga from './saga';
+import { sliceKey, reducer } from './slice';
 import useHooks from './hook';
-import UserModal from './UserModal/Loadable';
+import AddUserModal from './AddUserModal/Loadable';
+import UpdateUserModal from './UpdateUserModal/Loadable';
 
 export default function UserList() {
+  useInjectSaga({ key: sliceKey, saga });
+  useInjectReducer({ key: sliceKey, reducer });
+
   const { states, handlers } = useHooks();
-  const { isOpenAddEditModal } = states;
-  const { toggleAddEditModal } = handlers;
+  const { isOpenAddModal, isOpenUpdateModal, userList } = states;
+  const { toggleAddModal, toggleUpdateModal, getUserList } = handlers;
 
   return (
     <div className="content">
-      <h3>User Management</h3>
+      <CardTitle tag="h2">
+        Employee Management
+        <Button
+          className="ml-3"
+          color="info"
+          size="sm"
+          onClick={() => toggleAddModal(true)}
+        >
+          Add new
+        </Button>
+      </CardTitle>
+
       <Table>
         <thead>
           <tr>
-            <th className="text-center">#</th>
             <th>Name</th>
-            <th>Job Position</th>
-            <th className="text-center">Since</th>
-            <th className="text-right">Salary</th>
+            <th>Position</th>
+            <th>Email</th>
+            <th className="text-center">Birthday</th>
             <th className="text-right">Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td className="text-center">3</td>
-            <td>Alex Mike</td>
-            <td>Designer</td>
-            <td className="text-center">2012</td>
-            <td className="text-right">€ 99,201</td>
-            <td className="text-right">
-              <Button
-                className="btn-icon btn-simple mr-2"
-                color="success"
-                size="sm"
-                onClick={() => toggleAddEditModal(true)}
-              >
-                <i className="fa fa-edit" />
-              </Button>
-              <Button className="btn-icon btn-simple" color="danger" size="sm">
-                <i className="fa fa-times" />
-              </Button>
-            </td>
-          </tr>
+          {userList &&
+            userList.map(item => (
+              <tr key={item.id}>
+                <td>{`${item.firstname || ''} ${item.lastname || ''}`}</td>
+                <td>{`${item.department_name} ${item.position || ''}`}</td>
+                <td>{item.email}</td>
+                <td className="text-center">
+                  {item.birthday
+                    ? moment(item.birthday).format('YYYY-MM-DD')
+                    : ''}
+                </td>
+                <td className="text-right">
+                  <Button
+                    className="btn-icon mr-3"
+                    color="info"
+                    size="sm"
+                    onClick={() => toggleUpdateModal(true)}
+                  >
+                    <i className="fa fa-edit" />
+                  </Button>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </Table>
-      <UserModal isOpen={isOpenAddEditModal} toggleModal={toggleAddEditModal} />
+      <AddUserModal
+        isOpen={isOpenAddModal}
+        toggleModal={toggleAddModal}
+        reloadList={getUserList}
+      />
+      <UpdateUserModal
+        isOpen={isOpenUpdateModal}
+        toggleModal={toggleUpdateModal}
+      />
     </div>
   );
 }
