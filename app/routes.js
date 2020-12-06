@@ -1,10 +1,10 @@
-import Dashboard from 'containers/Layouts/Dashboard';
-import Icons from 'containers/Layouts/Icons';
-import Map from 'containers/Layouts/Map';
-import Notifications from 'containers/Layouts/Notifications';
-import TableList from 'containers/Layouts/TableList';
-import Typography from 'containers/Layouts/Typography';
-import UserProfile from 'containers/Layouts/UserProfile';
+import Dashboard from 'containers/Layout/Dashboard';
+import Icons from 'containers/Layout/Icons';
+import Map from 'containers/Layout/Map';
+import Notifications from 'containers/Layout/Notifications';
+import TableList from 'containers/Layout/TableList';
+import Typography from 'containers/Layout/Typography';
+import UserProfile from 'containers/Layout/UserProfile';
 import UserList from 'containers/UserList/Loadable';
 
 const routes = [

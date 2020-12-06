@@ -1,11 +1,11 @@
 import { createSelector } from 'reselect';
+import get from 'lodash/fp/get';
 
-const selectRouter = state => state.router;
+const selectAuthenticationState = state => state.authentication;
 
-const makeSelectLocation = () =>
-  createSelector(
-    selectRouter,
-    routerState => routerState.location,
-  );
+const makeSelectIsAuthenticated = createSelector(
+  selectAuthenticationState,
+  state => get('isAuthenticated', state),
+);
 
-export { makeSelectLocation };
+export { makeSelectIsAuthenticated };

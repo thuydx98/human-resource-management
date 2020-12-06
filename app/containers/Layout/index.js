@@ -1,20 +1,10 @@
-/*!
+/* eslint-disable indent */
+/* eslint-disable react/prop-types */
+/* eslint-disable no-shadow */
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable react/no-access-state-in-setstate */
+/* eslint-disable react/no-string-refs */
 
-=========================================================
-* Black Dashboard React v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/black-dashboard-react
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/black-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 // javascript plugin used to create scrollbars on windows
@@ -32,7 +22,7 @@ import logo from 'assets/img/react-logo.png';
 
 let ps;
 
-class Admin extends React.Component {
+class Layout extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -48,7 +38,7 @@ class Admin extends React.Component {
       document.documentElement.classList.remove('perfect-scrollbar-off');
       ps = new PerfectScrollbar(this.refs.mainPanel, { suppressScrollX: true });
       const tables = document.querySelectorAll('.table-responsive');
-      for (let i = 0; i < tables.length; i++) {
+      for (let i = 0; i < tables.length; i += 1) {
         ps = new PerfectScrollbar(tables[i]);
       }
     }
@@ -66,7 +56,7 @@ class Admin extends React.Component {
     if (e.history.action === 'PUSH') {
       if (navigator.platform.indexOf('Win') > -1) {
         const tables = document.querySelectorAll('.table-responsive');
-        for (let i = 0; i < tables.length; i++) {
+        for (let i = 0; i < tables.length; i += 1) {
           ps = new PerfectScrollbar(tables[i]);
         }
       }
@@ -83,13 +73,13 @@ class Admin extends React.Component {
   };
 
   getRoutes = routes =>
-    routes.map((prop, key) => {
+    routes.map((prop, index) => {
       if (prop.layout === '/admin') {
         return (
           <Route
             path={prop.layout + prop.path}
             component={prop.component}
-            key={key}
+            key={index}
           />
         );
       }
@@ -100,8 +90,8 @@ class Admin extends React.Component {
     this.setState({ backgroundColor: color });
   };
 
-  getBrandText = path => {
-    for (let i = 0; i < routes.length; i++) {
+  getBrandText = () => {
+    for (let i = 0; i < routes.length; i += 1) {
       if (
         this.props.location.pathname.indexOf(
           routes[i].layout + routes[i].path,
@@ -149,6 +139,7 @@ class Admin extends React.Component {
             )}
           </div>
         </div>
+
         <FixedPlugin
           bgColor={this.state.backgroundColor}
           handleBgClick={this.handleBgClick}
@@ -158,4 +149,4 @@ class Admin extends React.Component {
   }
 }
 
-export default Admin;
+export default Layout;

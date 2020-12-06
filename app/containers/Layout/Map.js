@@ -1,3 +1,4 @@
+/* eslint-disable react/prefer-stateless-function */
 /*!
 
 =========================================================
@@ -28,7 +29,7 @@ import {
 import { Card, CardHeader, CardBody, Row, Col } from 'reactstrap';
 
 const MapWrapper = withScriptjs(
-  withGoogleMap(props => (
+  withGoogleMap(() => (
     <GoogleMap
       defaultZoom={13}
       defaultCenter={{ lat: 40.748817, lng: -73.985428 }}

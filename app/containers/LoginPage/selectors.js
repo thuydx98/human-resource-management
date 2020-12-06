@@ -1,25 +1,15 @@
+import get from 'lodash/fp/get';
 import { createSelector } from 'reselect';
-import { initialState } from './reducer';
 
-/**
- * Direct selector to the loginPage state domain
- */
+const selectLoginPage = state => state.loginPage;
 
-const selectLoginPageDomain = state => state.loginPage || initialState;
+const makeSelectLoginStatus = createSelector(
+  selectLoginPage,
+  state => get('state', state),
+);
+const makeSelectLoginError = createSelector(
+  selectLoginPage,
+  state => get('error', state),
+);
 
-/**
- * Other specific selectors
- */
-
-/**
- * Default selector used by LoginPage
- */
-
-const makeSelectLoginPage = () =>
-  createSelector(
-    selectLoginPageDomain,
-    substate => substate,
-  );
-
-export default makeSelectLoginPage;
-export { selectLoginPageDomain };
+export { makeSelectLoginStatus, makeSelectLoginError };

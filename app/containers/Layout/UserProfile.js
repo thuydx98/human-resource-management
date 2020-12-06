@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 /*!
 
 =========================================================
@@ -32,6 +33,7 @@ import {
   Col,
 } from 'reactstrap';
 
+// eslint-disable-next-line react/prefer-stateless-function
 class UserProfile extends React.Component {
   render() {
     return (
