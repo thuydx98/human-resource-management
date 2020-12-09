@@ -135,7 +135,9 @@ export const AdminNavbar = props => {
                     <DropdownItem className="nav-item">Profile</DropdownItem>
                   </NavLink>
                   <NavLink tag="li">
-                    <DropdownItem className="nav-item">Settings</DropdownItem>
+                    <DropdownItem className="nav-item">
+                      Change password
+                    </DropdownItem>
                   </NavLink>
                   <DropdownItem divider tag="li" />
                   <NavLink tag="li">

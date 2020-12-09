@@ -29,6 +29,9 @@ const authenticationSlice = createSlice({
         set('userList.error', null),
       )(state);
     },
+    setUserList(state, action) {
+      return flow(set('userList.data', action.payload))(state);
+    },
     getUserListFailed(state, action) {
       return flow(
         set('userList.state', ACTION_STATUS.FAILED),

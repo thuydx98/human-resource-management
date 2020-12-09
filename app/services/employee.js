@@ -25,7 +25,7 @@ export function createEmployee(email, password) {
 
 export function updateEmployee(payload) {
   return service(BASE_URL, {
-    url: '/manager/createDetail',
+    url: '/manager/employee-detail/create',
     method: 'PUT',
     data: payload,
   })

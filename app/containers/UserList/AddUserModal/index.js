@@ -25,7 +25,7 @@ export const AddUserModal = props => {
     <Modal isOpen={isOpenModal} toggle={handleCloseModal} className="card">
       <div className="modal-header">
         <h4 className="modal-title" id="exampleModalLabel">
-          Add new employee
+          Add new user
         </h4>
         <button
           type="button"

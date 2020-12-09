@@ -25,6 +25,10 @@ const GlobalStyle = createGlobalStyle`
     .modal-title {
       color: #fff !important;
     }
+
+    .form-group label {
+      color: rgba(255,255,255,0.6) !important;
+    }
   }
 
   .form-control:focus {

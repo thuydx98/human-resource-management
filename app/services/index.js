@@ -1,6 +1,6 @@
 import axios from 'axios';
 import isNil from 'lodash/fp/isNil';
-import { notifyError } from 'utils/notify';
+// import { notifyError } from 'utils/notify';
 import AuthUtils from 'utils/authentication';
 
 /**
@@ -51,9 +51,9 @@ const handleShowError = error => {
   }
 
   if (error.status === 500) {
-    notifyError('Internal server error.');
+    // notifyError('Internal server error.');
   } else if (error === 'Network Error') {
-    notifyError('Network error. Please check your internet.');
+    // notifyError('Network error. Please check your internet.');
   }
 };
 

@@ -14,13 +14,18 @@ export default function UserList() {
   useInjectReducer({ key: sliceKey, reducer });
 
   const { states, handlers } = useHooks();
-  const { isOpenAddModal, isOpenUpdateModal, userList } = states;
-  const { toggleAddModal, toggleUpdateModal, getUserList } = handlers;
+  const { isOpenAddModal, isOpenUpdateModal, userList, selectedUser } = states;
+  const {
+    toggleAddModal,
+    toggleUpdateModal,
+    getUserList,
+    updateUserInfo,
+  } = handlers;
 
   return (
     <div className="content">
       <CardTitle tag="h2">
-        Employee Management
+        User Management
         <Button
           className="ml-3"
           color="info"
@@ -44,9 +49,10 @@ export default function UserList() {
         <tbody>
           {userList &&
             userList.map(item => (
-              <tr key={item.id}>
+              <tr key={item.employee_id}>
                 <td>{`${item.firstname || ''} ${item.lastname || ''}`}</td>
-                <td>{`${item.department_name} ${item.position || ''}`}</td>
+                <td>{`${item.department_name || ''} ${item.position ||
+                  ''}`}</td>
                 <td>{item.email}</td>
                 <td className="text-center">
                   {item.birthday
@@ -58,7 +64,7 @@ export default function UserList() {
                     className="btn-icon mr-3"
                     color="info"
                     size="sm"
-                    onClick={() => toggleUpdateModal(true)}
+                    onClick={() => toggleUpdateModal(true, item)}
                   >
                     <i className="fa fa-edit" />
                   </Button>
@@ -75,6 +81,8 @@ export default function UserList() {
       <UpdateUserModal
         isOpen={isOpenUpdateModal}
         toggleModal={toggleUpdateModal}
+        selectedUser={selectedUser}
+        updateUserInfo={updateUserInfo}
       />
     </div>
   );
