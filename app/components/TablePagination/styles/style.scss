@@ -1,0 +1,28 @@
+.table-pagination {
+  nav {
+    ul li {
+      margin: 0 4px;
+
+      &.active {
+        button {
+          z-index: 1;
+          color: #fff;
+          background-color: #1d8cf8 !important;
+          border-color: #1d8cf8 !important;
+        }
+      }
+      &.disabled {
+        button {
+          border-color: gray !important;
+        }
+      }
+
+      button {
+        border-radius: 50% !important;
+        width: 28px;
+        height: 28px;
+        padding: 1px;
+      }
+    }
+  }
+}

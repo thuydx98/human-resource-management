@@ -1,5 +1,5 @@
 import { call, put, all, fork, takeLatest } from 'redux-saga/effects';
-import { getEmployees } from 'services/employee';
+import { getEmployees } from 'services/user';
 import { actions } from './slice';
 
 export function* getUserListWatcher() {

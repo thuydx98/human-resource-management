@@ -21,8 +21,8 @@ import useHooks from './hook';
 
 export const AdminNavbar = props => {
   const { states, handlers } = useHooks();
-  const { collapseOpen, modalSearch, color } = states;
-  const { logout, toggleCollapse, toggleModalSearch } = handlers;
+  const { collapseOpen, color, modalChangePassword } = states;
+  const { logout, toggleCollapse, toggleModalChangePassword } = handlers;
   const { toggleSidebar, sidebarOpened, brandText } = props;
 
   return (
@@ -65,57 +65,6 @@ export const AdminNavbar = props => {
           </button>
           <Collapse navbar isOpen={collapseOpen}>
             <Nav className="ml-auto" navbar>
-              <InputGroup className="search-bar">
-                <Button
-                  color="link"
-                  data-target="#searchModal"
-                  data-toggle="modal"
-                  id="search-button"
-                  onClick={toggleModalSearch}
-                >
-                  <i className="tim-icons icon-zoom-split" />
-                  <span className="d-lg-none d-md-block">Search</span>
-                </Button>
-              </InputGroup>
-              <UncontrolledDropdown nav>
-                <DropdownToggle
-                  caret
-                  color="default"
-                  data-toggle="dropdown"
-                  nav
-                >
-                  <div className="notification d-none d-lg-block d-xl-block" />
-                  <i className="tim-icons icon-sound-wave" />
-                  <p className="d-lg-none">Notifications</p>
-                </DropdownToggle>
-                <DropdownMenu className="dropdown-navbar" right tag="ul">
-                  <NavLink tag="li">
-                    <DropdownItem className="nav-item">
-                      Mike John responded to your email
-                    </DropdownItem>
-                  </NavLink>
-                  <NavLink tag="li">
-                    <DropdownItem className="nav-item">
-                      You have 5 more tasks
-                    </DropdownItem>
-                  </NavLink>
-                  <NavLink tag="li">
-                    <DropdownItem className="nav-item">
-                      Your friend Michael is in town
-                    </DropdownItem>
-                  </NavLink>
-                  <NavLink tag="li">
-                    <DropdownItem className="nav-item">
-                      Another notification
-                    </DropdownItem>
-                  </NavLink>
-                  <NavLink tag="li">
-                    <DropdownItem className="nav-item">
-                      Another one
-                    </DropdownItem>
-                  </NavLink>
-                </DropdownMenu>
-              </UncontrolledDropdown>
               <UncontrolledDropdown nav>
                 <DropdownToggle
                   caret
@@ -132,10 +81,10 @@ export const AdminNavbar = props => {
                 </DropdownToggle>
                 <DropdownMenu className="dropdown-navbar" right tag="ul">
                   <NavLink tag="li">
-                    <DropdownItem className="nav-item">Profile</DropdownItem>
-                  </NavLink>
-                  <NavLink tag="li">
-                    <DropdownItem className="nav-item">
+                    <DropdownItem
+                      className="nav-item"
+                      onClick={toggleModalChangePassword}
+                    >
                       Change password
                     </DropdownItem>
                   </NavLink>
@@ -154,8 +103,8 @@ export const AdminNavbar = props => {
       </Navbar>
       <Modal
         modalClassName="modal-search"
-        isOpen={modalSearch}
-        toggle={toggleModalSearch}
+        isOpen={modalChangePassword}
+        toggle={toggleModalChangePassword}
       >
         <div className="modal-header">
           <Input id="inlineFormInputGroup" placeholder="SEARCH" type="text" />
@@ -164,7 +113,7 @@ export const AdminNavbar = props => {
             className="close"
             data-dismiss="modal"
             type="button"
-            onClick={toggleModalSearch}
+            onClick={toggleModalChangePassword}
           >
             <i className="tim-icons icon-simple-remove" />
           </button>

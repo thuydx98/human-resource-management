@@ -4,7 +4,7 @@ import useActions from 'utils/hooks/useActions';
 
 export const useHooks = () => {
   const [collapseOpen, setCollapseOpen] = useState(false);
-  const [modalSearch, setModalSearch] = useState(false);
+  const [modalChangePassword, setModalChangePassword] = useState(false);
   const [color, setColor] = useState('navbar-transparent');
 
   const { logout } = useActions(
@@ -38,13 +38,14 @@ export const useHooks = () => {
   }, [collapseOpen]);
 
   // this function is to open the Search modal
-  const toggleModalSearch = useCallback(() => setModalSearch(!modalSearch), [
-    modalSearch,
-  ]);
+  const toggleModalChangePassword = useCallback(
+    () => setModalChangePassword(!modalChangePassword),
+    [modalChangePassword],
+  );
 
   return {
-    states: { collapseOpen, modalSearch, color },
-    handlers: { logout, toggleCollapse, toggleModalSearch },
+    states: { collapseOpen, modalChangePassword, color },
+    handlers: { logout, toggleCollapse, toggleModalChangePassword },
   };
 };
 

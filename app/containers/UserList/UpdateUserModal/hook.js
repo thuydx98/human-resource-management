@@ -47,7 +47,6 @@ export const useHooks = props => {
     ) {
       updateUser({
         ...user,
-        id: user.employee_id,
         firstName: user.firstname,
         lastName: user.lastname,
         identityCard: user.identity_card,

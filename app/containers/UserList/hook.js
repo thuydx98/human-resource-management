@@ -8,6 +8,7 @@ export const useHooks = () => {
   const [isOpenAddModal, toggleAddModal] = useState(false);
   const [isOpenUpdateModal, setIsOpenUpdateModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [pageIndex, setPageIndex] = useState(1);
   const userList = useSelector(selectUserListData);
   const { getUserList, setUserList } = useActions(
     {
@@ -29,9 +30,7 @@ export const useHooks = () => {
 
   const updateUserInfo = useCallback(
     user => {
-      const users = userList.map(item =>
-        user.employee_id === item.employee_id ? user : item,
-      );
+      const users = userList.map(item => (user.id === item.id ? user : item));
       setUserList(users);
     },
     [userList, setUserList],
@@ -43,12 +42,14 @@ export const useHooks = () => {
       isOpenAddModal,
       isOpenUpdateModal,
       selectedUser,
+      pageIndex,
     },
     handlers: {
       toggleAddModal,
       toggleUpdateModal,
       getUserList,
       updateUserInfo,
+      setPageIndex,
     },
   };
 };

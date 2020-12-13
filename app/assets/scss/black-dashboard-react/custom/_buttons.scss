@@ -84,7 +84,7 @@
 
     &:not(.btn-icon) .tim-icons{
         position: relative;
-        top: 1px;
+        top: -3px;
     }
 
     span{
@@ -99,6 +99,10 @@
   &.dropdown-toggle:after {
     margin-left: 30px !important;
   }
+}
+
+button {
+  font-weight: 300 !important;
 }
 
 // Apply the mixin to the buttons
@@ -136,6 +140,7 @@
     box-shadow: none;
     padding: $padding-btn-vertical - 1 $padding-round-horizontal - 1;
     background-color: $transparent-bg;
+    font-weight: 300;
 }
 
 .btn-simple,

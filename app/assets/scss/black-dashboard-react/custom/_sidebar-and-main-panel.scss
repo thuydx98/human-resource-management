@@ -29,8 +29,7 @@
   background-position: center center;
   display: block;
   box-shadow: 0px 0px 45px 0px rgba(0,0,0,0.6);
-  margin-top: 80px;
-  margin-left: 20px;
+  height: 100%;
   border-radius: 5px;
 
   .sidebar-wrapper{
@@ -459,7 +458,7 @@
   }
 
   > .content {
-    padding: 78px 30px 30px 280px;
+    padding: 78px 30px 30px 260px;
     min-height: calc(100vh - 70px);
   }
 

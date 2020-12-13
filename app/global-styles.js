@@ -34,6 +34,11 @@ const GlobalStyle = createGlobalStyle`
   .form-control:focus {
     border-color: #1d8cf8 !important;
   }
+
+  ::-webkit-calendar-picker-indicator {
+    filter: invert(.8);
+    outline: none;
+  }
 `;
 
 export default GlobalStyle;
