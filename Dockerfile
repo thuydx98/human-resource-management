@@ -1,11 +1,14 @@
 # build stage
 FROM node:13-alpine as builder
 
+RUN apk --no-cache add pkgconfig autoconf automake libtool nasm build-base zlib-dev
+
 WORKDIR /
 COPY . .
 RUN npm install --unsafe-perm=true --allow-root
 RUN npm rebuild node-sass
 # RUN npm run test
+RUN npm rebuild
 RUN npm run build
 
 # production stage
