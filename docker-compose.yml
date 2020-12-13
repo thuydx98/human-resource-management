@@ -20,7 +20,7 @@ services:
     - PORT=80
     - PORT=433
     - NODE_ENV=production
-    - API_URI=http://localhost:10000/api
+    - API_URI=http://188.166.245.251:10000/api
     restart: unless-stopped
 
 networks:
