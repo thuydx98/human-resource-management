@@ -1,5 +1,5 @@
 # build stage
-FROM FROM node:13-alpine as builder
+FROM FROM node:alpine as builder
 
 WORKDIR /
 COPY . .
