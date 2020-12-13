@@ -4,7 +4,7 @@ FROM node:alpine as builder
 WORKDIR /
 COPY . .
 RUN npm install
-RUN npm rebuild node-sass
+# RUN npm rebuild node-sass
 # RUN npm run test
 RUN npm run build
 
