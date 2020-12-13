@@ -1,6 +1,8 @@
 # build stage
-FROM node:13-alpine as builder
+FROM node:alpine as builder
 
+WORKDIR /
+COPY . .
 RUN npm install
 RUN npm rebuild node-sass
 # RUN npm run test
