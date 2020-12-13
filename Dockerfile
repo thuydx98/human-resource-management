@@ -1,10 +1,10 @@
 # build stage
-FROM node:alpine as builder
+FROM FROM node:13-alpine as builder
 
 WORKDIR /
 COPY . .
-RUN npm install
-# RUN npm rebuild node-sass
+RUN npm install --unsafe-perm=true --allow-root
+RUN npm rebuild node-sass
 # RUN npm run test
 RUN npm run build
 
