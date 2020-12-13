@@ -2,7 +2,7 @@
 FROM node:13-alpine as builder
 WORKDIR /app
 COPY . .
-RUN npm install
+RUN npm install --unsafe-perm=true --allow-root
 RUN npm rebuild node-sass
 # RUN npm run test
 RUN npm run build
