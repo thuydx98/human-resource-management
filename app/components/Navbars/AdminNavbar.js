@@ -90,7 +90,7 @@ export const AdminNavbar = props => {
                   </NavLink>
                   <DropdownItem divider tag="li" />
                   <NavLink tag="li">
-                    <DropdownItem className="nav-item" onClick={() => logout()}>
+                    <DropdownItem className="nav-item" onClick={logout}>
                       Log out
                     </DropdownItem>
                   </NavLink>

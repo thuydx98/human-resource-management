@@ -72,18 +72,9 @@ class Layout extends React.Component {
   };
 
   getRoutes = routes =>
-    routes.map((prop, index) => {
-      if (prop.layout === '/admin') {
-        return (
-          <Route
-            path={prop.layout + prop.path}
-            component={prop.component}
-            key={index}
-          />
-        );
-      }
-      return undefined;
-    });
+    routes.map((prop, index) => (
+      <Route path={prop.path} component={prop.component} key={index} />
+    ));
 
   handleBgClick = color => {
     this.setState({ backgroundColor: color });
@@ -91,11 +82,7 @@ class Layout extends React.Component {
 
   getBrandText = () => {
     for (let i = 0; i < routes.length; i += 1) {
-      if (
-        this.props.location.pathname.indexOf(
-          routes[i].layout + routes[i].path,
-        ) !== -1
-      ) {
+      if (this.props.location.pathname.indexOf(routes[i].path) !== -1) {
         return routes[i].name;
       }
     }
@@ -130,7 +117,7 @@ class Layout extends React.Component {
             />
             <Switch>
               {this.getRoutes(routes)}
-              <Redirect from="*" to="/admin/dashboard" />
+              <Redirect from="*" to="/dashboard" />
             </Switch>
             {// we don't want the Footer to be rendered on map page
             this.props.location.pathname.indexOf('maps') !== -1 ? null : (

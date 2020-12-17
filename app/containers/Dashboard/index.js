@@ -9,6 +9,7 @@ import {
   Col,
   Row,
 } from 'reactstrap';
+import { useHistory } from 'react-router-dom';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import WeeklyTimeSheet from 'containers/WeeklyTimeSheet/Loadable';
@@ -20,6 +21,7 @@ export default function Dashboard() {
   useInjectSaga({ key: sliceKey, saga });
   useInjectReducer({ key: sliceKey, reducer });
 
+  const history = useHistory();
   const { states, handlers } = useHooks();
 
   return (
@@ -43,7 +45,7 @@ export default function Dashboard() {
               <Button
                 color="info"
                 className="btn-sm float-right ml-2"
-                // onClick={onSubmit}
+                onClick={() => history.push('/leave')}
               >
                 Request leave
               </Button>

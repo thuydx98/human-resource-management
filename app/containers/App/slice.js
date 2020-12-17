@@ -16,7 +16,6 @@ const authenticationSlice = createSlice({
       return flow(set('isAuthenticated', true))(state);
     },
     logout(state) {
-      authUtils.clearAuthInfo();
       return flow(
         set('isAuthenticated', false),
         set('userInfo', null),

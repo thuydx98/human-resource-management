@@ -4,10 +4,10 @@ import { Helmet } from 'react-helmet';
 import Layout from 'containers/Layout';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import LoginPage from 'containers/LoginPage/Loadable';
-
+import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import { sliceKey, reducer } from './slice';
-
+import saga from './saga';
 import GlobalStyle from '../../global-styles';
 import 'assets/scss/black-dashboard-react.scss';
 import 'assets/demo/demo.css';
@@ -15,6 +15,7 @@ import 'assets/css/nucleo-icons.css';
 import useHooks from './hook';
 
 export default function App() {
+  useInjectSaga({ key: sliceKey, saga });
   useInjectReducer({ key: sliceKey, reducer });
   const { selectors } = useHooks();
   const { isAuthenticated } = selectors;
@@ -31,8 +32,8 @@ export default function App() {
         </Switch>
       ) : (
         <Switch>
-          <Route path="/admin" render={props => <Layout {...props} />} />
-          <Redirect from="/" to="/admin/dashboard" />
+          <Route path="/" render={props => <Layout {...props} />} />
+          <Redirect from="/" to="/dashboard" />
           <Route component={NotFoundPage} />
         </Switch>
       )}

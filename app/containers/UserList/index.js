@@ -10,6 +10,7 @@ import {
 } from 'reactstrap';
 import moment from 'moment';
 import get from 'lodash/fp/get';
+import { useHistory } from 'react-router-dom';
 import Pagination from 'components/TablePagination';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -23,7 +24,7 @@ import './styles/style.scss';
 export default function UserList() {
   useInjectSaga({ key: sliceKey, saga });
   useInjectReducer({ key: sliceKey, reducer });
-
+  const history = useHistory();
   const { states, handlers } = useHooks();
   const {
     isOpenAddModal,
@@ -88,7 +89,7 @@ export default function UserList() {
               id={`tooltip${userList[i].id}`}
               title=""
               type="button"
-              onClick={() => toggleUpdateModal(true, userList[i])}
+              onClick={() => history.push(`/information/${userList[i].id}`)}
             >
               <i className="tim-icons icon-pencil" />
             </Button>
