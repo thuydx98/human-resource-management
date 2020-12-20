@@ -20,12 +20,22 @@ export default function Contract(props) {
 
   const { states, handlers } = useHooks(props);
   const { contracts } = states;
-  console.log(contracts);
+
   return (
     <>
       <Card>
         <CardHeader>
-          <h4 className="description">Contract</h4>
+          <h4 className="description m-0">
+            Contract
+            <Button
+              size="sm"
+              color="info"
+              className="btn-simple float-right m-0"
+              // onClick={() => toggleAddModal(true)}
+            >
+              <i className="tim-icons icon-simple-add" /> New
+            </Button>
+          </h4>
         </CardHeader>
         <CardBody>
           <Table>

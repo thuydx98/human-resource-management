@@ -34,7 +34,17 @@ export default function ReportingLine(props) {
     <>
       <Card>
         <CardHeader>
-          <h4 className="description">Reporting line</h4>
+          <h4 className="description mb-0">
+            Feed back
+            <Button
+              size="sm"
+              color="info"
+              className="btn-simple float-right m-0"
+              // onClick={() => toggleAddModal(true)}
+            >
+              <i className="tim-icons icon-simple-add" /> New
+            </Button>
+          </h4>
         </CardHeader>
         <CardBody>
           <Table>

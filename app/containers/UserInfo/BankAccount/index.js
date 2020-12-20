@@ -12,19 +12,31 @@ import { useInjectReducer } from 'utils/injectReducer';
 import saga from './saga';
 import { sliceKey, reducer } from './slice';
 import useHooks from './hook';
+import { BankAccountModal } from './BankAccountModal';
 
 export default function BankAccount(props) {
   useInjectSaga({ key: sliceKey, saga });
   useInjectReducer({ key: sliceKey, reducer });
 
-  const { states } = useHooks(props);
-  const { bankAccounts } = states;
+  const { states, handlers } = useHooks(props);
+  const { bankAccounts, isOpenModal, selectedAccount, user } = states;
+  const { handleOpenModal, toggleModal, updateList } = handlers;
 
   return (
     <>
       <Card>
         <CardHeader>
-          <h4 className="description">Bank account</h4>
+          <h4 className="description mb-0">
+            Bank account
+            <Button
+              size="sm"
+              color="info"
+              className="btn-simple float-right m-0"
+              onClick={handleOpenModal}
+            >
+              <i className="tim-icons icon-simple-add" /> New
+            </Button>
+          </h4>
         </CardHeader>
         <CardBody>
           <Table>
@@ -39,22 +51,23 @@ export default function BankAccount(props) {
             <tbody>
               {bankAccounts &&
                 bankAccounts.map(item => (
-                  <tr>
+                  <tr key={item.id}>
                     <td>{item.bankName}</td>
                     <td>{item.accountNumber}</td>
                     <td>{item.accountName}</td>
                     <td className="text-right">
                       <Button
                         color="link"
-                        id="tooltip636901683"
+                        id={`tooltip${item.id}`}
                         title=""
                         type="button"
+                        onClick={() => handleOpenModal(item)}
                       >
                         <i className="tim-icons icon-pencil" />
                       </Button>
                       <UncontrolledTooltip
                         delay={0}
-                        target="tooltip636901683"
+                        target={`tooltip${item.id}`}
                         placement="right"
                       >
                         Edit Account
@@ -66,6 +79,13 @@ export default function BankAccount(props) {
           </Table>
         </CardBody>
       </Card>
+      <BankAccountModal
+        isOpen={isOpenModal}
+        bankAccount={selectedAccount}
+        toggleModal={toggleModal}
+        user={user}
+        updateList={updateList}
+      />
     </>
   );
 }

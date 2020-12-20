@@ -26,7 +26,17 @@ export default function ProjectInfo(props) {
     <>
       <Card>
         <CardHeader>
-          <h4 className="description">Project information</h4>
+          <h4 className="description mb-0">
+            Project information
+            <Button
+              size="sm"
+              color="info"
+              className="btn-simple float-right m-0"
+              // onClick={() => toggleAddModal(true)}
+            >
+              <i className="tim-icons icon-simple-add" /> New
+            </Button>
+          </h4>
         </CardHeader>
         <CardBody>
           <Table>

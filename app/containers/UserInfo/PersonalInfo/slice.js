@@ -11,7 +11,7 @@ export const initialState = {
 };
 
 const slice = createSlice({
-  name: 'updatePersonalInfo',
+  name: 'personalInfo',
   initialState,
   reducers: {
     updatePersonalInfo(state) {

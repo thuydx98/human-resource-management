@@ -16,6 +16,7 @@ import get from 'lodash/fp/get';
 import moment from 'moment';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+import Notification from 'components/Notification';
 import saga from './saga';
 import { sliceKey, reducer } from './slice';
 import useHooks from './hook';
@@ -25,11 +26,12 @@ export default function Insurance(props) {
   useInjectReducer({ key: sliceKey, reducer });
 
   const { states, handlers } = useHooks(props);
-  const { insurance, isSubmitted } = states;
-  const { onSubmit, setUser } = handlers;
+  const { insurance, isSubmitted, notificationRef } = states;
+  const { onSubmit, setInsurance } = handlers;
 
   return (
     <>
+      <Notification ref={notificationRef} />
       <Card>
         <CardHeader>
           <h4 className="description">
@@ -58,7 +60,10 @@ export default function Insurance(props) {
                         : null
                     }
                     onChange={e =>
-                      setUser({ ...insurance, effectiveDate: e.target.value })
+                      setInsurance({
+                        ...insurance,
+                        effectiveDate: e.target.value,
+                      })
                     }
                     invalid={isSubmitted && !insurance.effectiveDate}
                   />
@@ -69,11 +74,11 @@ export default function Insurance(props) {
                 <FormGroup>
                   <Label>Social insurance book No.</Label>
                   <Input
-                    defaultValue={get('bookNo', insurance)}
-                    placeholder="First name"
+                    value={get('bookNo', insurance)}
+                    placeholder="Insurance book No."
                     autoComplete="off"
                     onChange={e =>
-                      setUser({ ...insurance, bookNo: e.target.value })
+                      setInsurance({ ...insurance, bookNo: e.target.value })
                     }
                     invalid={isSubmitted && !insurance.bookNo}
                   />
@@ -88,9 +93,9 @@ export default function Insurance(props) {
                   <Input
                     placeholder="Thu Duc hospital"
                     autoComplete="off"
-                    defaultValue={get('hospital', insurance)}
+                    value={get('hospital', insurance)}
                     onChange={e =>
-                      setUser({ ...insurance, hospital: e.target.value })
+                      setInsurance({ ...insurance, hospital: e.target.value })
                     }
                     invalid={isSubmitted && !insurance.hospital}
                   />

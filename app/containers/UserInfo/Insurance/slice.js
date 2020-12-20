@@ -4,42 +4,36 @@ import flow from 'lodash/fp/flow';
 import { ACTION_STATUS } from 'utils/constants';
 
 export const initialState = {
-  userInfo: {
-    data: [],
+  updateInsurance: {
     state: null,
     error: null,
   },
 };
 
 const slice = createSlice({
-  name: 'userInfo',
+  name: 'updateInsurance',
   initialState,
   reducers: {
-    getUser(state) {
+    updateInsurance(state) {
       return flow(
-        set('userInfo.data', []),
-        set('userInfo.state', ACTION_STATUS.PENDING),
-        set('userInfo.error', null),
+        set('updateInsurance.state', ACTION_STATUS.PENDING),
+        set('updateInsurance.error', null),
       )(state);
     },
-    getUserSuccess(state, action) {
+    updateInsuranceSuccess(state) {
       return flow(
-        set('userInfo.data', action.payload),
-        set('userInfo.state', ACTION_STATUS.SUCCESS),
-        set('userInfo.error', null),
+        set('updateInsurance.state', ACTION_STATUS.SUCCESS),
+        set('updateInsurance.error', null),
       )(state);
     },
-    setUser(state, action) {
-      return flow(set('userInfo.data', action.payload))(state);
-    },
-    getUserFailed(state, action) {
+    updateInsuranceFailed(state, action) {
       return flow(
-        set('userInfo.state', ACTION_STATUS.FAILED),
-        set('userInfo.error', action.payload),
+        set('updateInsurance.state', ACTION_STATUS.FAILED),
+        set('updateInsurance.error', action.payload),
       )(state);
     },
     resetState(state) {
-      return flow(set('userInfo', initialState.userInfo))(state);
+      return flow(set('updateInsurance', initialState.updateInsurance))(state);
     },
   },
 });

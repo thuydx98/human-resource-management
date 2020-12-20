@@ -1,31 +1,10 @@
-/*!
-
-=========================================================
-* Black Dashboard React v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/black-dashboard-react
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/black-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 /*eslint-disable*/
 import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
-// nodejs library to set properties for components
 import { PropTypes } from 'prop-types';
-
-// javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from 'perfect-scrollbar';
-
-// reactstrap components
 import { Nav, NavLink as ReactstrapNavLink } from 'reactstrap';
+import AuthUtils from 'utils/authentication';
 
 var ps;
 
@@ -116,13 +95,14 @@ class Sidebar extends React.Component {
           ) : null}
           <Nav>
             {routes.map((prop, key) => {
-              if (prop.redirect) return null;
+              const { role } = AuthUtils.getAuthInfo();
+              const isDisable = prop.requireAdmin && role !== 'Manager';
+              if (prop.redirect || isDisable) return null;
               const uri = prop.uri ? prop.uri : prop.path;
               return (
                 <li
                   className={
-                    this.activeRoute(uri) +
-                    (prop.pro ? ' active-pro' : '')
+                    this.activeRoute(uri) + (prop.pro ? ' active-pro' : '')
                   }
                   key={key}
                 >
