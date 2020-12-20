@@ -1,9 +1,9 @@
 import Cookies from 'js-cookie';
 
-const createCookie = (name, value, days = 30) =>
+const createCookie = (name, value, days = 600) =>
   Cookies.set(name, value, {
     expires: days,
-    secure: process.env.NODE_ENV === 'production',
+    secure: false, // process.env.NODE_ENV === 'production',
   });
 
 const readCookie = name => Cookies.get(name);
