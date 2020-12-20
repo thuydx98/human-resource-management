@@ -1,8 +1,3 @@
-import DashboardSample from 'containers/Layout/Dashboard';
-import Icons from 'containers/Layout/Icons';
-import Notifications from 'containers/Layout/Notifications';
-import TableList from 'containers/Layout/TableList';
-import Typography from 'containers/Layout/Typography';
 import UserList from 'containers/UserList/Loadable';
 import DepartmentList from './containers/DepartmentList/Loadable';
 import Leave from './containers/Leave/Loadable';
@@ -63,30 +58,6 @@ const routes = [
     icon: 'tim-icons icon-money-coins',
     component: SalaryManagement,
   },
-  // {
-  //   path: '/icons',
-  //   name: 'Icons',
-  //   icon: 'tim-icons icon-atom',
-  //   component: Icons,
-  // },
-  // {
-  //   path: '/notifications',
-  //   name: 'Notifications',
-  //   icon: 'tim-icons icon-bell-55',
-  //   component: Notifications,
-  // },
-  // {
-  //   path: '/tables',
-  //   name: 'Table List',
-  //   icon: 'tim-icons icon-puzzle-10',
-  //   component: TableList,
-  // },
-  // {
-  //   path: '/typography',
-  //   name: 'Typography',
-  //   icon: 'tim-icons icon-align-center',
-  //   component: Typography,
-  // },
 ];
 
 export default routes;

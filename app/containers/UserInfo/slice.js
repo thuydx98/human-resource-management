@@ -5,7 +5,7 @@ import { ACTION_STATUS } from 'utils/constants';
 
 export const initialState = {
   userInfo: {
-    data: [],
+    data: null,
     state: null,
     error: null,
   },
@@ -17,7 +17,7 @@ const slice = createSlice({
   reducers: {
     getUser(state) {
       return flow(
-        set('userInfo.data', []),
+        set('userInfo.data', null),
         set('userInfo.state', ACTION_STATUS.PENDING),
         set('userInfo.error', null),
       )(state);

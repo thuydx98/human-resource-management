@@ -1,5 +1,5 @@
 import { call, put, all, fork, takeLatest } from 'redux-saga/effects';
-import { getEmployees } from 'services/user';
+import { getUsers } from 'services/user';
 import { actions } from './slice';
 
 export function* getUserListWatcher() {
@@ -7,7 +7,7 @@ export function* getUserListWatcher() {
 }
 
 export function* getUserListTask() {
-  const { response, error } = yield call(getEmployees);
+  const { response, error } = yield call(getUsers);
   if (response) {
     yield put(actions.getUserListSuccess(response.obj));
   } else {

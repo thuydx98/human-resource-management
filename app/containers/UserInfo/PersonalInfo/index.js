@@ -4,7 +4,6 @@ import {
   Card,
   CardHeader,
   CardBody,
-  CardFooter,
   FormGroup,
   Form,
   Input,
@@ -13,26 +12,39 @@ import {
   Label,
   FormFeedback,
 } from 'reactstrap';
+import moment from 'moment';
 import get from 'lodash/fp/get';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+import Notification from 'components/Notification';
 import saga from './saga';
 import { sliceKey, reducer } from './slice';
 import useHooks from './hook';
 
-export default function PersonalInfo() {
+export default function PersonalInfo(props) {
   useInjectSaga({ key: sliceKey, saga });
   useInjectReducer({ key: sliceKey, reducer });
 
-  const { states, handlers } = useHooks();
-  const { user, isSubmitted } = states;
-  const { onSubmit, setUser } = handlers;
+  const { states, handlers } = useHooks(props);
+  const { personalInfo, isSubmitted, notificationRef } = states;
+  const { onSubmit, setPersonalInfo } = handlers;
 
   return (
     <>
+      <Notification ref={notificationRef} />
       <Card>
         <CardHeader>
-          <h4 className="description">Personal detail</h4>
+          <h4 className="description">
+            Personal detail
+            <Button
+              color="info"
+              type="submit"
+              className="float-right btn-sm float-right"
+              onClick={onSubmit}
+            >
+              Update
+            </Button>
+          </h4>
         </CardHeader>
         <CardBody>
           <Form>
@@ -40,7 +52,7 @@ export default function PersonalInfo() {
               <Col className="pr-md-1" md="5">
                 <FormGroup>
                   <Label>Email address</Label>
-                  <Input defaultValue={get('email', user)} disabled />
+                  <Input defaultValue={get('email', personalInfo)} disabled />
                 </FormGroup>
               </Col>
               <Col className="px-md-1" md="3">
@@ -50,9 +62,14 @@ export default function PersonalInfo() {
                     name="gender"
                     placeholder="Choose..."
                     type="select"
-                    defaultValue={get('gender', user)}
-                    onChange={e => setUser({ ...user, gender: e.target.value })}
-                    invalid={isSubmitted && !user.gender}
+                    value={get('gender', personalInfo)}
+                    onChange={e =>
+                      setPersonalInfo({
+                        ...personalInfo,
+                        gender: e.target.value,
+                      })
+                    }
+                    invalid={isSubmitted && !personalInfo.gender}
                   >
                     <option value="null">None</option>
                     <option value="Male">Male</option>
@@ -68,40 +85,57 @@ export default function PersonalInfo() {
                   type="number"
                   autoComplete="off"
                   placeholder="Phone number"
-                  defaultValue={get('phone', user)}
-                  onChange={e => setUser({ ...user, phone: e.target.value })}
-                  invalid={isSubmitted && !user.phone}
+                  defaultValue={get('phone', personalInfo)}
+                  onChange={e =>
+                    setPersonalInfo({ ...personalInfo, phone: e.target.value })
+                  }
+                  invalid={isSubmitted && !personalInfo.phone}
                 />
                 <FormFeedback>Phone is required</FormFeedback>
               </Col>
             </Row>
             <Row>
-              <Col className="pr-md-1" md="6">
+              <Col className="pr-md-1" md="4">
+                <FormGroup>
+                  <Label>Employee code</Label>
+                  <Input
+                    defaultValue={get('employee_code', personalInfo)}
+                    disabled
+                  />
+                </FormGroup>
+              </Col>
+              <Col className="pr-md-1" md="4">
                 <FormGroup>
                   <Label>First Name</Label>
                   <Input
-                    defaultValue={get('firstname', user)}
+                    defaultValue={get('firstname', personalInfo)}
                     placeholder="First name"
                     autoComplete="off"
                     onChange={e =>
-                      setUser({ ...user, firstname: e.target.value })
+                      setPersonalInfo({
+                        ...personalInfo,
+                        firstname: e.target.value,
+                      })
                     }
-                    invalid={isSubmitted && !user.firstname}
+                    invalid={isSubmitted && !personalInfo.firstname}
                   />
                 </FormGroup>
                 <FormFeedback>First name is required</FormFeedback>
               </Col>
-              <Col className="pl-md-1" md="6">
+              <Col className="pl-md-1" md="4">
                 <FormGroup>
                   <Label>Last Name</Label>
                   <Input
                     autoComplete="off"
                     placeholder="Last name"
-                    defaultValue={get('lastname', user)}
+                    defaultValue={get('lastname', personalInfo)}
                     onChange={e =>
-                      setUser({ ...user, lastname: e.target.value })
+                      setPersonalInfo({
+                        ...personalInfo,
+                        lastname: e.target.value,
+                      })
                     }
-                    invalid={isSubmitted && !user.lastname}
+                    invalid={isSubmitted && !personalInfo.lastname}
                   />
                   <FormFeedback>Last name is required</FormFeedback>
                 </FormGroup>
@@ -115,11 +149,14 @@ export default function PersonalInfo() {
                     name="gender"
                     placeholder="Address"
                     autoComplete="off"
-                    defaultValue={get('address', user)}
+                    defaultValue={get('address', personalInfo)}
                     onChange={e =>
-                      setUser({ ...user, address: e.target.value })
+                      setPersonalInfo({
+                        ...personalInfo,
+                        address: e.target.value,
+                      })
                     }
-                    invalid={isSubmitted && !user.address}
+                    invalid={isSubmitted && !personalInfo.address}
                   />
                   <FormFeedback>Address is required</FormFeedback>
                 </FormGroup>
@@ -134,11 +171,14 @@ export default function PersonalInfo() {
                     type="number"
                     autoComplete="off"
                     placeholder="Identity number"
-                    value={get('identity_card', user)}
+                    value={get('identity_card', personalInfo)}
                     onChange={e =>
-                      setUser({ ...user, identity_card: e.target.value })
+                      setPersonalInfo({
+                        ...personalInfo,
+                        identity_card: e.target.value,
+                      })
                     }
-                    invalid={isSubmitted && !user.identity_card}
+                    invalid={isSubmitted && !personalInfo.identity_card}
                   />
                   <FormFeedback>ID number is required</FormFeedback>
                 </FormGroup>
@@ -149,12 +189,16 @@ export default function PersonalInfo() {
                   <Input
                     name="birthday"
                     type="date"
-                    placeholder="Birthday"
-                    value={get('birthday', user)}
+                    value={moment(get('birthday', personalInfo)).format(
+                      'YYYY-MM-DD',
+                    )}
                     onChange={e =>
-                      setUser({ ...user, birthday: e.target.value })
+                      setPersonalInfo({
+                        ...personalInfo,
+                        birthday: e.target.value,
+                      })
                     }
-                    invalid={isSubmitted && !user.birthday}
+                    invalid={isSubmitted && !personalInfo.birthday}
                   />
                   <FormFeedback>Birthday is required</FormFeedback>
                 </FormGroup>
@@ -162,16 +206,6 @@ export default function PersonalInfo() {
             </Row>
           </Form>
         </CardBody>
-        <CardFooter className="pt-0">
-          <Button
-            color="info"
-            type="submit"
-            className="float-right"
-            onClick={onSubmit}
-          >
-            Save
-          </Button>
-        </CardFooter>
       </Card>
     </>
   );

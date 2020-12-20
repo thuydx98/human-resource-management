@@ -4,31 +4,21 @@ import {
   Card,
   CardHeader,
   CardBody,
-  CardFooter,
-  FormGroup,
-  Form,
-  Input,
-  Row,
-  Col,
-  Label,
-  FormFeedback,
   Table,
   UncontrolledTooltip,
 } from 'reactstrap';
-import get from 'lodash/fp/get';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import saga from './saga';
 import { sliceKey, reducer } from './slice';
 import useHooks from './hook';
 
-export default function BankAccount() {
+export default function BankAccount(props) {
   useInjectSaga({ key: sliceKey, saga });
   useInjectReducer({ key: sliceKey, reducer });
 
-  const { states, handlers } = useHooks();
-  const { user, isSubmitted } = states;
-  const { onSubmit, setUser } = handlers;
+  const { states } = useHooks(props);
+  const { bankAccounts } = states;
 
   return (
     <>
@@ -47,28 +37,31 @@ export default function BankAccount() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Cong Thuong CN Bao Loc</td>
-                <td> 102001754606</td>
-                <td>Dao Xuan Thuy</td>
-                <td className="text-right">
-                  <Button
-                    color="link"
-                    id="tooltip636901683"
-                    title=""
-                    type="button"
-                  >
-                    <i className="tim-icons icon-pencil" />
-                  </Button>
-                  <UncontrolledTooltip
-                    delay={0}
-                    target="tooltip636901683"
-                    placement="right"
-                  >
-                    Edit Account
-                  </UncontrolledTooltip>
-                </td>
-              </tr>
+              {bankAccounts &&
+                bankAccounts.map(item => (
+                  <tr>
+                    <td>{item.bankName}</td>
+                    <td>{item.accountNumber}</td>
+                    <td>{item.accountName}</td>
+                    <td className="text-right">
+                      <Button
+                        color="link"
+                        id="tooltip636901683"
+                        title=""
+                        type="button"
+                      >
+                        <i className="tim-icons icon-pencil" />
+                      </Button>
+                      <UncontrolledTooltip
+                        delay={0}
+                        target="tooltip636901683"
+                        placement="right"
+                      >
+                        Edit Account
+                      </UncontrolledTooltip>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </Table>
         </CardBody>

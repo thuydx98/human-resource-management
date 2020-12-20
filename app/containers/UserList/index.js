@@ -18,7 +18,6 @@ import saga from './saga';
 import { sliceKey, reducer } from './slice';
 import useHooks from './hook';
 import AddUserModal from './AddUserModal/Loadable';
-import UpdateUserModal from './UpdateUserModal/Loadable';
 import './styles/style.scss';
 
 export default function UserList() {
@@ -26,21 +25,9 @@ export default function UserList() {
   useInjectReducer({ key: sliceKey, reducer });
   const history = useHistory();
   const { states, handlers } = useHooks();
-  const {
-    isOpenAddModal,
-    isOpenUpdateModal,
-    userList,
-    selectedUser,
-    pageIndex,
-  } = states;
+  const { isOpenAddModal, userList, pageIndex } = states;
 
-  const {
-    toggleAddModal,
-    toggleUpdateModal,
-    getUserList,
-    updateUserInfo,
-    setPageIndex,
-  } = handlers;
+  const { toggleAddModal, getUserList, setPageIndex } = handlers;
 
   const renderItems = () => {
     const skip = (pageIndex - 1) * 10;
@@ -58,7 +45,7 @@ export default function UserList() {
                 {`${userList[i].firstname || ''} ${userList[i].lastname || ''}`}
               </div>
               <div className="user-title">Software Engineering</div>
-              <div className="user-title">ID.2097</div>
+              <div className="user-title">ID.{userList[i].employee_code}</div>
             </div>
           </td>
           <td>
@@ -147,12 +134,6 @@ export default function UserList() {
         isOpen={isOpenAddModal}
         toggleModal={toggleAddModal}
         reloadList={getUserList}
-      />
-      <UpdateUserModal
-        isOpen={isOpenUpdateModal}
-        toggleModal={toggleUpdateModal}
-        selectedUser={selectedUser}
-        updateUserInfo={updateUserInfo}
       />
     </div>
   );

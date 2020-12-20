@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import useActions from 'utils/hooks/useActions';
 import { ACTION_STATUS } from 'utils/constants';
@@ -6,6 +6,7 @@ import { actions } from './slice';
 import { selectAddUserStatus } from './selectors';
 
 export const useHooks = props => {
+  const notificationRef = useRef();
   const { isOpen, toggleModal } = props;
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [payload, setPayload] = useState({});
@@ -27,6 +28,7 @@ export const useHooks = props => {
       const { reloadList } = props;
       reloadList();
       handleCloseModal();
+      notificationRef.current.notifySuccess('Create new user succeeded');
     }
   }, [addUserState]);
 
@@ -49,6 +51,7 @@ export const useHooks = props => {
     states: {
       isOpenModal,
       payload,
+      notificationRef,
     },
     handlers: {
       handleCloseModal,

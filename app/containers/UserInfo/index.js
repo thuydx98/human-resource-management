@@ -1,20 +1,5 @@
 import React from 'react';
-import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  CardText,
-  FormGroup,
-  Form,
-  Input,
-  Row,
-  Col,
-  Label,
-  FormFeedback,
-} from 'reactstrap';
-import get from 'lodash/fp/get';
+import { Button, Card, CardBody, CardText, Row, Col } from 'reactstrap';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import saga from './saga';
@@ -32,11 +17,10 @@ export default function UserInfo() {
   useInjectReducer({ key: sliceKey, reducer });
 
   const { states, handlers } = useHooks();
-  const { user, isSubmitted } = states;
-  const { onSubmit, setUser } = handlers;
 
-  const { selectedTab } = states;
-  const { setSelectedTab, updateUser } = handlers;
+  const { selectedTab, selectUserInfo } = states;
+  const { setSelectedTab, setUser } = handlers;
+  const { firstname, lastname, permission } = selectUserInfo || {};
 
   return (
     <div className="content">
@@ -56,9 +40,11 @@ export default function UserInfo() {
                     className="avatar"
                     src={require('assets/img/emilyz.jpg')}
                   />
-                  <h5 className="title">Thien Nguyen</h5>
+                  <h5 className="title">
+                    {firstname ? `${firstname} ${lastname}` : '-'}
+                  </h5>
                 </a>
-                <p className="description">Principle Software Engineer</p>
+                <p className="description">{permission}</p>
               </div>
               <Button
                 className="card-description btn-link w-100 text-left m-0 mt-4"
@@ -88,7 +74,7 @@ export default function UserInfo() {
                 className="card-description btn-link w-100 text-left m-0 mt-2"
                 onClick={() => setSelectedTab(USER_INFO_TABS.reportTab)}
               >
-                Reporting line
+                Feedback
               </Button>
               <Button
                 className="card-description btn-link w-100 text-left m-0 mt-2"
@@ -101,22 +87,22 @@ export default function UserInfo() {
         </Col>
         <Col md="9">
           {selectedTab === USER_INFO_TABS.personalTab && (
-            <PersonalInfo user={user} updateUser={updateUser} />
+            <PersonalInfo user={selectUserInfo} updateUser={setUser} />
           )}
           {selectedTab === USER_INFO_TABS.bankAccountTab && (
-            <BankAccount user={user} updateUser={updateUser} />
+            <BankAccount user={selectUserInfo} updateUser={setUser} />
           )}
           {selectedTab === USER_INFO_TABS.contractTab && (
-            <Contract user={user} updateUser={updateUser} />
+            <Contract user={selectUserInfo} updateUser={setUser} />
           )}
           {selectedTab === USER_INFO_TABS.insuranceTab && (
-            <Insurance user={user} updateUser={updateUser} />
+            <Insurance user={selectUserInfo} updateUser={setUser} />
           )}
           {selectedTab === USER_INFO_TABS.reportTab && (
-            <ReportingLine user={user} updateUser={updateUser} />
+            <ReportingLine user={selectUserInfo} updateUser={setUser} />
           )}
           {selectedTab === USER_INFO_TABS.projectTab && (
-            <ProjectInfo user={user} updateUser={updateUser} />
+            <ProjectInfo user={selectUserInfo} updateUser={setUser} />
           )}
         </Col>
       </Row>

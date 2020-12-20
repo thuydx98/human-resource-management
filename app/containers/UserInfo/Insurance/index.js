@@ -4,7 +4,6 @@ import {
   Card,
   CardHeader,
   CardBody,
-  CardFooter,
   FormGroup,
   Form,
   Input,
@@ -14,25 +13,36 @@ import {
   FormFeedback,
 } from 'reactstrap';
 import get from 'lodash/fp/get';
+import moment from 'moment';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import saga from './saga';
 import { sliceKey, reducer } from './slice';
 import useHooks from './hook';
 
-export default function Insurance() {
+export default function Insurance(props) {
   useInjectSaga({ key: sliceKey, saga });
   useInjectReducer({ key: sliceKey, reducer });
 
-  const { states, handlers } = useHooks();
-  const { user, isSubmitted } = states;
+  const { states, handlers } = useHooks(props);
+  const { insurance, isSubmitted } = states;
   const { onSubmit, setUser } = handlers;
 
   return (
     <>
       <Card>
         <CardHeader>
-          <h4 className="description">Insurance</h4>
+          <h4 className="description">
+            Insurance
+            <Button
+              color="info"
+              type="submit"
+              className="float-right btn-sm float-right"
+              onClick={onSubmit}
+            >
+              Save
+            </Button>
+          </h4>
         </CardHeader>
         <CardBody>
           <Form>
@@ -42,27 +52,32 @@ export default function Insurance() {
                   <Label>Effective date</Label>
                   <Input
                     type="date"
-                    value={get('birthday', user)}
-                    onChange={e =>
-                      setUser({ ...user, birthday: e.target.value })
+                    value={
+                      insurance.effectiveDate
+                        ? moment(insurance.effectiveDate).format('YYYY-MM-DD')
+                        : null
                     }
-                    invalid={isSubmitted && !user.birthday}
+                    onChange={e =>
+                      setUser({ ...insurance, effectiveDate: e.target.value })
+                    }
+                    invalid={isSubmitted && !insurance.effectiveDate}
                   />
+                  <FormFeedback>Effective Date is required</FormFeedback>
                 </FormGroup>
               </Col>
               <Col className="px-md-1" md="7">
                 <FormGroup>
                   <Label>Social insurance book No.</Label>
                   <Input
-                    defaultValue={get('firstname', user)}
+                    defaultValue={get('bookNo', insurance)}
                     placeholder="First name"
                     autoComplete="off"
                     onChange={e =>
-                      setUser({ ...user, firstname: e.target.value })
+                      setUser({ ...insurance, bookNo: e.target.value })
                     }
-                    invalid={isSubmitted && !user.firstname}
+                    invalid={isSubmitted && !insurance.bookNo}
                   />
-                  <FormFeedback>Gender is required</FormFeedback>
+                  <FormFeedback>Book No is required</FormFeedback>
                 </FormGroup>
               </Col>
             </Row>
@@ -71,31 +86,20 @@ export default function Insurance() {
                 <FormGroup>
                   <Label>Hospital</Label>
                   <Input
-                    name="gender"
                     placeholder="Thu Duc hospital"
                     autoComplete="off"
-                    defaultValue={get('address', user)}
+                    defaultValue={get('hospital', insurance)}
                     onChange={e =>
-                      setUser({ ...user, address: e.target.value })
+                      setUser({ ...insurance, hospital: e.target.value })
                     }
-                    invalid={isSubmitted && !user.address}
+                    invalid={isSubmitted && !insurance.hospital}
                   />
-                  <FormFeedback>Address is required</FormFeedback>
+                  <FormFeedback>Hospital is required</FormFeedback>
                 </FormGroup>
               </Col>
             </Row>
           </Form>
         </CardBody>
-        <CardFooter className="pt-0">
-          <Button
-            color="info"
-            type="submit"
-            className="float-right"
-            onClick={onSubmit}
-          >
-            Save
-          </Button>
-        </CardFooter>
       </Card>
     </>
   );

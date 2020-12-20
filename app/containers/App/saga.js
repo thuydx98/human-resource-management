@@ -7,7 +7,6 @@ export function* logoutWatcher() {
 }
 
 export function* logoutTask() {
-  console.log('saga');
   AuthUtils.clearAuthInfo();
 }
 

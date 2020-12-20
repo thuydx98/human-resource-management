@@ -1,13 +1,18 @@
 import { useCallback, useEffect, useState } from 'react';
 import useActions from 'utils/hooks/useActions';
-import { useSelector } from 'react-redux';
-import { actions } from './slice';
 // import { selectContractListData } from './selectors';
 
-export const useHooks = () => {
+export const useHooks = props => {
+  const { user, updateUser } = props;
+  const [insurance, setInsurance] = useState({});
+
+  useEffect(() => {
+    const tempUser = { ...user };
+    setInsurance(tempUser.insurance);
+  }, [user]);
   return {
-    states: {},
-    handlers: {},
+    states: { insurance },
+    handlers: { setInsurance },
   };
 };
 

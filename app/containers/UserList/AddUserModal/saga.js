@@ -1,5 +1,5 @@
 import { call, put, all, fork, takeLatest } from 'redux-saga/effects';
-import { createEmployee } from 'services/user';
+import { createUser } from 'services/user';
 import { actions } from './slice';
 
 export function* addUserWatcher() {
@@ -8,7 +8,7 @@ export function* addUserWatcher() {
 
 export function* addUserTask(action) {
   const { email, password } = action.payload;
-  const { response, error } = yield call(createEmployee, email, password);
+  const { response, error } = yield call(createUser, email, password);
   if (response) {
     yield put(actions.addUserSuccess());
   } else {
