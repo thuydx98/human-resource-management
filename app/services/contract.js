@@ -2,22 +2,11 @@ import service, { handleGeneralError } from './index';
 
 const BASE_URL = process.env.API_URI;
 
-export function createContract(state, contractTerm, signingDate) {
+export function save(payload, userId) {
   return service(BASE_URL, {
-    url: '/manager/create/contract',
+    url: `/users/${userId}/contracts`,
     method: 'POST',
-    data: { state, contractTerm, signingDate },
-  })
-    .then(response => response.data)
-    .then(data => ({ response: data }))
-    .catch(handleGeneralError);
-}
-
-export function updateContract(id, state, contractTerm, signingDate) {
-  return service(BASE_URL, {
-    url: `/manager/update/contract?id=${id}`,
-    method: 'POST',
-    data: { state, contractTerm, signingDate },
+    data: payload,
   })
     .then(response => response.data)
     .then(data => ({ response: data }))

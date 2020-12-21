@@ -1,16 +1,16 @@
 import get from 'lodash/fp/get';
 import { createSelector } from 'reselect';
 
-const selectUserInfo = state => state.userInfo;
+const selectFeedback = state => state.feedback;
 
-const selectUserInfoData = createSelector(
-  selectUserInfo,
-  state => get('userInfo.data', state),
+const selectSaveFeedbackData = createSelector(
+  selectFeedback,
+  state => get('saveFeedback.data', state),
 );
 
-const selectUserInfoState = createSelector(
-  selectUserInfo,
-  state => get('userInfo.state', state),
+const selectSaveFeedbackState = createSelector(
+  selectFeedback,
+  state => get('saveFeedback.state', state),
 );
 
-export { selectUserInfoData, selectUserInfoState };
+export { selectSaveFeedbackData, selectSaveFeedbackState };

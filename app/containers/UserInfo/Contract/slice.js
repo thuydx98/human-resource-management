@@ -4,42 +4,38 @@ import flow from 'lodash/fp/flow';
 import { ACTION_STATUS } from 'utils/constants';
 
 export const initialState = {
-  userInfo: {
-    data: [],
+  saveContract: {
+    data: null,
     state: null,
     error: null,
   },
 };
 
 const slice = createSlice({
-  name: 'userInfo',
+  name: 'contract',
   initialState,
   reducers: {
-    getUser(state) {
+    saveContract(state) {
       return flow(
-        set('userInfo.data', []),
-        set('userInfo.state', ACTION_STATUS.PENDING),
-        set('userInfo.error', null),
+        set('saveContract.state', ACTION_STATUS.PENDING),
+        set('saveContract.error', null),
       )(state);
     },
-    getUserSuccess(state, action) {
+    saveContractSuccess(state, action) {
       return flow(
-        set('userInfo.data', action.payload),
-        set('userInfo.state', ACTION_STATUS.SUCCESS),
-        set('userInfo.error', null),
+        set('saveContract.data', action.payload),
+        set('saveContract.state', ACTION_STATUS.SUCCESS),
+        set('saveContract.error', null),
       )(state);
     },
-    setUser(state, action) {
-      return flow(set('userInfo.data', action.payload))(state);
-    },
-    getUserFailed(state, action) {
+    saveContractFailed(state, action) {
       return flow(
-        set('userInfo.state', ACTION_STATUS.FAILED),
-        set('userInfo.error', action.payload),
+        set('saveContract.state', ACTION_STATUS.FAILED),
+        set('saveContract.error', action.payload),
       )(state);
     },
     resetState(state) {
-      return flow(set('userInfo', initialState.userInfo))(state);
+      return flow(set('saveContract', initialState.saveContract))(state);
     },
   },
 });

@@ -1,20 +1,24 @@
 import { call, put, all, fork, takeLatest } from 'redux-saga/effects';
-import { getListContract } from 'services/contract';
+import { save } from 'services/contract';
 import { actions } from './slice';
 
-export function* getContractListWatcher() {
-  yield takeLatest(actions.getContractList, getContractListTask);
+export function* saveContractWatcher() {
+  yield takeLatest(actions.saveContract, saveContractTask);
 }
 
-export function* getContractListTask() {
-  const { response, error } = yield call(getListContract);
+export function* saveContractTask(action) {
+  const { response, error } = yield call(
+    save,
+    action.payload,
+    action.payload.userId,
+  );
   if (response) {
-    yield put(actions.getContractListSuccess(response.obj));
+    yield put(actions.saveContractSuccess(response.obj));
   } else {
-    yield put(actions.getContractListFailed(error));
+    yield put(actions.saveContractFailed(error));
   }
 }
 
 export default function* defaultSaga() {
-  yield all([fork(getContractListWatcher)]);
+  yield all([fork(saveContractWatcher)]);
 }

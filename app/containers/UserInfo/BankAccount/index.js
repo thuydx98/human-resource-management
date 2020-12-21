@@ -79,6 +79,7 @@ export default function BankAccount(props) {
           </Table>
         </CardBody>
       </Card>
+
       <BankAccountModal
         isOpen={isOpenModal}
         bankAccount={selectedAccount}

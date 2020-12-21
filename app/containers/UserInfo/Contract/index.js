@@ -13,13 +13,15 @@ import { useInjectReducer } from 'utils/injectReducer';
 import saga from './saga';
 import { sliceKey, reducer } from './slice';
 import useHooks from './hook';
+import { ContractModal } from './ContractModal';
 
 export default function Contract(props) {
   useInjectSaga({ key: sliceKey, saga });
   useInjectReducer({ key: sliceKey, reducer });
 
   const { states, handlers } = useHooks(props);
-  const { contracts } = states;
+  const { contracts, isOpenModal, user, selectedContract } = states;
+  const { toggleModal, updateList, handleOpenModal } = handlers;
 
   return (
     <>
@@ -31,7 +33,7 @@ export default function Contract(props) {
               size="sm"
               color="info"
               className="btn-simple float-right m-0"
-              // onClick={() => toggleAddModal(true)}
+              onClick={() => handleOpenModal()}
             >
               <i className="tim-icons icon-simple-add" /> New
             </Button>
@@ -62,7 +64,7 @@ export default function Contract(props) {
                       : '-'}
                   </td>
                   <td>
-                    {item.endDate
+                    {item.startDate
                       ? moment(item.startDate).format('MMM DD YYYY')
                       : '-'}
                   </td>
@@ -74,15 +76,16 @@ export default function Contract(props) {
                   <td className="text-right">
                     <Button
                       color="link"
-                      id="tooltip636901683"
+                      id={`tooltip${item.id}`}
                       title=""
                       type="button"
+                      onClick={() => handleOpenModal(item)}
                     >
                       <i className="tim-icons icon-pencil" />
                     </Button>
                     <UncontrolledTooltip
                       delay={0}
-                      target="tooltip636901683"
+                      target={`tooltip${item.id}`}
                       placement="right"
                     >
                       Edit Contract
@@ -94,6 +97,14 @@ export default function Contract(props) {
           </Table>
         </CardBody>
       </Card>
+
+      <ContractModal
+        isOpen={isOpenModal}
+        contract={selectedContract}
+        toggleModal={toggleModal}
+        user={user}
+        updateList={updateList}
+      />
     </>
   );
 }
