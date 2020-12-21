@@ -59,7 +59,7 @@ export default function Contract(props) {
                   <td>{moment(item.joinDate).format('MMM DD YYYY')}</td>
                   <td>{item.probationStatus}</td>
                   <td>
-                    {item.endDate
+                    {item.endProbationDate
                       ? moment(item.endProbationDate).format('MMM DD YYYY')
                       : '-'}
                   </td>
