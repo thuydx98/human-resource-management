@@ -51,40 +51,41 @@ export default function ProjectInfo(props) {
               </tr>
             </thead>
             <tbody>
-              {projects.map(item => (
-                <tr>
-                  <td>{item.project}</td>
-                  <td>{item.client || '-'}</td>
-                  <td>
-                    {item.startDate
-                      ? moment(item.startDate).format('MMMM DD YYYY')
-                      : '-'}
-                  </td>
-                  <td>
-                    {item.endDate
-                      ? moment(item.endDate).format('MMMM DD YYYY')
-                      : '-'}
-                  </td>
-                  <td className="text-right">
-                    <Button
-                      color="link"
-                      id={`tooltip${item.id}`}
-                      title=""
-                      type="button"
-                      onClick={() => handleOpenModal(item)}
-                    >
-                      <i className="tim-icons icon-pencil" />
-                    </Button>
-                    <UncontrolledTooltip
-                      delay={0}
-                      target={`tooltip${item.id}`}
-                      placement="right"
-                    >
-                      Edit
-                    </UncontrolledTooltip>
-                  </td>
-                </tr>
-              ))}
+              {projects &&
+                projects.map(item => (
+                  <tr>
+                    <td>{item.project}</td>
+                    <td>{item.client || '-'}</td>
+                    <td>
+                      {item.startDate
+                        ? moment(item.startDate).format('MMMM DD YYYY')
+                        : '-'}
+                    </td>
+                    <td>
+                      {item.endDate
+                        ? moment(item.endDate).format('MMMM DD YYYY')
+                        : '-'}
+                    </td>
+                    <td className="text-right">
+                      <Button
+                        color="link"
+                        id={`tooltip${item.id}`}
+                        title=""
+                        type="button"
+                        onClick={() => handleOpenModal(item)}
+                      >
+                        <i className="tim-icons icon-pencil" />
+                      </Button>
+                      <UncontrolledTooltip
+                        delay={0}
+                        target={`tooltip${item.id}`}
+                        placement="right"
+                      >
+                        Edit
+                      </UncontrolledTooltip>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </Table>
         </CardBody>

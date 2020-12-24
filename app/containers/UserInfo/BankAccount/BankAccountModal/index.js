@@ -51,6 +51,7 @@ export const BankAccountModal = props => {
               onChange={e => setPayload({ ...payload, bankId: e.target.value })}
               invalid={isSubmitted && !payload.bankId}
             >
+              <option value="">Choose...</option>
               {bankList &&
                 bankList.map(item => (
                   <option key={item.id} value={item.id}>

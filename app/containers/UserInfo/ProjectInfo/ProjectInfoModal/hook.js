@@ -22,7 +22,7 @@ export const useHooks = props => {
 
   const { saveProject, getProjectList, resetState } = useActions(
     {
-      saveProject: actions.saveProject,
+      saveProject: actions.saveProjectInfo,
       getProjectList: actions.getProjectList,
       resetState: actions.resetState,
     },
@@ -63,7 +63,7 @@ export const useHooks = props => {
     event => {
       event.preventDefault();
       setIsSubmitted(true);
-      if (payload.bankId && payload.accountNumber && payload.accountName) {
+      if (payload.projectId && payload.startDate && payload.endDate) {
         saveProject({ ...payload, userId: user.id });
       }
     },

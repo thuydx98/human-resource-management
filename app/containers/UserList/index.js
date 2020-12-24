@@ -38,9 +38,13 @@ export default function UserList() {
         <tr key={userList[i].id}>
           <td className="d-flex">
             <div className="user-avatar">
-              <img src="https://st3.depositphotos.com/4111759/13425/v/380/depositphotos_134255626-stock-illustration-avatar-male-profile-gray-person.jpg" />
+              <img
+                src={
+                  userList[i].avatar || require('assets/img/default-avatar.png')
+                }
+              />
             </div>
-            <div className="ml-2">
+            <div className="ml-4">
               <div className="user-name">
                 {`${userList[i].firstname || ''} ${userList[i].lastname || ''}`}
               </div>

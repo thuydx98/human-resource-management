@@ -20,7 +20,7 @@ export default function UserInfo() {
 
   const { selectedTab, selectUserInfo } = states;
   const { setSelectedTab, setUser } = handlers;
-  const { firstname, lastname, permission } = selectUserInfo || {};
+  const { avatar, firstname, lastname, permission } = selectUserInfo || {};
 
   return (
     <div className="content">
@@ -38,7 +38,7 @@ export default function UserInfo() {
                   <img
                     alt="..."
                     className="avatar"
-                    src={require('assets/img/emilyz.jpg')}
+                    src={avatar || require('assets/img/default-avatar.png')}
                   />
                   <h5 className="title">
                     {firstname ? `${firstname} ${lastname}` : '-'}

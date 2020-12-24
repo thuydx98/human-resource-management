@@ -71,7 +71,7 @@ export default function PersonalInfo(props) {
                     }
                     invalid={isSubmitted && !personalInfo.gender}
                   >
-                    <option value="null">None</option>
+                    <option value="">None</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                   </Input>
@@ -146,7 +146,6 @@ export default function PersonalInfo(props) {
                 <FormGroup>
                   <Label>Address</Label>
                   <Input
-                    name="gender"
                     placeholder="Address"
                     autoComplete="off"
                     defaultValue={get('address', personalInfo)}

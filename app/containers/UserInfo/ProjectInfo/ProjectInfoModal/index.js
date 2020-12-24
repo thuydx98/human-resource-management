@@ -49,9 +49,12 @@ export const ProjectInfoModal = props => {
               autoComplete="off"
               type="select"
               value={payload.projectId}
-              onChange={e => setPayload({ ...payload, bankId: e.target.value })}
-              invalid={isSubmitted && !payload.bankId}
+              onChange={e =>
+                setPayload({ ...payload, projectId: e.target.value })
+              }
+              invalid={isSubmitted && !payload.projectId}
             >
+              <option value="">Choose...</option>
               {projectList &&
                 projectList.map(item => (
                   <option key={item.id} value={item.id}>
