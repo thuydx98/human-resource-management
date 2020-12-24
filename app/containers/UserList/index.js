@@ -38,7 +38,7 @@ export default function UserList() {
         <tr key={userList[i].id}>
           <td className="d-flex">
             <div className="user-avatar">
-              <img src="https://hr.kms-technology.com/api/employees/photo/2491/320" />
+              <img src="https://st3.depositphotos.com/4111759/13425/v/380/depositphotos_134255626-stock-illustration-avatar-male-profile-gray-person.jpg" />
             </div>
             <div className="ml-2">
               <div className="user-name">

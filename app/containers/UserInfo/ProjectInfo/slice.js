@@ -4,7 +4,12 @@ import flow from 'lodash/fp/flow';
 import { ACTION_STATUS } from 'utils/constants';
 
 export const initialState = {
-  userInfo: {
+  saveProjectInfo: {
+    data: null,
+    state: null,
+    error: null,
+  },
+  projectList: {
     data: [],
     state: null,
     error: null,
@@ -12,34 +17,42 @@ export const initialState = {
 };
 
 const slice = createSlice({
-  name: 'userInfo',
+  name: 'projectInfo',
   initialState,
   reducers: {
-    getUser(state) {
+    saveProjectInfo(state) {
       return flow(
-        set('userInfo.data', []),
-        set('userInfo.state', ACTION_STATUS.PENDING),
-        set('userInfo.error', null),
+        set('saveProjectInfo.state', ACTION_STATUS.PENDING),
+        set('saveProjectInfo.error', null),
       )(state);
     },
-    getUserSuccess(state, action) {
+    saveProjectInfoSuccess(state, action) {
       return flow(
-        set('userInfo.data', action.payload),
-        set('userInfo.state', ACTION_STATUS.SUCCESS),
-        set('userInfo.error', null),
+        set('saveProjectInfo.data', action.payload),
+        set('saveProjectInfo.state', ACTION_STATUS.SUCCESS),
+        set('saveProjectInfo.error', null),
       )(state);
     },
-    setUser(state, action) {
-      return flow(set('userInfo.data', action.payload))(state);
-    },
-    getUserFailed(state, action) {
+    saveProjectInfoFailed(state, action) {
       return flow(
-        set('userInfo.state', ACTION_STATUS.FAILED),
-        set('userInfo.error', action.payload),
+        set('saveProjectInfo.state', ACTION_STATUS.FAILED),
+        set('saveProjectInfo.error', action.payload),
       )(state);
     },
     resetState(state) {
-      return flow(set('userInfo', initialState.userInfo))(state);
+      return flow(set('saveProjectInfo', initialState.saveProjectInfo))(state);
+    },
+    getProjectList(state) {
+      return flow(
+        set('projectList.state', ACTION_STATUS.PENDING),
+        set('projectList.error', null),
+      )(state);
+    },
+    getProjectListSuccess(state, action) {
+      return flow(
+        set('projectList.data', action.payload),
+        set('projectList.state', ACTION_STATUS.SUCCESS),
+      )(state);
     },
   },
 });

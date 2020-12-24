@@ -7,20 +7,21 @@ import {
   Table,
   UncontrolledTooltip,
 } from 'reactstrap';
-import get from 'lodash/fp/get';
 import moment from 'moment';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import saga from './saga';
 import { sliceKey, reducer } from './slice';
 import useHooks from './hook';
+import { ProjectInfoModal } from './ProjectInfoModal';
 
 export default function ProjectInfo(props) {
   useInjectSaga({ key: sliceKey, saga });
   useInjectReducer({ key: sliceKey, reducer });
 
   const { states, handlers } = useHooks(props);
-  const { projects } = states;
+  const { projects, isOpenModal, selectedProject, user } = states;
+  const { updateList, toggleModal, handleOpenModal } = handlers;
 
   return (
     <>
@@ -32,7 +33,7 @@ export default function ProjectInfo(props) {
               size="sm"
               color="info"
               className="btn-simple float-right m-0"
-              // onClick={() => toggleAddModal(true)}
+              onClick={() => handleOpenModal()}
             >
               <i className="tim-icons icon-simple-add" /> New
             </Button>
@@ -67,15 +68,16 @@ export default function ProjectInfo(props) {
                   <td className="text-right">
                     <Button
                       color="link"
-                      id="tooltip636901683"
+                      id={`tooltip${item.id}`}
                       title=""
                       type="button"
+                      onClick={() => handleOpenModal(item)}
                     >
                       <i className="tim-icons icon-pencil" />
                     </Button>
                     <UncontrolledTooltip
                       delay={0}
-                      target="tooltip636901683"
+                      target={`tooltip${item.id}`}
                       placement="right"
                     >
                       Edit
@@ -87,6 +89,14 @@ export default function ProjectInfo(props) {
           </Table>
         </CardBody>
       </Card>
+
+      <ProjectInfoModal
+        isOpen={isOpenModal}
+        project={selectedProject}
+        toggleModal={toggleModal}
+        user={user}
+        updateList={updateList}
+      />
     </>
   );
 }
