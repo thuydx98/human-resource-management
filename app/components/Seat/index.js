@@ -4,17 +4,17 @@ import PropTypes from 'prop-types';
 import './styles/style.scss';
 
 const Seat = props => {
-  const { id, department, fullName, position } = props;
+  const { id, department, fullName, position, employeeId } = props;
   return (
     <>
       <Button
-        color={fullName ? 'danger' : 'success'}
+        color={employeeId ? 'danger' : 'success'}
         id={`tooltip${id}`}
         className="animation-on-hover border seat"
       >
         {position}
       </Button>
-      {fullName && (
+      {employeeId && (
         <UncontrolledTooltip
           delay={0}
           target={`tooltip${id}`}
@@ -32,6 +32,7 @@ Seat.propTypes = {
   position: PropTypes.string,
   department: PropTypes.string,
   fullName: PropTypes.string,
+  employeeId: PropTypes.string,
 };
 
 export default memo(Seat);

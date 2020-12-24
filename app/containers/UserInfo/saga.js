@@ -1,5 +1,5 @@
 import { call, put, all, fork, takeLatest } from 'redux-saga/effects';
-import { getUser } from 'services/user';
+import { getUser, uploadAvatar } from 'services/user';
 import { actions } from './slice';
 
 export function* getUserInfoWatcher() {
@@ -15,6 +15,20 @@ export function* getUserInfoTask(action) {
   }
 }
 
+export function* uploadAvatarWatcher() {
+  yield takeLatest(actions.uploadAvatar, uploadAvatarTask);
+}
+
+export function* uploadAvatarTask(action) {
+  const { image, userId } = action.payload;
+  const { response, error } = yield call(uploadAvatar, image, userId);
+  if (response) {
+    yield put(actions.uploadAvatarSuccess(response.obj));
+  } else {
+    yield put(actions.uploadAvatarFailed(error));
+  }
+}
+
 export default function* defaultSaga() {
-  yield all([fork(getUserInfoWatcher)]);
+  yield all([fork(getUserInfoWatcher), fork(uploadAvatarWatcher)]);
 }

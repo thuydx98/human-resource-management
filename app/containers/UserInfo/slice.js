@@ -9,6 +9,11 @@ export const initialState = {
     state: null,
     error: null,
   },
+  uploadAvatar: {
+    data: null,
+    state: null,
+    error: null,
+  },
 };
 
 const slice = createSlice({
@@ -30,12 +35,33 @@ const slice = createSlice({
       )(state);
     },
     setUser(state, action) {
-      return flow(set('userInfo.data', action.payload))(state);
+      return flow(
+        set('userInfo.data', action.payload),
+        set('uploadAvatar', initialState.uploadAvatar),
+      )(state);
     },
     getUserFailed(state, action) {
       return flow(
         set('userInfo.state', ACTION_STATUS.FAILED),
         set('userInfo.error', action.payload),
+      )(state);
+    },
+    uploadAvatar(state) {
+      return flow(
+        set('uploadAvatar.data', null),
+        set('uploadAvatar.state', ACTION_STATUS.PENDING),
+      )(state);
+    },
+    uploadAvatarSuccess(state, action) {
+      return flow(
+        set('uploadAvatar.data', action.payload),
+        set('uploadAvatar.state', ACTION_STATUS.SUCCESS),
+      )(state);
+    },
+    uploadAvatarFailed(state, action) {
+      return flow(
+        set('uploadAvatar.state', ACTION_STATUS.FAILED),
+        set('uploadAvatar.error', action.payload),
       )(state);
     },
     resetState(state) {

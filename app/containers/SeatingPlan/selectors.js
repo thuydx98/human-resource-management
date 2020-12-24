@@ -1,16 +1,16 @@
 import get from 'lodash/fp/get';
 import { createSelector } from 'reselect';
 
-const selectDepartmentList = state => state.departmentList;
+const selectSeatingPlan = state => state.seatingPlan;
 
-const selectDepartmentListData = createSelector(
-  selectDepartmentList,
-  state => get('departmentList.data', state),
+const selectListSeatData = createSelector(
+  selectSeatingPlan,
+  state => get('seats.data', state),
 );
 
-const selectDepartmentListState = createSelector(
-  selectDepartmentList,
-  state => get('departmentList.state', state),
+const selectListSeatState = createSelector(
+  selectSeatingPlan,
+  state => get('seats.state', state),
 );
 
-export { selectDepartmentListData, selectDepartmentListState };
+export { selectListSeatData, selectListSeatState };

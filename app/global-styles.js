@@ -39,6 +39,14 @@ const GlobalStyle = createGlobalStyle`
     filter: invert(.8);
     outline: none;
   }
+
+  .outline-none {
+    outline: none !important;
+  }
+
+  .cursor-pointer{
+    cursor: pointer !important;
+  }
 `;
 
 export default GlobalStyle;

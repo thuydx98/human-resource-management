@@ -1,5 +1,5 @@
 import { call, put, all, fork, takeLatest } from 'redux-saga/effects';
-import { login } from 'services/authentication';
+import { login } from 'services/user/authentication';
 import AuthInfo from 'models/AuthInfo';
 import AuthUtils from 'utils/authentication';
 import { actions } from './slice';

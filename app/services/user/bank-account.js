@@ -1,4 +1,4 @@
-import service, { handleGeneralError } from './index';
+import service, { handleGeneralError } from '../index';
 
 const BASE_URL = process.env.API_URI;
 

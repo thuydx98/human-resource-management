@@ -1,12 +1,11 @@
-import service, { handleGeneralError } from './index';
+import service, { handleGeneralError } from '../index';
 
 const BASE_URL = process.env.API_URI;
 
-export function save(payload, userId) {
+export function getList() {
   return service(BASE_URL, {
-    url: `/users/${userId}/projects`,
-    method: 'POST',
-    data: payload,
+    url: '/seats',
+    method: 'GET',
   })
     .then(response => response.data)
     .then(data => ({ response: data }))

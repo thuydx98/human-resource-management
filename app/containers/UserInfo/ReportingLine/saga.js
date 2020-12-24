@@ -1,5 +1,5 @@
 import { call, put, all, fork, takeLatest } from 'redux-saga/effects';
-import { save } from 'services/feedback';
+import { save } from 'services/user/feedback';
 import { actions } from './slice';
 
 export function* saveFeedbackWatcher() {

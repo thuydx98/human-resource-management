@@ -1,5 +1,5 @@
 import { call, put, all, fork, takeLatest } from 'redux-saga/effects';
-import { save } from 'services/contract';
+import { save } from 'services/user/contract';
 import { actions } from './slice';
 
 export function* saveContractWatcher() {

@@ -19,62 +19,36 @@ export default function SeatingPlan() {
   useInjectReducer({ key: sliceKey, reducer });
 
   const { states, handlers } = useHooks();
+  const { seats, selectedFloor } = states;
+  const { setSelectedFloor } = handlers;
+  const selectedSeats = seats
+    ? seats.filter(item => item.floor === selectedFloor)
+    : [];
 
   return (
     <div className="content">
-      <Input placeholder="Choose..." type="select" className="w-25 ml-3">
+      <Input
+        placeholder="Choose..."
+        type="select"
+        className="w-25 ml-3"
+        onChange={e => setSelectedFloor(e.target.value)}
+      >
         <option value="1">Floor 1</option>
         <option value="2">Floor 2</option>
         <option value="3">Floor 3</option>
         <option value="4">Floor 4</option>
-        <option value="5">Floor 5</option>
-        <option value="6">Floor 6</option>
       </Input>
 
-      <Seat
-        position="F1.1"
-        id="636901683"
-        fullName="Employee name"
-        department="Department"
-      />
-      <Seat
-        position="F1.2"
-        id="636901683"
-        fullName="Employee name"
-        department="Department"
-      />
-      <Seat position="F1.3" />
-      <Seat
-        position="F1.4"
-        id="636901683"
-        fullName="Employee name"
-        department="Department"
-      />
-      <Seat
-        position="F1.5"
-        id="636901683"
-        fullName="Employee name"
-        department="Department"
-      />
-      <Seat
-        position="F1.6"
-        id="636901683"
-        fullName="Employee name"
-        department="Department"
-      />
-      <Seat
-        position="F1.7"
-        id="636901683"
-        fullName="Employee name"
-        department="Department"
-      />
-      <Seat position="F1.8" />
-      <Seat
-        position="F1.9"
-        id="636901683"
-        fullName="Employee name"
-        department="Department"
-      />
+      {selectedSeats.map(item => (
+        <Seat
+          key={item.id}
+          position={item.seat}
+          id={item.id}
+          employeeId={item.employeeId}
+          fullName={item.firstname ? `${item.firstname} ${item.lastname}` : '-'}
+          department={item.department || '-'}
+        />
+      ))}
     </div>
   );
 }

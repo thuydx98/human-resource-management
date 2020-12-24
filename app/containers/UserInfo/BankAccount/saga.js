@@ -1,5 +1,5 @@
 import { call, put, all, fork, takeLatest } from 'redux-saga/effects';
-import { save } from 'services/bank-account';
+import { save } from 'services/user/bank-account';
 import { getList } from 'services/bank';
 import { actions } from './slice';
 

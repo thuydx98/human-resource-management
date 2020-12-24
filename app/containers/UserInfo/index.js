@@ -18,8 +18,8 @@ export default function UserInfo() {
 
   const { states, handlers } = useHooks();
 
-  const { selectedTab, selectUserInfo } = states;
-  const { setSelectedTab, setUser } = handlers;
+  const { selectedTab, selectUserInfo, fileInput } = states;
+  const { setSelectedTab, setUser, handleUploadAvatar } = handlers;
   const { avatar, firstname, lastname, permission } = selectUserInfo || {};
 
   return (
@@ -34,16 +34,27 @@ export default function UserInfo() {
                 <div className="block block-two" />
                 <div className="block block-three" />
                 <div className="block block-four" />
-                <a href="#pablo" onClick={e => e.preventDefault()}>
+                <input
+                  ref={fileInput}
+                  type="file"
+                  hidden
+                  onChange={handleUploadAvatar}
+                  accept=".jpg, .png, .jpeg"
+                />
+                <button
+                  type="button"
+                  className="btn-link outline-none cursor-pointer"
+                  onClick={() => fileInput.current.click()}
+                >
                   <img
                     alt="..."
                     className="avatar"
                     src={avatar || require('assets/img/default-avatar.png')}
                   />
-                  <h5 className="title">
+                  <h5 className="title mb-0">
                     {firstname ? `${firstname} ${lastname}` : '-'}
                   </h5>
-                </a>
+                </button>
                 <p className="description">{permission}</p>
               </div>
               <Button

@@ -1,5 +1,5 @@
 import { call, put, all, fork, takeLatest } from 'redux-saga/effects';
-import { update } from 'services/insurance';
+import { update } from 'services/user/insurance';
 import { actions } from './slice';
 
 export function* updateInsuranceWatcher() {

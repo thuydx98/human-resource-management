@@ -13,4 +13,19 @@ const selectUserInfoState = createSelector(
   state => get('userInfo.state', state),
 );
 
-export { selectUserInfoData, selectUserInfoState };
+const uploadAvatarState = createSelector(
+  selectUserInfo,
+  state => get('uploadAvatar.state', state),
+);
+
+const uploadAvatarData = createSelector(
+  selectUserInfo,
+  state => get('uploadAvatar.data', state),
+);
+
+export {
+  selectUserInfoData,
+  selectUserInfoState,
+  uploadAvatarState,
+  uploadAvatarData,
+};

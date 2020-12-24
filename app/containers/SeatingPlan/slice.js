@@ -4,7 +4,7 @@ import flow from 'lodash/fp/flow';
 import { ACTION_STATUS } from 'utils/constants';
 
 export const initialState = {
-  departmentList: {
+  seats: {
     data: [],
     state: null,
     error: null,
@@ -12,34 +12,34 @@ export const initialState = {
 };
 
 const slice = createSlice({
-  name: 'departmentList',
+  name: 'seatingPlan',
   initialState,
   reducers: {
-    getDepartmentList(state) {
+    getListSeat(state) {
       return flow(
-        set('departmentList.data', []),
-        set('departmentList.state', ACTION_STATUS.PENDING),
-        set('departmentList.error', null),
+        set('seats.data', []),
+        set('seats.state', ACTION_STATUS.PENDING),
+        set('seats.error', null),
       )(state);
     },
-    getDepartmentListSuccess(state, action) {
+    getListSeatSuccess(state, action) {
       return flow(
-        set('departmentList.data', action.payload),
-        set('departmentList.state', ACTION_STATUS.SUCCESS),
-        set('departmentList.error', null),
+        set('seats.data', action.payload),
+        set('seats.state', ACTION_STATUS.SUCCESS),
+        set('seats.error', null),
       )(state);
     },
-    setDepartmentList(state, action) {
-      return flow(set('departmentList.data', action.payload))(state);
+    setListSeat(state, action) {
+      return flow(set('seats.data', action.payload))(state);
     },
-    getDepartmentListFailed(state, action) {
+    getListSeatFailed(state, action) {
       return flow(
-        set('departmentList.state', ACTION_STATUS.FAILED),
-        set('departmentList.error', action.payload),
+        set('seats.state', ACTION_STATUS.FAILED),
+        set('seats.error', action.payload),
       )(state);
     },
     resetState(state) {
-      return flow(set('departmentList', initialState.departmentList))(state);
+      return flow(set('seats', initialState.seats))(state);
     },
   },
 });

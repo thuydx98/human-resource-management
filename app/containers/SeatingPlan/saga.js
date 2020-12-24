@@ -1,20 +1,20 @@
 import { call, put, all, fork, takeLatest } from 'redux-saga/effects';
-import { getListDepartment } from 'services/department';
+import { getList } from 'services/seating-plan';
 import { actions } from './slice';
 
-export function* getDepartmentListWatcher() {
-  yield takeLatest(actions.getdepartmentList, getDepartmentListTask);
+export function* getListSeatWatcher() {
+  yield takeLatest(actions.getListSeat, getListSeatTask);
 }
 
-export function* getDepartmentListTask() {
-  const { response, error } = yield call(getListDepartment);
+export function* getListSeatTask() {
+  const { response, error } = yield call(getList);
   if (response) {
-    yield put(actions.getDepartmentListSuccess(response.obj));
+    yield put(actions.getListSeatSuccess(response.obj));
   } else {
-    yield put(actions.getDepartmentListFailed(error));
+    yield put(actions.getListSeatFailed(error));
   }
 }
 
 export default function* defaultSaga() {
-  yield all([fork(getDepartmentListWatcher)]);
+  yield all([fork(getListSeatWatcher)]);
 }
