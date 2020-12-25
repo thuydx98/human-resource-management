@@ -10,6 +10,8 @@ import {
 import moment from 'moment';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+import AuthUtils from 'utils/authentication';
+import { useParams } from 'react-router-dom';
 import saga from './saga';
 import { sliceKey, reducer } from './slice';
 import useHooks from './hook';
@@ -22,23 +24,28 @@ export default function ReportingLine(props) {
   const { states, handlers } = useHooks(props);
   const { feedBacks, isOpenModal, user } = states;
   const { toggleModal, updateList } = handlers;
+  const params = useParams();
+  const { role } = AuthUtils.getAuthInfo();
+  const isAllow = role === 'Manager' && params.userId;
 
   return (
     <>
       <Card>
-        <CardHeader>
-          <h4 className="description mb-0">
-            Feed back
-            <Button
-              size="sm"
-              color="info"
-              className="btn-simple float-right m-0"
-              onClick={() => toggleModal(true)}
-            >
-              <i className="tim-icons icon-simple-add" /> New
-            </Button>
-          </h4>
-        </CardHeader>
+        {isAllow && (
+          <CardHeader>
+            <h4 className="description mb-0">
+              Feed back
+              <Button
+                size="sm"
+                color="info"
+                className="btn-simple float-right m-0"
+                onClick={() => toggleModal(true)}
+              >
+                <i className="tim-icons icon-simple-add" /> New
+              </Button>
+            </h4>
+          </CardHeader>
+        )}
         <CardBody>
           <Table>
             <thead>

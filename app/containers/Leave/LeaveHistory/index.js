@@ -1,50 +1,20 @@
 import React from 'react';
-import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  Table,
-  UncontrolledTooltip,
-  Row,
-  Col,
-  Input,
-} from 'reactstrap';
-import get from 'lodash/fp/get';
-import { useInjectSaga } from 'utils/injectSaga';
-import { useInjectReducer } from 'utils/injectReducer';
-import saga from './saga';
-import { sliceKey, reducer } from './slice';
+import { Button, Card, CardBody, Table, UncontrolledTooltip } from 'reactstrap';
+import moment from 'moment';
+import Notification from 'components/Notification';
 import useHooks from './hook';
 
 export default function LeaveHistory() {
-  useInjectSaga({ key: sliceKey, saga });
-  useInjectReducer({ key: sliceKey, reducer });
-
   const { states, handlers } = useHooks();
-  const { user, isSubmitted } = states;
-  const { onSubmit, setUser } = handlers;
+  const { leaves, notificationRef } = states;
+  const { handleCancelRequest } = handlers;
+
+  const now = moment();
 
   return (
     <>
+      <Notification ref={notificationRef} />
       <Card>
-        <CardHeader>
-          <Row>
-            <Col md={3}>
-              <Input
-                type="select"
-                onChange={e => setUser({ ...user, gender: e.target.value })}
-              >
-                <option value="2020">2018</option>
-                <option value="2020">2019</option>
-                <option value="2020" selected>
-                  2020
-                </option>
-                <option value="2020">2021</option>
-              </Input>
-            </Col>
-          </Row>
-        </CardHeader>
         <CardBody>
           <Table>
             <thead>
@@ -58,30 +28,35 @@ export default function LeaveHistory() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Nov 19 2020</td>
-                <td>Nov 18 2020</td>
-                <td>Annual Leave</td>
-                <td>Taken</td>
-                <td>13h - 17h: Receive a graduate certificate & Re ...</td>
-                <td className="text-right">
-                  <Button
-                    color="link"
-                    id="tooltip636901683"
-                    title=""
-                    type="button"
-                  >
-                    <i className="tim-icons icon-simple-remove" />
-                  </Button>
-                  <UncontrolledTooltip
-                    delay={0}
-                    target="tooltip636901683"
-                    placement="right"
-                  >
-                    Cancel
-                  </UncontrolledTooltip>
-                </td>
-              </tr>
+              {leaves.map(item => {
+                const status = moment(item.date) < now ? 'Taken' : 'Planned';
+                return (
+                  <tr key={item.id}>
+                    <td>{moment(item.date).format('MMM DD YYYY')}</td>
+                    <td>{moment(item.createdDate).format('MMM DD YYYY')}</td>
+                    <td>{item.type === 'ANNUAL' ? 'Annual' : 'Non-paid'}</td>
+                    <td>{item.status === 'CANCEL' ? 'Cancelled' : status}</td>
+                    <td>{item.reason}</td>
+                    <td className="text-right">
+                      {moment(item.date) > now && item.status !== 'CANCEL' && (
+                        <>
+                          <Button
+                            color="link"
+                            className="text-muted"
+                            id={`tooltip${item.id}`}
+                            onClick={() => handleCancelRequest(item.id)}
+                          >
+                            <i className="tim-icons icon-simple-remove" />
+                          </Button>
+                          <UncontrolledTooltip target={`tooltip${item.id}`}>
+                            Cancel
+                          </UncontrolledTooltip>
+                        </>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </Table>
         </CardBody>

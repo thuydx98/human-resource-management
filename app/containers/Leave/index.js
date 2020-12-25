@@ -5,34 +5,58 @@ import {
   Col,
   ButtonGroup,
   Card,
-  CardBody,
   CardHeader,
+  Input,
 } from 'reactstrap';
 import classNames from 'classnames';
+import moment from 'moment';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import saga from './saga';
 import { sliceKey, reducer } from './slice';
 import useHooks, { LEAVE_TABS } from './hook';
-import RequestLeave from './RequestLeave/Loadable';
-import SummaryLeave from './SummaryLeave/Loadable';
-import LeaveHistory from './LeaveHistory/Loadable';
+import RequestLeave from './RequestLeave';
+import SummaryLeave from './SummaryLeave';
+import LeaveHistory from './LeaveHistory';
 
 export default function Leave() {
   useInjectSaga({ key: sliceKey, saga });
   useInjectReducer({ key: sliceKey, reducer });
 
   const { states, handlers } = useHooks();
-  const { selectedTab, userLeave } = states;
-  const { setSelectedTab, updateLeave } = handlers;
+  const { selectedTab, selectedYear } = states;
+  const { setSelectedTab, setSelectedYear } = handlers;
 
   return (
     <div className="content">
       <Card>
         <CardHeader>
           <Row>
-            <Col md="6" />
-            <Col sm="6">
+            <Col md="3">
+              {(selectedTab === LEAVE_TABS.summaryTab ||
+                selectedTab === LEAVE_TABS.historyTab) && (
+                <Input
+                  type="select"
+                  value={selectedYear || moment().year()}
+                  onChange={e => setSelectedYear(e.target.value)}
+                >
+                  <option value={moment().year() - 3}>
+                    {moment().year() - 3}
+                  </option>
+                  <option value={moment().year() - 2}>
+                    {moment().year() - 2}
+                  </option>
+                  <option value={moment().year() - 1}>
+                    {moment().year() - 1}
+                  </option>
+                  <option value={moment().year()}>{moment().year()}</option>
+                  <option value={moment().year() + 1}>
+                    {moment().year() + 1}
+                  </option>
+                </Input>
+              )}
+            </Col>
+            <Col md="9">
               <ButtonGroup
                 className="btn-group-toggle float-right"
                 data-toggle="buttons"
@@ -100,15 +124,9 @@ export default function Leave() {
             </Col>
           </Row>
         </CardHeader>
-        {selectedTab === LEAVE_TABS.requestTab && (
-          <RequestLeave userLeave={userLeave} updateLeave={updateLeave} />
-        )}
-        {selectedTab === LEAVE_TABS.summaryTab && (
-          <SummaryLeave userLeave={userLeave} updateLeave={updateLeave} />
-        )}
-        {selectedTab === LEAVE_TABS.historyTab && (
-          <LeaveHistory userLeave={userLeave} updateLeave={updateLeave} />
-        )}
+        {selectedTab === LEAVE_TABS.requestTab && <RequestLeave />}
+        {selectedTab === LEAVE_TABS.summaryTab && <SummaryLeave />}
+        {selectedTab === LEAVE_TABS.historyTab && <LeaveHistory />}
       </Card>
     </div>
   );

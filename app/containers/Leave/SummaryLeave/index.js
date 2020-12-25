@@ -1,57 +1,24 @@
 import React from 'react';
-import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  Table,
-  UncontrolledTooltip,
-  FormGroup,
-  Label,
-  Input,
-  FormFeedback,
-  Row,
-  Col,
-} from 'reactstrap';
-import get from 'lodash/fp/get';
-import { useInjectSaga } from 'utils/injectSaga';
-import { useInjectReducer } from 'utils/injectReducer';
-import saga from './saga';
-import { sliceKey, reducer } from './slice';
+import { Card, CardBody, Table } from 'reactstrap';
+import moment from 'moment';
 import useHooks from './hook';
 
 export default function SummaryLeave() {
-  useInjectSaga({ key: sliceKey, saga });
-  useInjectReducer({ key: sliceKey, reducer });
+  const { states } = useHooks();
+  const { leaves } = states;
 
-  const { states, handlers } = useHooks();
-  const { user, isSubmitted } = states;
-  const { onSubmit, setUser } = handlers;
+  const now = moment();
+  const annualLeaves = leaves.filter(
+    item => item.type === 'ANNUAL' && item.status !== 'CANCEL',
+  );
+
+  const unPaidLeaves = leaves.filter(
+    item => item.type === 'NON_PAID' && item.status !== 'CANCEL',
+  );
 
   return (
     <>
       <Card>
-        <CardHeader>
-          <Row>
-            <Col md={3}>
-              <Input
-                name="gender"
-                placeholder="Choose..."
-                type="select"
-                defaultValue={get('gender', user)}
-                onChange={e => setUser({ ...user, gender: e.target.value })}
-                invalid={isSubmitted && !user.gender}
-              >
-                <option value="2020">2018</option>
-                <option value="2020">2019</option>
-                <option value="2020" selected>
-                  2020
-                </option>
-                <option value="2020">2021</option>
-              </Input>
-            </Col>
-          </Row>
-        </CardHeader>
         <CardBody>
           <Table>
             <thead>
@@ -67,16 +34,24 @@ export default function SummaryLeave() {
               <tr>
                 <td>Annual Leave</td>
                 <td className="text-right">12</td>
-                <td className="text-right">0</td>
-                <td className="text-right">0</td>
-                <td className="text-right">0</td>
+                <td className="text-right">
+                  {annualLeaves.filter(item => moment(item.date) <= now).length}
+                </td>
+                <td className="text-right">
+                  {annualLeaves.filter(item => moment(item.date) > now).length}
+                </td>
+                <td className="text-right">{12 - annualLeaves.length}</td>
               </tr>
               <tr>
                 <td>Non-paid Leave</td>
                 <td className="text-right">30</td>
-                <td className="text-right">0</td>
-                <td className="text-right">0</td>
-                <td className="text-right">0</td>
+                <td className="text-right">
+                  {unPaidLeaves.filter(item => moment(item.date) <= now).length}
+                </td>
+                <td className="text-right">
+                  {unPaidLeaves.filter(item => moment(item.date) > now).length}
+                </td>
+                <td className="text-right">{30 - unPaidLeaves.length}</td>
               </tr>
             </tbody>
           </Table>

@@ -10,9 +10,9 @@ import {
   Row,
 } from 'reactstrap';
 import { useHistory } from 'react-router-dom';
+import WeeklyTimeSheet from 'containers/WeeklyTimeSheet/Loadable';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import WeeklyTimeSheet from 'containers/WeeklyTimeSheet/Loadable';
 import saga from './saga';
 import { sliceKey, reducer } from './slice';
 import useHooks from './hook';
@@ -22,7 +22,16 @@ export default function Dashboard() {
   useInjectReducer({ key: sliceKey, reducer });
 
   const history = useHistory();
-  const { states, handlers } = useHooks();
+  const { states } = useHooks();
+  const { leaves } = states;
+
+  const annualLeaves = leaves.filter(
+    item => item.type === 'ANNUAL' && item.status !== 'CANCEL',
+  );
+
+  const unPaidLeaves = leaves.filter(
+    item => item.type === 'NON_PAID' && item.status !== 'CANCEL',
+  );
 
   return (
     <div className="content">
@@ -35,10 +44,16 @@ export default function Dashboard() {
             </CardHeader>
             <CardBody>
               <CardText>
-                Annual leave <span className="float-right">5/5</span>
+                Annual leave
+                <span className="float-right">
+                  {`${12 - annualLeaves.length}/12`}
+                </span>
               </CardText>
               <CardText>
-                Unpaid leave <span className="float-right">30/30</span>
+                Unpaid leave
+                <span className="float-right">
+                  {`${30 - unPaidLeaves.length}/30`}
+                </span>
               </CardText>
             </CardBody>
             <CardFooter className="pt-0">

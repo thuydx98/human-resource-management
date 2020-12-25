@@ -1,16 +1,17 @@
 import get from 'lodash/fp/get';
 import { createSelector } from 'reselect';
+import { initialState } from './slice';
 
-const selectContractList = state => state.contractList;
+const selectDashboard = state => state.dashboard || initialState;
 
-const selectContractListData = createSelector(
-  selectContractList,
-  state => get('contractList.data', state),
+const selectListLeaveData = createSelector(
+  selectDashboard,
+  state => get('leaves.data', state),
 );
 
-const selectContractListState = createSelector(
-  selectContractList,
-  state => get('contractList.state', state),
+const selectListLeaveState = createSelector(
+  selectDashboard,
+  state => get('leaves.state', state),
 );
 
-export { selectContractListData, selectContractListState };
+export { selectListLeaveData, selectListLeaveState };

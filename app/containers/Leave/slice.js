@@ -4,42 +4,68 @@ import flow from 'lodash/fp/flow';
 import { ACTION_STATUS } from 'utils/constants';
 
 export const initialState = {
-  userInfo: {
+  leaves: {
     data: [],
+    state: null,
+    error: null,
+  },
+  selectedYear: null,
+  cancel: {
+    data: null,
     state: null,
     error: null,
   },
 };
 
 const slice = createSlice({
-  name: 'userInfo',
+  name: 'userLeave',
   initialState,
   reducers: {
-    getUser(state) {
+    getListLeave(state) {
       return flow(
-        set('userInfo.data', []),
-        set('userInfo.state', ACTION_STATUS.PENDING),
-        set('userInfo.error', null),
+        set('leaves.data', []),
+        set('leaves.state', ACTION_STATUS.PENDING),
+        set('leaves.error', null),
       )(state);
     },
-    getUserSuccess(state, action) {
+    getListLeaveSuccess(state, action) {
       return flow(
-        set('userInfo.data', action.payload),
-        set('userInfo.state', ACTION_STATUS.SUCCESS),
-        set('userInfo.error', null),
+        set('leaves.data', action.payload),
+        set('leaves.state', ACTION_STATUS.SUCCESS),
+        set('leaves.error', null),
       )(state);
     },
-    setUser(state, action) {
-      return flow(set('userInfo.data', action.payload))(state);
+    setListLeave(state, action) {
+      return flow(set('leaves.data', action.payload))(state);
     },
-    getUserFailed(state, action) {
+    getListLeaveFailed(state, action) {
       return flow(
-        set('userInfo.state', ACTION_STATUS.FAILED),
-        set('userInfo.error', action.payload),
+        set('leaves.state', ACTION_STATUS.FAILED),
+        set('leaves.error', action.payload),
       )(state);
     },
     resetState(state) {
-      return flow(set('userInfo', initialState.userInfo))(state);
+      return flow(set('leaves', initialState.leaves))(state);
+    },
+    setSelectedYear(state, action) {
+      return flow(set('selectedYear', action.payload))(state);
+    },
+    cancelRequest(state) {
+      return flow(
+        set('cancel.data', null),
+        set('cancel.state', ACTION_STATUS.PENDING),
+        set('cancel.error', null),
+      )(state);
+    },
+    resetCancelRequest(state) {
+      return flow(set('cancel', initialState.cancel))(state);
+    },
+    cancelRequestSuccess(state, action) {
+      return flow(
+        set('cancel.data', action.payload),
+        set('cancel.state', ACTION_STATUS.SUCCESS),
+        set('cancel.error', null),
+      )(state);
     },
   },
 });

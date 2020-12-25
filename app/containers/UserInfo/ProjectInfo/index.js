@@ -10,6 +10,7 @@ import {
 import moment from 'moment';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+import AuthUtils from 'utils/authentication';
 import saga from './saga';
 import { sliceKey, reducer } from './slice';
 import useHooks from './hook';
@@ -22,23 +23,26 @@ export default function ProjectInfo(props) {
   const { states, handlers } = useHooks(props);
   const { projects, isOpenModal, selectedProject, user } = states;
   const { updateList, toggleModal, handleOpenModal } = handlers;
+  const { role } = AuthUtils.getAuthInfo();
 
   return (
     <>
       <Card>
-        <CardHeader>
-          <h4 className="description mb-0">
-            Project information
-            <Button
-              size="sm"
-              color="info"
-              className="btn-simple float-right m-0"
-              onClick={() => handleOpenModal()}
-            >
-              <i className="tim-icons icon-simple-add" /> New
-            </Button>
-          </h4>
-        </CardHeader>
+        {role === 'Manager' && (
+          <CardHeader>
+            <h4 className="description mb-0">
+              Project information
+              <Button
+                size="sm"
+                color="info"
+                className="btn-simple float-right m-0"
+                onClick={() => handleOpenModal()}
+              >
+                <i className="tim-icons icon-simple-add" /> New
+              </Button>
+            </h4>
+          </CardHeader>
+        )}
         <CardBody>
           <Table>
             <thead>
@@ -47,7 +51,7 @@ export default function ProjectInfo(props) {
                 <th>Client</th>
                 <th>Start from</th>
                 <th>To</th>
-                <th className="text-right">Actions</th>
+                {role === 'Manager' && <th className="text-right">Actions</th>}
               </tr>
             </thead>
             <tbody>
@@ -66,24 +70,26 @@ export default function ProjectInfo(props) {
                         ? moment(item.endDate).format('MMMM DD YYYY')
                         : '-'}
                     </td>
-                    <td className="text-right">
-                      <Button
-                        color="link"
-                        id={`tooltip${item.id}`}
-                        title=""
-                        type="button"
-                        onClick={() => handleOpenModal(item)}
-                      >
-                        <i className="tim-icons icon-pencil" />
-                      </Button>
-                      <UncontrolledTooltip
-                        delay={0}
-                        target={`tooltip${item.id}`}
-                        placement="right"
-                      >
-                        Edit
-                      </UncontrolledTooltip>
-                    </td>
+                    {role === 'Manager' && (
+                      <td className="text-right">
+                        <Button
+                          color="link"
+                          id={`tooltip${item.id}`}
+                          title=""
+                          type="button"
+                          onClick={() => handleOpenModal(item)}
+                        >
+                          <i className="tim-icons icon-pencil" />
+                        </Button>
+                        <UncontrolledTooltip
+                          delay={0}
+                          target={`tooltip${item.id}`}
+                          placement="right"
+                        >
+                          Edit
+                        </UncontrolledTooltip>
+                      </td>
+                    )}
                   </tr>
                 ))}
             </tbody>

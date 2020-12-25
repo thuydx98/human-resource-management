@@ -1,8 +1,7 @@
+/* eslint-disable indent */
 import React from 'react';
 import {
   Button,
-  Card,
-  CardHeader,
   CardBody,
   CardFooter,
   FormGroup,
@@ -12,11 +11,11 @@ import {
   Col,
   Label,
   FormFeedback,
-  FormText,
 } from 'reactstrap';
 import get from 'lodash/fp/get';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+import Notification from 'components/Notification';
 import saga from './saga';
 import { sliceKey, reducer } from './slice';
 import useHooks from './hook';
@@ -26,11 +25,19 @@ export default function RequestLeave() {
   useInjectReducer({ key: sliceKey, reducer });
 
   const { states, handlers } = useHooks();
-  const { user, isSubmitted } = states;
-  const { onSubmit, setUser } = handlers;
+  const { leaves, payload, isSubmitted, notificationRef } = states;
+  const { onSubmit, setPayload } = handlers;
+
+  const selectedType = get('type', payload) || 'ANNUAL';
+  const totalUsed = leaves
+    ? leaves.filter(
+        item => item.type === selectedType && item.status !== 'CANCEL',
+      ).length
+    : 0;
 
   return (
     <>
+      <Notification ref={notificationRef} />
       <CardBody>
         <Form>
           <Row>
@@ -41,46 +48,34 @@ export default function RequestLeave() {
                   name="gender"
                   placeholder="Choose..."
                   type="select"
-                  defaultValue={get('gender', user)}
-                  onChange={e => setUser({ ...user, gender: e.target.value })}
-                  invalid={isSubmitted && !user.gender}
+                  value={get('type', payload) || 'ANNUAL'}
+                  onChange={e =>
+                    setPayload({ ...payload, type: e.target.value })
+                  }
                 >
-                  <option value="Annual Leave">Annual Leave</option>
-                  <option value="Non-paid Leave">Non-paid Leave</option>
+                  <option value="ANNUAL">Annual Leave</option>
+                  <option value="NON_PAID">Non-paid Leave</option>
                 </Input>
-                <FormFeedback>Leave type is required</FormFeedback>
               </FormGroup>
             </Col>
             <Col className="px-md-1" md="2">
               <Label>Remaining days</Label>
-              <p className="p-2">5</p>
+              <p className="p-2">
+                {selectedType === 'ANNUAL' ? 12 - totalUsed : 30 - totalUsed}
+              </p>
             </Col>
             <Col className="pl-md-1">
               <FormGroup>
-                <Label>From</Label>
+                <Label>Leave date</Label>
                 <Input
-                  name="birthday"
                   type="date"
-                  placeholder="Birthday"
-                  value={get('birthday', user)}
-                  onChange={e => setUser({ ...user, birthday: e.target.value })}
-                  invalid={isSubmitted && !user.birthday}
+                  value={get('date', payload)}
+                  onChange={e =>
+                    setPayload({ ...payload, date: e.target.value })
+                  }
+                  invalid={isSubmitted && !payload.date}
                 />
-                <FormFeedback>Birthday is required</FormFeedback>
-              </FormGroup>
-            </Col>
-            <Col className="pl-md-1">
-              <FormGroup>
-                <Label>To</Label>
-                <Input
-                  name="birthday"
-                  type="date"
-                  placeholder="Birthday"
-                  value={get('birthday', user)}
-                  onChange={e => setUser({ ...user, birthday: e.target.value })}
-                  invalid={isSubmitted && !user.birthday}
-                />
-                <FormFeedback>Birthday is required</FormFeedback>
+                <FormFeedback>Leave date is required</FormFeedback>
               </FormGroup>
             </Col>
           </Row>
@@ -92,15 +87,15 @@ export default function RequestLeave() {
                 <Input
                   rows="4"
                   type="textarea"
-                  defaultValue={get('firstname', user)}
-                  placeholder="Please note your leave time here."
+                  value={get('reason', payload)}
+                  placeholder="Please note your leave time & reason here."
                   autoComplete="off"
                   onChange={e =>
-                    setUser({ ...user, firstname: e.target.value })
+                    setPayload({ ...payload, reason: e.target.value })
                   }
-                  invalid={isSubmitted && !user.firstname}
+                  invalid={isSubmitted && !payload.reason}
                 />
-                <FormFeedback>First name is required</FormFeedback>
+                <FormFeedback>Reason is required</FormFeedback>
               </FormGroup>
             </Col>
           </Row>
@@ -110,8 +105,13 @@ export default function RequestLeave() {
         <Button
           color="info"
           type="submit"
-          className="float-right"
+          className="btn-sm float-right"
           onClick={onSubmit}
+          disabled={
+            selectedType === 'ANNUAL'
+              ? 12 - totalUsed === 0
+              : 30 - totalUsed === 0
+          }
         >
           Submit
         </Button>

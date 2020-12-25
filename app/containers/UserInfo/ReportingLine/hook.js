@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import useActions from 'utils/hooks/useActions';
 
 export const useHooks = props => {
   const { user, updateUser } = props;

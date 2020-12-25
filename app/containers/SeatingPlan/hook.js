@@ -1,19 +1,21 @@
 import { useCallback, useEffect, useState } from 'react';
 import useActions from 'utils/hooks/useActions';
 import { useSelector } from 'react-redux';
-import { actions as userActions } from 'containers/UserList/slice';
 import { actions } from './slice';
 import { selectListSeatData } from './selectors';
 
 export const useHooks = () => {
-  const [isOpenAddModal, toggleAddModal] = useState(false);
-  const [isOpenUpdateModal, setIsOpenUpdateModal] = useState(false);
   const [selectedFloor, setSelectedFloor] = useState('1');
+  const [isOpenModal, toggleModal] = useState(false);
+  const [selectedSeat, setSelectedSeat] = useState({});
+
   const seats = useSelector(selectListSeatData);
-  const { getListSeat, getUserList } = useActions(
+
+  const { getListSeat, getUserList, setListSeat } = useActions(
     {
       getListSeat: actions.getListSeat,
-      getUserList: userActions.getUserList,
+      getUserList: actions.getUserList,
+      setListSeat: actions.setListSeat,
     },
     [actions],
   );
@@ -21,35 +23,53 @@ export const useHooks = () => {
   useEffect(() => {
     if (!seats || seats.length === 0) {
       getListSeat();
+      getUserList();
     }
-  }, [getListSeat]);
+  }, [getListSeat, getUserList]);
 
-  const toggleUpdateModal = useCallback((isOpen, user) => {
-    setIsOpenUpdateModal(isOpen);
-  }, []);
+  const handleOpenModal = useCallback(
+    (seat = {}) => {
+      setSelectedSeat(seat);
+      toggleModal(true);
+    },
+    [setSelectedSeat, toggleModal],
+  );
 
-  // const updateDepartmentInList = useCallback(
-  //   user => {
-  //     const users = DepartmentList.map(item =>
-  //       user.employee_id === item.employee_id ? user : item,
-  //     );
-  //     setDepartmentList(users);
-  //   },
-  //   [DepartmentList, setDepartmentList],
-  // );
+  const updateList = useCallback(
+    seat => {
+      let list = [...seats];
+      if (seat.employeeId) {
+        list = list.map(item =>
+          item.employeeId === seat.employeeId
+            ? { ...item, firstname: null, lastname: null, employeeId: null }
+            : item,
+        );
+      }
+
+      if (selectedSeat.id) {
+        list = list.map(item => (item.id === selectedSeat.id ? seat : item));
+      } else {
+        list.push(seat);
+      }
+
+      setListSeat(list);
+    },
+    [seats, selectedSeat],
+  );
 
   return {
     states: {
-      isOpenAddModal,
-      isOpenUpdateModal,
       seats,
       selectedFloor,
+      selectedSeat,
+      isOpenModal,
     },
     handlers: {
-      toggleAddModal,
-      toggleUpdateModal,
       setSelectedFloor,
-      // updateDepartmentInList,
+      setSelectedSeat,
+      toggleModal,
+      handleOpenModal,
+      updateList,
     },
   };
 };

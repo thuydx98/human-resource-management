@@ -82,11 +82,14 @@ class Layout extends React.Component {
 
   getBrandText = () => {
     for (let i = 0; i < routes.length; i += 1) {
-      if (this.props.location.pathname.indexOf(routes[i].path) !== -1) {
+      if (
+        this.props.location.pathname.indexOf(
+          routes[i].uri || routes[i].path,
+        ) !== -1
+      ) {
         return routes[i].name;
       }
     }
-    return 'Brand';
   };
 
   render() {

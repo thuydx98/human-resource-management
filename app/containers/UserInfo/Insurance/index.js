@@ -17,6 +17,7 @@ import moment from 'moment';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import Notification from 'components/Notification';
+import AuthUtils from 'utils/authentication';
 import saga from './saga';
 import { sliceKey, reducer } from './slice';
 import useHooks from './hook';
@@ -28,24 +29,27 @@ export default function Insurance(props) {
   const { states, handlers } = useHooks(props);
   const { insurance, isSubmitted, notificationRef } = states;
   const { onSubmit, setInsurance } = handlers;
+  const { role } = AuthUtils.getAuthInfo();
 
   return (
     <>
       <Notification ref={notificationRef} />
       <Card>
-        <CardHeader>
-          <h4 className="description">
-            Insurance
-            <Button
-              color="info"
-              type="submit"
-              className="float-right btn-sm float-right"
-              onClick={onSubmit}
-            >
-              Save
-            </Button>
-          </h4>
-        </CardHeader>
+        {role === 'Manager' && (
+          <CardHeader>
+            <h4 className="description">
+              Insurance
+              <Button
+                color="info"
+                type="submit"
+                className="float-right btn-sm float-right"
+                onClick={onSubmit}
+              >
+                Save
+              </Button>
+            </h4>
+          </CardHeader>
+        )}
         <CardBody>
           <Form>
             <Row>
@@ -66,6 +70,7 @@ export default function Insurance(props) {
                       })
                     }
                     invalid={isSubmitted && !insurance.effectiveDate}
+                    disabled={role !== 'Manager'}
                   />
                   <FormFeedback>Effective Date is required</FormFeedback>
                 </FormGroup>
@@ -81,6 +86,7 @@ export default function Insurance(props) {
                       setInsurance({ ...insurance, bookNo: e.target.value })
                     }
                     invalid={isSubmitted && !insurance.bookNo}
+                    disabled={role !== 'Manager'}
                   />
                   <FormFeedback>Book No is required</FormFeedback>
                 </FormGroup>
@@ -91,13 +97,14 @@ export default function Insurance(props) {
                 <FormGroup>
                   <Label>Hospital</Label>
                   <Input
-                    placeholder="Thu Duc hospital"
+                    placeholder="Enter hospital"
                     autoComplete="off"
                     value={get('hospital', insurance)}
                     onChange={e =>
                       setInsurance({ ...insurance, hospital: e.target.value })
                     }
                     invalid={isSubmitted && !insurance.hospital}
+                    disabled={role !== 'Manager'}
                   />
                   <FormFeedback>Hospital is required</FormFeedback>
                 </FormGroup>

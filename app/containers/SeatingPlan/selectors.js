@@ -13,4 +13,31 @@ const selectListSeatState = createSelector(
   state => get('seats.state', state),
 );
 
-export { selectListSeatData, selectListSeatState };
+const selectUserListData = createSelector(
+  selectSeatingPlan,
+  state => get('users.data', state),
+);
+
+const selectUserListState = createSelector(
+  selectSeatingPlan,
+  state => get('users.state', state),
+);
+
+const selectSaveSeatData = createSelector(
+  selectSeatingPlan,
+  state => get('saveSeat.data', state),
+);
+
+const selectSaveSeatState = createSelector(
+  selectSeatingPlan,
+  state => get('saveSeat.state', state),
+);
+
+export {
+  selectListSeatData,
+  selectListSeatState,
+  selectUserListData,
+  selectUserListState,
+  selectSaveSeatData,
+  selectSaveSeatState,
+};

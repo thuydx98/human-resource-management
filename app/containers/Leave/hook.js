@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 import useActions from 'utils/hooks/useActions';
 import { useSelector } from 'react-redux';
 import { actions } from './slice';
-// import { selectContractListData } from './selectors';
+import { selectSelectedYear } from './selectors';
 
 export const LEAVE_TABS = {
   requestTab: 'requestTab',
@@ -12,10 +12,17 @@ export const LEAVE_TABS = {
 
 export const useHooks = () => {
   const [selectedTab, setSelectedTab] = useState(LEAVE_TABS.requestTab);
-  const updateLeave = useCallback(() => {}, []);
+  const selectedYear = useSelector(selectSelectedYear);
+  const { setSelectedYear } = useActions(
+    {
+      setSelectedYear: actions.setSelectedYear,
+    },
+    [actions],
+  );
+
   return {
-    states: { selectedTab },
-    handlers: { setSelectedTab, updateLeave },
+    states: { selectedTab, selectedYear },
+    handlers: { setSelectedTab, setSelectedYear },
   };
 };
 

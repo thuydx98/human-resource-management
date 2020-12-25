@@ -4,7 +4,7 @@ import flow from 'lodash/fp/flow';
 import { ACTION_STATUS } from 'utils/constants';
 
 export const initialState = {
-  contractList: {
+  leaves: {
     data: [],
     state: null,
     error: null,
@@ -12,34 +12,28 @@ export const initialState = {
 };
 
 const slice = createSlice({
-  name: 'contractList',
+  name: 'dashboard',
   initialState,
   reducers: {
-    getContractList(state) {
+    getListLeave(state) {
       return flow(
-        set('contractList.data', []),
-        set('contractList.state', ACTION_STATUS.PENDING),
-        set('contractList.error', null),
+        set('leaves.data', []),
+        set('leaves.state', ACTION_STATUS.PENDING),
+        set('leaves.error', null),
       )(state);
     },
-    getContractListSuccess(state, action) {
+    getListLeaveSuccess(state, action) {
       return flow(
-        set('contractList.data', action.payload),
-        set('contractList.state', ACTION_STATUS.SUCCESS),
-        set('contractList.error', null),
+        set('leaves.data', action.payload),
+        set('leaves.state', ACTION_STATUS.SUCCESS),
+        set('leaves.error', null),
       )(state);
     },
-    setContractList(state, action) {
-      return flow(set('contractList.data', action.payload))(state);
-    },
-    getContractListFailed(state, action) {
+    getListLeaveFailed(state, action) {
       return flow(
-        set('contractList.state', ACTION_STATUS.FAILED),
-        set('contractList.error', action.payload),
+        set('leaves.state', ACTION_STATUS.FAILED),
+        set('leaves.error', action.payload),
       )(state);
-    },
-    resetState(state) {
-      return flow(set('contractList', initialState.contractList))(state);
     },
   },
 });

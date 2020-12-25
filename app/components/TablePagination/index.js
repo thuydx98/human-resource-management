@@ -13,7 +13,7 @@ const TablePagination = props => {
     const elements = [];
     for (let i = 0; i < total; i += 1) {
       elements.push(
-        <PaginationItem active={pageActive === i + 1}>
+        <PaginationItem key={i} active={pageActive === i + 1}>
           <PaginationLink onClick={() => handleChangePage(i + 1)}>
             {i + 1}
           </PaginationLink>

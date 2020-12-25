@@ -9,6 +9,16 @@ export const initialState = {
     state: null,
     error: null,
   },
+  saveSeat: {
+    data: {},
+    state: null,
+    error: null,
+  },
+  users: {
+    data: [],
+    state: null,
+    error: null,
+  },
 };
 
 const slice = createSlice({
@@ -39,7 +49,35 @@ const slice = createSlice({
       )(state);
     },
     resetState(state) {
-      return flow(set('seats', initialState.seats))(state);
+      return flow(set('saveSeat', initialState.saveSeat))(state);
+    },
+    getUserList(state) {
+      return flow(
+        set('users.data', []),
+        set('users.state', ACTION_STATUS.PENDING),
+        set('users.error', null),
+      )(state);
+    },
+    getUserListSuccess(state, action) {
+      return flow(
+        set('users.data', action.payload),
+        set('users.state', ACTION_STATUS.SUCCESS),
+        set('users.error', null),
+      )(state);
+    },
+    saveSeat(state) {
+      return flow(
+        set('saveSeat.data', {}),
+        set('saveSeat.state', ACTION_STATUS.PENDING),
+        set('saveSeat.error', null),
+      )(state);
+    },
+    saveSeatSuccess(state, action) {
+      return flow(
+        set('saveSeat.data', action.payload),
+        set('saveSeat.state', ACTION_STATUS.SUCCESS),
+        set('saveSeat.error', null),
+      )(state);
     },
   },
 });

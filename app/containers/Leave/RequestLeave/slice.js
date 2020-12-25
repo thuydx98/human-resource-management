@@ -4,42 +4,41 @@ import flow from 'lodash/fp/flow';
 import { ACTION_STATUS } from 'utils/constants';
 
 export const initialState = {
-  userInfo: {
-    data: [],
-    state: null,
-    error: null,
-  },
+  data: null,
+  state: null,
+  error: null,
 };
 
 const slice = createSlice({
-  name: 'userInfo',
+  name: 'requestLeave',
   initialState,
   reducers: {
-    getUser(state) {
+    requestLeave(state) {
       return flow(
-        set('userInfo.data', []),
-        set('userInfo.state', ACTION_STATUS.PENDING),
-        set('userInfo.error', null),
+        set('data', {}),
+        set('state', ACTION_STATUS.PENDING),
+        set('error', null),
       )(state);
     },
-    getUserSuccess(state, action) {
+    requestLeaveSuccess(state, action) {
       return flow(
-        set('userInfo.data', action.payload),
-        set('userInfo.state', ACTION_STATUS.SUCCESS),
-        set('userInfo.error', null),
+        set('data', action.payload),
+        set('state', ACTION_STATUS.SUCCESS),
+        set('error', null),
       )(state);
     },
-    setUser(state, action) {
-      return flow(set('userInfo.data', action.payload))(state);
-    },
-    getUserFailed(state, action) {
+    requestLeaveFailed(state, action) {
       return flow(
-        set('userInfo.state', ACTION_STATUS.FAILED),
-        set('userInfo.error', action.payload),
+        set('state', ACTION_STATUS.FAILED),
+        set('error', action.payload),
       )(state);
     },
     resetState(state) {
-      return flow(set('userInfo', initialState.userInfo))(state);
+      return flow(
+        set('data', null),
+        set('state', null),
+        set('error', null),
+      )(state);
     },
   },
 });

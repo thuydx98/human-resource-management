@@ -47,17 +47,17 @@ const routes = [
     component: SeatingPlan,
   },
   {
-    path: '/departments',
-    name: 'Departments',
-    icon: 'tim-icons icon-components',
-    component: DepartmentList,
-    requireAdmin: true,
-  },
-  {
     path: '/salaries',
     name: 'Salaries',
     icon: 'tim-icons icon-money-coins',
     component: SalaryManagement,
+    requireAdmin: true,
+  },
+  {
+    path: '/departments',
+    name: 'Departments',
+    icon: 'tim-icons icon-components',
+    component: DepartmentList,
     requireAdmin: true,
   },
 ];
