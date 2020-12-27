@@ -14,4 +14,19 @@ const selectListLeaveState = createSelector(
   state => get('leaves.state', state),
 );
 
-export { selectListLeaveData, selectListLeaveState };
+const selectListTaskData = createSelector(
+  selectDashboard,
+  state => get('tasks.data', state),
+);
+
+const selectListTaskState = createSelector(
+  selectDashboard,
+  state => get('tasks.state', state),
+);
+
+export {
+  selectListLeaveData,
+  selectListLeaveState,
+  selectListTaskData,
+  selectListTaskState,
+};

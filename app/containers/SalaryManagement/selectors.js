@@ -18,8 +18,14 @@ const selectSaveSalaryListState = createSelector(
   state => get('saveListSalary.state', state),
 );
 
+const selectSendReportState = createSelector(
+  selectSalaries,
+  state => get('sendReport.state', state),
+);
+
 export {
   selectListSalaryData,
   selectListSalaryState,
   selectSaveSalaryListState,
+  selectSendReportState,
 };

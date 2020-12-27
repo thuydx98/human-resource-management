@@ -22,3 +22,26 @@ export function save(payload) {
     .then(data => ({ response: data }))
     .catch(handleGeneralError);
 }
+
+export function exportExcel(payload) {
+  return service(BASE_URL, {
+    url: `/salaries/export`,
+    method: 'POST',
+    data: payload,
+    responseType: 'blob',
+  })
+    .then(response => response.data)
+    .then(data => ({ response: data }))
+    .catch(handleGeneralError);
+}
+
+export function sendReport(payload) {
+  return service(BASE_URL, {
+    url: `/salaries/reports/send`,
+    method: 'POST',
+    data: payload,
+  })
+    .then(response => response.data)
+    .then(data => ({ response: data }))
+    .catch(handleGeneralError);
+}

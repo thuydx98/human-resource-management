@@ -18,7 +18,7 @@ import Notification from 'components/Notification';
 import { ACTION_STATUS } from 'utils/constants';
 import saga from './saga';
 import { sliceKey, reducer } from './slice';
-import useHooks, { calculateTax, formatCurrency } from './hook';
+import useHooks, { formatCurrency } from './hook';
 
 export default function SalaryManagement() {
   useInjectSaga({ key: sliceKey, saga });
@@ -32,7 +32,12 @@ export default function SalaryManagement() {
     getListSalaryState,
     notificationRef,
   } = states;
-  const { setSelectedDate, handleSaveListSalary } = handlers;
+  const {
+    setSelectedDate,
+    handleSaveListSalary,
+    handleExportListSalary,
+    handleSendReport,
+  } = handlers;
 
   return (
     <div className="content">
@@ -63,7 +68,10 @@ export default function SalaryManagement() {
             ? 'Submitted'
             : 'Submit'}
         </SubmitButton>
-        <UncontrolledDropdown className="ml-auto">
+        <UncontrolledDropdown
+          className="ml-auto"
+          disabled={!salaries || salaries.length === 0}
+        >
           <DropdownToggle
             caret
             className="btn-icon"
@@ -74,16 +82,16 @@ export default function SalaryManagement() {
             <i className="tim-icons icon-settings-gear-63" />
           </DropdownToggle>
           <DropdownMenu aria-labelledby="dropdownMenuLink" right>
-            <DropdownItem onClick={e => e.preventDefault()}>
+            <DropdownItem onClick={e => handleExportListSalary()}>
               Export report
             </DropdownItem>
-            <DropdownItem onClick={e => e.preventDefault()}>
-              Export for each bank
-            </DropdownItem>
-            <DropdownItem onClick={e => e.preventDefault()}>
-              Send report to banks
-            </DropdownItem>
-            <DropdownItem onClick={e => e.preventDefault()}>
+            <DropdownItem
+              disabled={
+                !salaries || salaries.length === 0 || !salaries[0].submitted
+              }
+              title="Can send reports after submitted monthly salaries"
+              onClick={e => handleSendReport()}
+            >
               Send report to employees
             </DropdownItem>
           </DropdownMenu>
@@ -132,21 +140,6 @@ export default function SalaryManagement() {
         <tbody>
           {salaries &&
             salaries.map(item => {
-              const gross =
-                (item.gross / item.totalWorkingDateOfMonth) *
-                item.totalWorkingDate;
-              const social = gross * 0.08;
-              const companySocial = gross * 0.175;
-              const health = gross * 0.015;
-              const companyHealth = gross * 0.03;
-              const unemployment = gross * 0.01;
-              const other = item.others.reduce((a, b) => a + b.amount, 0);
-              const tax = calculateTax(
-                gross + other - health - social - unemployment,
-              );
-              const net = gross + other - social - health - unemployment - tax;
-              const total =
-                gross + companyHealth + companySocial + unemployment + other;
               return (
                 <tr key={item.id}>
                   <td>{item.employeeCode}</td>
@@ -173,12 +166,12 @@ export default function SalaryManagement() {
                       id={`tooltip${item.id}_salary`}
                       className="text-info cursor-pointer"
                     >
-                      {formatCurrency(net)}
+                      {formatCurrency(item.net)}
                     </span>
                     <UncontrolledTooltip target={`tooltip${item.id}_salary`}>
                       {`Gross base: ${formatCurrency(item.gross)}`}
                       <br />
-                      {`Actual salary: ${formatCurrency(gross)}`}
+                      {`Actual salary: ${formatCurrency(item.actualGross)}`}
                     </UncontrolledTooltip>
                   </td>
                   <td className="text-right">
@@ -186,13 +179,15 @@ export default function SalaryManagement() {
                       id={`tooltip${item.id}_social`}
                       className="text-info cursor-pointer"
                     >
-                      {formatCurrency(social + companySocial)}
+                      {formatCurrency(item.social + item.companySocial)}
                     </span>
                     <UncontrolledTooltip target={`tooltip${item.id}_social`}>
                       <div className="text-left">
-                        {`Employee (8%): ${formatCurrency(social)}`}
+                        {`Employee (8%): ${formatCurrency(item.social)}`}
                       </div>
-                      {`Employer (17.5%): ${formatCurrency(companySocial)}`}
+                      {`Employer (17.5%): ${formatCurrency(
+                        item.companySocial,
+                      )}`}
                     </UncontrolledTooltip>
                   </td>
                   <td className="text-right">
@@ -200,13 +195,13 @@ export default function SalaryManagement() {
                       id={`tooltip${item.id}_health`}
                       className="text-info cursor-pointer"
                     >
-                      {formatCurrency(health + companyHealth)}
+                      {formatCurrency(item.health + item.companyHealth)}
                     </span>
                     <UncontrolledTooltip target={`tooltip${item.id}_health`}>
                       <div className="text-left">
-                        {`Employee (1.5%): ${formatCurrency(health)}`}
+                        {`Employee (1.5%): ${formatCurrency(item.health)}`}
                       </div>
-                      {`Employer (3%): ${formatCurrency(companyHealth)}`}
+                      {`Employer (3%): ${formatCurrency(item.companyHealth)}`}
                     </UncontrolledTooltip>
                   </td>
                   <td className="text-right">
@@ -214,27 +209,29 @@ export default function SalaryManagement() {
                       id={`tooltip${item.id}_unemployment`}
                       className="text-info cursor-pointer"
                     >
-                      {formatCurrency(unemployment + unemployment)}
+                      {formatCurrency(item.unemployment + item.unemployment)}
                     </span>
                     <UncontrolledTooltip
                       target={`tooltip${item.id}_unemployment`}
                     >
                       <div className="text-left">
-                        {`Employee (8%): ${formatCurrency(unemployment)}`}
+                        {`Employee (8%): ${formatCurrency(item.unemployment)}`}
                       </div>
-                      {`Employer (17.5%): ${formatCurrency(unemployment)}`}
+                      {`Employer (17.5%): ${formatCurrency(item.unemployment)}`}
                     </UncontrolledTooltip>
                   </td>
-                  <td className="text-right">{formatCurrency(tax)}</td>
+                  <td className="text-right">{formatCurrency(item.tax)}</td>
                   <td className="text-right">
                     <span
                       id={`tooltip${item.id}_other`}
-                      className={other > 0 ? 'text-info cursor-pointer' : ''}
+                      className={
+                        item.other > 0 ? 'text-info cursor-pointer' : ''
+                      }
                     >
-                      {other < 0 ? '- ' : '+ '}
-                      {formatCurrency(other)}
+                      {item.other < 0 ? '- ' : '+ '}
+                      {formatCurrency(item.other)}
                     </span>
-                    {other > 0 && (
+                    {item.other > 0 && (
                       <UncontrolledTooltip target={`tooltip${item.id}_other`}>
                         {item.others.map(otherItem => (
                           <div key={otherItem.id} className="text-left">
@@ -246,13 +243,7 @@ export default function SalaryManagement() {
                       </UncontrolledTooltip>
                     )}
                   </td>
-                  <td className="text-right">
-                    {String(total.toFixed(0)).replace(
-                      /(.)(?=(\d{3})+$)/g,
-                      '$1.',
-                    )}{' '}
-                    đ
-                  </td>
+                  <td className="text-right">{formatCurrency(item.total)}</td>
                 </tr>
               );
             })}

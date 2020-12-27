@@ -9,6 +9,11 @@ export const initialState = {
     state: null,
     error: null,
   },
+  tasks: {
+    data: [],
+    state: null,
+    error: null,
+  },
 };
 
 const slice = createSlice({
@@ -33,6 +38,26 @@ const slice = createSlice({
       return flow(
         set('leaves.state', ACTION_STATUS.FAILED),
         set('leaves.error', action.payload),
+      )(state);
+    },
+    getListTask(state) {
+      return flow(
+        set('tasks.data', []),
+        set('tasks.state', ACTION_STATUS.PENDING),
+        set('tasks.error', null),
+      )(state);
+    },
+    getListTaskSuccess(state, action) {
+      return flow(
+        set('tasks.data', action.payload),
+        set('tasks.state', ACTION_STATUS.SUCCESS),
+        set('tasks.error', null),
+      )(state);
+    },
+    getListTaskFailed(state, action) {
+      return flow(
+        set('tasks.state', ACTION_STATUS.FAILED),
+        set('tasks.error', action.payload),
       )(state);
     },
   },

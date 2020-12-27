@@ -9,6 +9,7 @@ import {
   selectListSalaryData,
   selectSaveSalaryListState,
   selectListSalaryState,
+  selectSendReportState,
 } from './selectors';
 
 export const useHooks = () => {
@@ -17,12 +18,23 @@ export const useHooks = () => {
   const salaries = useSelector(selectListSalaryData);
   const saveSalaryListState = useSelector(selectSaveSalaryListState);
   const getListSalaryState = useSelector(selectListSalaryState);
+  const sendReportState = useSelector(selectSendReportState);
 
-  const { setSalaryList, getSalaryList, saveSalaryList } = useActions(
+  const {
+    setSalaryList,
+    getSalaryList,
+    saveSalaryList,
+    exportListSalary,
+    sendReport,
+    resetSendReport,
+  } = useActions(
     {
       setSalaryList: actions.setSalaryList,
       getSalaryList: actions.getSalaryList,
       saveSalaryList: actions.saveListSalary,
+      exportListSalary: actions.exportListSalary,
+      sendReport: actions.sendReport,
+      resetSendReport: actions.resetSendReport,
     },
     [actions],
   );
@@ -31,6 +43,16 @@ export const useHooks = () => {
     getSalaryList(selectedDate);
     return undefined;
   }, [selectedDate]);
+
+  useEffect(() => {
+    if (sendReportState === ACTION_STATUS.SUCCESS) {
+      notificationRef.current.notifySuccess('Send report to employees succeed');
+    } else if (sendReportState === ACTION_STATUS.FAILED) {
+      notificationRef.current.notifyError('Send report to employees failed');
+    }
+
+    return () => resetSendReport();
+  }, [sendReportState]);
 
   useEffect(() => {
     switch (saveSalaryListState) {
@@ -52,6 +74,18 @@ export const useHooks = () => {
     }
   }, [salaries]);
 
+  const handleExportListSalary = useCallback(() => {
+    if (window.confirm('Are you sure want to export this monthly salary?')) {
+      exportListSalary(salaries);
+    }
+  }, [salaries]);
+
+  const handleSendReport = useCallback(() => {
+    if (window.confirm('Are you sure want to send reports for this month?')) {
+      sendReport(salaries);
+    }
+  }, [salaries]);
+
   return {
     states: {
       selectedDate,
@@ -63,37 +97,13 @@ export const useHooks = () => {
     handlers: {
       setSelectedDate,
       handleSaveListSalary,
+      handleExportListSalary,
+      handleSendReport,
     },
   };
 };
 
 export default useHooks;
-
-export const calculateTax = income => {
-  const taxAmount = income - 11000000;
-  if (taxAmount <= 0) return 0;
-
-  let total = 0;
-  if (taxAmount < 5000000) return taxAmount * 0.05;
-  total += (5000000 - 0) * 0.05;
-
-  if (taxAmount < 10000000) return total + (taxAmount - 5000000) * 0.1;
-  total += (10000000 - 5000000) * 0.1;
-
-  if (taxAmount < 18000000) return total + (taxAmount - 10000000) * 0.15;
-  total += (18000000 - 10000000) * 0.15;
-
-  if (taxAmount < 32000000) return total + (taxAmount - 18000000) * 0.2;
-  total += (32000000 - 18000000) * 0.2;
-
-  if (taxAmount < 52000000) return total + (taxAmount - 32000000) * 0.25;
-  total += (52000000 - 32000000) * 0.25;
-
-  if (taxAmount < 80000000) return total + (taxAmount - 52000000) * 0.3;
-  total += (80000000 - 52000000) * 0.3;
-
-  return total + (taxAmount - 80000000) * 0.35;
-};
 
 export const formatCurrency = input =>
   `${String(input.toFixed(0)).replace(/(.)(?=(\d{3})+$)/g, '$1.')} đ`;

@@ -58,51 +58,56 @@ export default function Contract(props) {
               </tr>
             </thead>
             <tbody>
-              {contracts.map(item => (
-                <tr>
-                  <td>{item.contractNo}</td>
-                  <td>{moment(item.joinDate).format('MMM DD YYYY')}</td>
-                  <td>{item.probationStatus}</td>
-                  <td>
-                    {item.endProbationDate
-                      ? moment(item.endProbationDate).format('MMM DD YYYY')
-                      : '-'}
-                  </td>
-                  <td>
-                    {item.startDate
-                      ? moment(item.startDate).format('MMM DD YYYY')
-                      : '-'}
-                  </td>
-                  <td>
-                    {item.endDate
-                      ? moment(item.endDate).format('MMM DD YYYY')
-                      : '-'}
-                  </td>
-                  <td>
-                    {String(item.grossSalary).replace(/(.)(?=(\d{3})+$)/g, '$1.')} đ
-                  </td>
-                  {role === 'Manager' && (
-                    <td className="text-right">
-                      <Button
-                        color="link"
-                        id={`tooltip${item.id}`}
-                        title=""
-                        type="button"
-                        onClick={() => handleOpenModal(item)}
-                      >
-                        <i className="tim-icons icon-pencil" />
-                      </Button>
-                      <UncontrolledTooltip
-                        delay={0}
-                        target={`tooltip${item.id}`}
-                        placement="right"
-                      >
-                        Edit Contract
-                      </UncontrolledTooltip>
+              {contracts &&
+                contracts.map(item => (
+                  <tr>
+                    <td>{item.contractNo}</td>
+                    <td>{moment(item.joinDate).format('MMM DD YYYY')}</td>
+                    <td>{item.probationStatus}</td>
+                    <td>
+                      {item.endProbationDate
+                        ? moment(item.endProbationDate).format('MMM DD YYYY')
+                        : '-'}
                     </td>
-                  )}
-                </tr>
-              ))}
+                    <td>
+                      {item.startDate
+                        ? moment(item.startDate).format('MMM DD YYYY')
+                        : '-'}
+                    </td>
+                    <td>
+                      {item.endDate
+                        ? moment(item.endDate).format('MMM DD YYYY')
+                        : '-'}
+                    </td>
+                    <td>
+                      {String(item.grossSalary).replace(
+                        /(.)(?=(\d{3})+$)/g,
+                        '$1.',
+                      )}{' '}
+                      đ
+                    </td>
+                    {role === 'Manager' && (
+                      <td className="text-right">
+                        <Button
+                          color="link"
+                          id={`tooltip${item.id}`}
+                          title=""
+                          type="button"
+                          onClick={() => handleOpenModal(item)}
+                        >
+                          <i className="tim-icons icon-pencil" />
+                        </Button>
+                        <UncontrolledTooltip
+                          delay={0}
+                          target={`tooltip${item.id}`}
+                          placement="right"
+                        >
+                          Edit Contract
+                        </UncontrolledTooltip>
+                      </td>
+                    )}
+                  </tr>
+                ))}
             </tbody>
           </Table>
         </CardBody>
