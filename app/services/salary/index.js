@@ -1,23 +1,22 @@
-import service, { handleGeneralError } from './index';
+import service, { handleGeneralError } from '../index';
 
 const BASE_URL = process.env.API_URI;
 
-export function createSalary(absentDate, getSalary) {
+export function getList(time) {
   return service(BASE_URL, {
-    url: '/manager/create/basicSalary',
-    method: 'POST',
-    data: { absentDate, getSalary },
+    url: `/salaries?time=${time}`,
+    method: 'GET',
   })
     .then(response => response.data)
     .then(data => ({ response: data }))
     .catch(handleGeneralError);
 }
 
-export function updateSalary(id, absentDate, getSalary) {
+export function save(payload) {
   return service(BASE_URL, {
-    url: `/manager/update/basicSalary?id=${id}`,
+    url: `/salaries`,
     method: 'POST',
-    data: { absentDate, getSalary },
+    data: payload,
   })
     .then(response => response.data)
     .then(data => ({ response: data }))

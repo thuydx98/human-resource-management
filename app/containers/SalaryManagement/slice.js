@@ -4,42 +4,65 @@ import flow from 'lodash/fp/flow';
 import { ACTION_STATUS } from 'utils/constants';
 
 export const initialState = {
-  departmentList: {
+  salaryList: {
     data: [],
+    state: null,
+    error: null,
+  },
+  saveListSalary: {
     state: null,
     error: null,
   },
 };
 
 const slice = createSlice({
-  name: 'departmentList',
+  name: 'salaries',
   initialState,
   reducers: {
-    getDepartmentList(state) {
+    setSalaryList(state, action) {
       return flow(
-        set('departmentList.data', []),
-        set('departmentList.state', ACTION_STATUS.PENDING),
-        set('departmentList.error', null),
+        set('salaryList.data', action.payload),
+        set('saveListSalary', initialState.salaryList),
       )(state);
     },
-    getDepartmentListSuccess(state, action) {
+    getSalaryList(state) {
       return flow(
-        set('departmentList.data', action.payload),
-        set('departmentList.state', ACTION_STATUS.SUCCESS),
-        set('departmentList.error', null),
+        set('saveListSalary', initialState.salaryList),
+        set('salaryList.data', []),
+        set('salaryList.state', ACTION_STATUS.PENDING),
+        set('salaryList.error', null),
       )(state);
     },
-    setDepartmentList(state, action) {
-      return flow(set('departmentList.data', action.payload))(state);
-    },
-    getDepartmentListFailed(state, action) {
+    getSalaryListSuccess(state, action) {
       return flow(
-        set('departmentList.state', ACTION_STATUS.FAILED),
-        set('departmentList.error', action.payload),
+        set('salaryList.data', action.payload),
+        set('salaryList.state', ACTION_STATUS.SUCCESS),
+        set('salaryList.error', null),
       )(state);
     },
-    resetState(state) {
-      return flow(set('departmentList', initialState.departmentList))(state);
+    getSalaryListFailed(state, action) {
+      return flow(
+        set('salaryList.state', ACTION_STATUS.FAILED),
+        set('salaryList.error', action.payload),
+      )(state);
+    },
+    saveListSalary(state) {
+      return flow(
+        set('saveListSalary.state', ACTION_STATUS.PENDING),
+        set('saveListSalary.error', null),
+      )(state);
+    },
+    saveListSalarySuccess(state) {
+      return flow(
+        set('saveListSalary.state', ACTION_STATUS.SUCCESS),
+        set('saveListSalary.error', null),
+      )(state);
+    },
+    saveListSalaryFailed(state, action) {
+      return flow(
+        set('saveListSalary.state', ACTION_STATUS.FAILED),
+        set('saveListSalary.error', action.payload),
+      )(state);
     },
   },
 });

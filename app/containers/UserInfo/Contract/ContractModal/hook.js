@@ -47,7 +47,8 @@ export const useHooks = props => {
         payload.contractNo &&
         payload.startDate &&
         payload.joinDate &&
-        payload.probationStatus
+        payload.probationStatus &&
+        payload.grossSalary
       ) {
         saveContract({ ...payload, userId: user.id });
       }

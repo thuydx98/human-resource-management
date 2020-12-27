@@ -143,6 +143,21 @@ export const ContractModal = props => {
                 />
               </FormGroup>
             </Col>
+            <Col md={6}>
+              <FormGroup>
+                <Label>Gross salary</Label>
+                <Input
+                  placeholder="Enter salary"
+                  autoComplete="off"
+                  value={payload.grossSalary}
+                  onChange={e =>
+                    setPayload({ ...payload, grossSalary: e.target.value })
+                  }
+                  invalid={isSubmitted && !payload.grossSalary}
+                />
+                <FormFeedback>Salary is required</FormFeedback>
+              </FormGroup>
+            </Col>
           </Row>
         </ModalBody>
         <ModalFooter>

@@ -53,6 +53,7 @@ export default function Contract(props) {
                 <th>End Probation Date</th>
                 <th>Start</th>
                 <th>End</th>
+                <th>Gross salary</th>
                 {role === 'Manager' && <th className="text-right">Actions</th>}
               </tr>
             </thead>
@@ -76,6 +77,9 @@ export default function Contract(props) {
                     {item.endDate
                       ? moment(item.endDate).format('MMM DD YYYY')
                       : '-'}
+                  </td>
+                  <td>
+                    {String(item.grossSalary).replace(/(.)(?=(\d{3})+$)/g, '$1.')} đ
                   </td>
                   {role === 'Manager' && (
                     <td className="text-right">

@@ -47,6 +47,10 @@ const GlobalStyle = createGlobalStyle`
   .cursor-pointer{
     cursor: pointer !important;
   }
+
+  button {
+    cursor: pointer !important;
+  }
 `;
 
 export default GlobalStyle;

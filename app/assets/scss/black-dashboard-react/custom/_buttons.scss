@@ -73,8 +73,8 @@
         &:not(.btn-footer) .fas{
             position: absolute;
             font-size: 1em;
-            top: 45%;
-            left: 57%;
+            top: 39%;
+            left: 40%;
             transform: translate(-12px, -12px);
             line-height: 1.5626rem;
             width: 24px;
@@ -98,6 +98,7 @@
 
   &.dropdown-toggle:after {
     margin-left: 30px !important;
+    margin-top: 10px;
   }
 }
 
