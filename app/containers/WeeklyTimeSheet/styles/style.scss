@@ -1,7 +1,7 @@
 .weekly-time-sheet {
   table {
     thead tr th {
-        padding: 3px 7px !important;
+      padding: 3px 7px !important;
     }
     tbody {
       tr {
@@ -15,6 +15,11 @@
 
             &:disabled {
               color: #fff;
+            }
+            &::-webkit-outer-spin-button,
+            &::-webkit-inner-spin-button {
+              -webkit-appearance: none;
+              margin: 0;
             }
           }
 

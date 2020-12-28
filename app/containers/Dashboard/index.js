@@ -23,7 +23,7 @@ export default function Dashboard() {
 
   const history = useHistory();
   const { states } = useHooks();
-  const { leaves, tasks, getTaskState, monday } = states;
+  const { leaves, taskData, getTaskState, monday } = states;
 
   const annualLeaves = leaves.filter(
     item => item.type === 'ANNUAL' && item.status !== 'CANCEL',
@@ -35,7 +35,11 @@ export default function Dashboard() {
 
   return (
     <div className="content">
-      <WeeklyTimeSheet monday={monday} tasks={tasks} loadStatus={getTaskState} />
+      <WeeklyTimeSheet
+        monday={monday}
+        data={taskData}
+        loadStatus={getTaskState}
+      />
       <Row>
         <Col md={5}>
           <Card>

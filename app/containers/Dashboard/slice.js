@@ -10,7 +10,7 @@ export const initialState = {
     error: null,
   },
   tasks: {
-    data: [],
+    data: {},
     state: null,
     error: null,
   },
@@ -42,7 +42,7 @@ const slice = createSlice({
     },
     getListTask(state) {
       return flow(
-        set('tasks.data', []),
+        set('tasks.data', {}),
         set('tasks.state', ACTION_STATUS.PENDING),
         set('tasks.error', null),
       )(state);

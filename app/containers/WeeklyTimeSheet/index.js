@@ -13,21 +13,24 @@ import {
   UncontrolledTooltip,
 } from 'reactstrap';
 import { ACTION_STATUS } from 'utils/constants';
-import PropTypes from 'prop-types';
 import moment from 'moment';
 import useHooks from './hook';
 import './styles/style.scss';
 
 const WeeklyTimeSheet = props => {
-  const { monday, tasks, loadStatus } = props;
+  const { states, handlers } = useHooks(props);
+  const { monday, tasks, details, loadStatus } = states;
+  const { getWorkingHour, updateWorkingHour } = handlers;
   const startDate = monday ? monday.format('MMMM DD') : '';
   const endDate = monday
     ? moment(monday)
         .endOf('isoweek')
         .format('MMMM DD')
     : '';
-  const totalHours = tasks ? tasks.reduce((a, b) => a + b.details.reduce((x, y) => x + y.workingHour, 0), 0) : 0;
-  
+  const totalHours = details
+    ? details.reduce((a, b) => a + b.workingHour, 0)
+    : 0;
+
   return (
     <Card className="weekly-time-sheet my-3">
       {loadStatus === ACTION_STATUS.SUCCESS && (
@@ -39,11 +42,17 @@ const WeeklyTimeSheet = props => {
               </span>
               {moment(monday).endOf('isoweek') <= moment() && (
                 <Badge
-                  color="info"
+                  color={
+                    tasks && tasks.length > 0 && tasks[0].submitted
+                      ? 'info'
+                      : 'dander'
+                  }
                   pill
                   className="ml-3 description text-white"
                 >
-                  Submitted
+                  {tasks && tasks.length > 0 && tasks[0].submitted
+                    ? 'Submitted'
+                    : 'Not-Submitted'}
                 </Badge>
               )}
               <span className="float-right">
@@ -102,7 +111,7 @@ const WeeklyTimeSheet = props => {
               <tbody>
                 {tasks &&
                   tasks.map(item => (
-                    <tr>
+                    <tr key={item.id}>
                       <td>
                         <Input
                           placeholder="Enter a project"
@@ -122,25 +131,66 @@ const WeeklyTimeSheet = props => {
                         />
                       </td>
                       <td>
-                        <Input className="text-center" />
+                        <Input
+                          type="number"
+                          className="text-center"
+                          value={getWorkingHour(item.id, monday)}
+                          onChange={e => updateWorkingHour(item.id, monday, e)}
+                        />
                       </td>
                       <td>
-                        <Input className="text-center" />
+                        <Input
+                          className="text-center"
+                          value={getWorkingHour(
+                            item.id,
+                            moment(monday).add('d', 1),
+                          )}
+                        />
                       </td>
                       <td>
-                        <Input className="text-center" />
+                        <Input
+                          className="text-center"
+                          value={getWorkingHour(
+                            item.id,
+                            moment(monday).add('d', 2),
+                          )}
+                        />
                       </td>
                       <td>
-                        <Input className="text-center" />
+                        <Input
+                          className="text-center"
+                          value={getWorkingHour(
+                            item.id,
+                            moment(monday).add('d', 3),
+                          )}
+                        />
                       </td>
                       <td>
-                        <Input className="text-center" />
+                        <Input
+                          className="text-center"
+                          value={getWorkingHour(
+                            item.id,
+                            moment(monday).add('d', 4),
+                          )}
+                        />
                       </td>
                       <td>
-                        <Input className="text-center text-warning" />
+                        <Input
+                          className="text-center"
+                          value={getWorkingHour(
+                            item.id,
+                            moment(monday).add('d', 5),
+                          )}
+                        />
                       </td>
                       <td>
-                        <Input className="text-center text-warning" />
+                        <Input
+                          className="text-center"
+                          value={getWorkingHour(
+                            item.id,
+                            moment(monday).add('d', 6),
+                          )}
+                        />
                       </td>
                       <td className="text-right">
                         <Button
@@ -245,12 +295,6 @@ const WeeklyTimeSheet = props => {
       )}
     </Card>
   );
-};
-
-WeeklyTimeSheet.propTypes = {
-  loadStatus: PropTypes.string,
-  tasks: PropTypes.any,
-  monday: PropTypes.any,
 };
 
 export default memo(WeeklyTimeSheet);

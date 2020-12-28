@@ -12,7 +12,7 @@ import {
 export const useHooks = () => {
   const monday = moment().startOf('isoweek');
   const leaves = useSelector(selectListLeaveData);
-  const tasks = useSelector(selectListTaskData);
+  const taskData = useSelector(selectListTaskData);
   const getTaskState = useSelector(selectListTaskState);
   const { getListLeave, getListTask } = useActions(
     {
@@ -34,7 +34,7 @@ export const useHooks = () => {
   }, []);
 
   return {
-    states: { leaves, tasks, getTaskState, monday },
+    states: { leaves, taskData, getTaskState, monday },
   };
 };
 
