@@ -64,7 +64,7 @@ const WeeklyTimeSheet = props => {
                   color={
                     tasks && tasks.length > 0 && tasks[0].submitted
                       ? 'info'
-                      : 'dander'
+                      : 'danger'
                   }
                   pill
                   className="ml-3 description text-white"
@@ -113,10 +113,10 @@ const WeeklyTimeSheet = props => {
                       .format('MM/DD')}
                   </th>
                   <th className="text-center text-warning" width="45">
+                    Sat <br />
                     {moment(monday)
                       .add(5, 'd')
                       .format('MM/DD')}
-                    {'12/07'}
                   </th>
                   <th className="text-center text-warning" width="45">
                     Sun <br />
@@ -295,14 +295,19 @@ const WeeklyTimeSheet = props => {
                   ))}
                 <tr>
                   <td>
-                    <Button
-                      size="sm"
-                      color="info"
-                      className="btn-simple mt-1"
-                      onClick={handleCreateTask}
-                    >
-                      + New task
-                    </Button>
+                    {(!tasks || !tasks.length > 0 || !tasks[0].submitted) && (
+                      <Button
+                        size="sm"
+                        color="info"
+                        className="btn-simple mt-1"
+                        onClick={handleCreateTask}
+                        disabled={
+                          tasks && tasks.length > 0 && tasks[0].submitted
+                        }
+                      >
+                        + New task
+                      </Button>
+                    )}
                   </td>
                   <td />
                   <td className="total-text">Total hours</td>
@@ -373,44 +378,49 @@ const WeeklyTimeSheet = props => {
               </tbody>
             </Table>
           </CardBody>
-          <CardFooter className="pt-0">
-            <SubmitButton
-              color="primary"
-              className="btn-sm float-right ml-2"
-              disabled={
-                !tasks ||
-                tasks.length === 0 ||
-                tasks[0].submitted ||
-                moment(monday).endOf('isoweek') > moment() ||
-                saveStatus === ACTION_STATUS.PENDING ||
-                submitStatus === ACTION_STATUS.PENDING
-              }
-              onClick={handleSubmit}
-              loading={submitStatus === ACTION_STATUS.PENDING}
-              btn="btn"
-            >
-              Submit
-            </SubmitButton>
-            <SubmitButton
-              color="info"
-              className="btn btn-sm float-right"
-              disabled={
-                !tasks ||
-                (tasks.length > 0 && tasks[0].submitted) ||
-                saveStatus === ACTION_STATUS.PENDING ||
-                submitStatus === ACTION_STATUS.PENDING
-              }
-              onClick={handleSave}
-              loading={saveStatus === ACTION_STATUS.PENDING}
-              btn="btn"
-            >
-              Save
-            </SubmitButton>
-          </CardFooter>
+
+          {(!tasks || !tasks.length > 0 || !tasks[0].submitted) && (
+            <CardFooter className="pt-0">
+              <SubmitButton
+                color="primary"
+                className="btn-sm float-right ml-2"
+                disabled={
+                  !tasks ||
+                  tasks.filter(
+                    item => item.task || item.activity || item.project,
+                  ).length === 0 ||
+                  tasks[0].submitted ||
+                  moment(monday).endOf('isoweek') > moment() ||
+                  saveStatus === ACTION_STATUS.PENDING ||
+                  submitStatus === ACTION_STATUS.PENDING
+                }
+                onClick={handleSubmit}
+                loading={submitStatus === ACTION_STATUS.PENDING}
+                btn="btn"
+              >
+                Submit
+              </SubmitButton>
+              <SubmitButton
+                color="info"
+                className="btn btn-sm float-right"
+                disabled={
+                  !tasks ||
+                  (tasks.length > 0 && tasks[0].submitted) ||
+                  saveStatus === ACTION_STATUS.PENDING ||
+                  submitStatus === ACTION_STATUS.PENDING
+                }
+                onClick={handleSave}
+                loading={saveStatus === ACTION_STATUS.PENDING}
+                btn="btn"
+              >
+                Save
+              </SubmitButton>
+            </CardFooter>
+          )}
         </>
       )}
 
-      {loadStatus === ACTION_STATUS.PENDING && (
+      {(!loadStatus || loadStatus === ACTION_STATUS.PENDING) && (
         <h5 className="w-100 text-center text-info my-3">
           <Spinner size="sm" color="info" className="mr-2" />
           Loading...

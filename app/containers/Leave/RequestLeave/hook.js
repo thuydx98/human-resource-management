@@ -53,7 +53,7 @@ export const useHooks = () => {
       setListLeave([...leaves, requestData]);
     }
     return () => resetRequestState();
-  }, [requestState, leaves, setIsSubmitted, setListLeave, setPayload]);
+  }, [requestState, leaves, setIsSubmitted, setListLeave]);
 
   const onSubmit = useCallback(() => {
     setIsSubmitted(true);

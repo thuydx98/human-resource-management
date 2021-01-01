@@ -13,20 +13,45 @@ export default function TimeSheet() {
   useInjectReducer({ key: sliceKey, reducer });
 
   const { states, handlers } = useHooks();
-
-  const items = [1, 2, 3, 4, 5];
+  const {
+    selectedMonth,
+    mondays,
+    tasks,
+    loadStatus,
+    saveTaskStates,
+    submitTaskStates,
+  } = states;
+  const {
+    setSelectedMonth,
+    handleSave,
+    handleSubmit,
+    handleResetState,
+  } = handlers;
 
   return (
     <div className="content">
       <Input
         type="month"
-        defaultValue={moment().format('YYYY-MM')}
+        value={selectedMonth.format('YYYY-MM')}
         className="float-right mb-3 w-25"
+        onChange={e => setSelectedMonth(moment(e.target.value))}
       />
 
-      {items.map(() => (
-        <WeeklyTimeSheet />
-      ))}
+      {mondays &&
+        mondays.map((item, index) => (
+          <WeeklyTimeSheet
+            key={item.format('YYYY-MM-DD')}
+            monday={item}
+            data={tasks[index]}
+            loadStatus={loadStatus}
+            onSave={handleSave}
+            onSubmit={handleSubmit}
+            index={index}
+            saveStatus={saveTaskStates[index].status}
+            submitStatus={submitTaskStates[index].status}
+            resetState={() => handleResetState(index)}
+          />
+        ))}
     </div>
   );
 }

@@ -1,16 +1,31 @@
 import get from 'lodash/fp/get';
 import { createSelector } from 'reselect';
 
-const selectContractList = state => state.contractList;
+const selectTimeSheet = state => state.timeSheet;
 
-const selectContractListData = createSelector(
-  selectContractList,
-  state => get('contractList.data', state),
+const selectTaskListData = createSelector(
+  selectTimeSheet,
+  state => get('tasks.data', state),
 );
 
-const selectContractListState = createSelector(
-  selectContractList,
-  state => get('contractList.state', state),
+const selectTaskListState = createSelector(
+  selectTimeSheet,
+  state => get('tasks.state', state),
 );
 
-export { selectContractListData, selectContractListState };
+const selectSaveTaskState = createSelector(
+  selectTimeSheet,
+  state => get('saveTasks', state),
+);
+
+const selectSubmitTaskState = createSelector(
+  selectTimeSheet,
+  state => get('submitTasks', state),
+);
+
+export {
+  selectTaskListData,
+  selectTaskListState,
+  selectSaveTaskState,
+  selectSubmitTaskState,
+};

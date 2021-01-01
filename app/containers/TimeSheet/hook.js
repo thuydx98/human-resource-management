@@ -1,55 +1,79 @@
 import { useCallback, useEffect, useState } from 'react';
 import useActions from 'utils/hooks/useActions';
 import { useSelector } from 'react-redux';
+import moment from 'moment';
+import { useParams } from 'react-router-dom';
+import get from 'lodash/fp/get';
 import { actions } from './slice';
-import { selectContractListData } from './selectors';
+import {
+  selectSaveTaskState,
+  selectSubmitTaskState,
+  selectTaskListData,
+  selectTaskListState,
+} from './selectors';
 
 export const useHooks = () => {
-  const [isOpenAddModal, toggleAddModal] = useState(false);
-  const [isOpenUpdateModal, setIsOpenUpdateModal] = useState(false);
-  const [selectedContract, setSelectedContract] = useState(null);
-  const contractList = useSelector(selectContractListData);
-  const { getContractList, setContractList } = useActions(
+  const params = useParams();
+  const [selectedMonth, setSelectedMonth] = useState(moment());
+  const [mondays, setMondays] = useState([]);
+  const tasks = useSelector(selectTaskListData);
+  const loadStatus = useSelector(selectTaskListState);
+  const saveTaskStates = useSelector(selectSaveTaskState);
+  const submitTaskStates = useSelector(selectSubmitTaskState);
+
+  const {
+    getTaskList,
+    setState,
+    saveTask,
+    submitTask,
+    resetState,
+  } = useActions(
     {
-      getContractList: actions.getContractList,
-      setContractList: actions.setContractList,
+      getTaskList: actions.getTaskList,
+      setState: actions.setState,
+      saveTask: actions.saveTask,
+      submitTask: actions.submitTask,
+      resetState: actions.resetState,
     },
     [actions],
   );
 
   useEffect(() => {
-    getContractList();
-    return undefined;
-  }, []);
+    const weeks = [];
+    const monday = moment(selectedMonth.format('YYYY-MM-01')).day('Monday');
+    const month = selectedMonth.month();
+    do {
+      weeks.push(moment(monday));
+      monday.add(7, 'd');
+    } while (month === monday.month());
 
-  const toggleUpdateModal = useCallback((isOpen, user) => {
-    setSelectedContract(user);
-    setIsOpenUpdateModal(isOpen);
-  }, []);
+    setMondays(weeks);
+    getTaskList({
+      data: weeks.map(() => ({ tasks: [], details: [] })),
+      times: weeks,
+      userId: get('userId', params) || 'me',
+    });
+    setState({
+      tasks: weeks.map(() => ({ tasks: [], details: [] })),
+      save: weeks.map(() => ({ state: null, error: null })),
+      submit: weeks.map(() => ({ state: null, error: null })),
+    });
+  }, [selectedMonth]);
 
-  const updateContractInList = useCallback(
-    user => {
-      const contracts = contractList.map(item =>
-        user.employee_id === item.employee_id ? user : item,
-      );
-      setContractList(contracts);
-    },
-    [contractList, setContractList],
-  );
+  const handleSave = useCallback(data => saveTask(data), []);
+  const handleSubmit = useCallback(data => submitTask(data), []);
+  const handleResetState = useCallback(index => resetState(index), []);
 
   return {
     states: {
-      contractList,
-      isOpenAddModal,
-      isOpenUpdateModal,
-      selectedContract,
+      selectedMonth,
+      mondays,
+      tasks,
+      loadStatus,
+      saveTaskStates,
+      submitTaskStates,
     },
-    handlers: {
-      toggleAddModal,
-      toggleUpdateModal,
-      getContractList,
-      updateContractInList,
-    },
+    handlers: { setSelectedMonth, handleSave, handleSubmit, handleResetState },
   };
 };
 

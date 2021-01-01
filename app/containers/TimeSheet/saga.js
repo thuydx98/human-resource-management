@@ -1,20 +1,77 @@
 import { call, put, all, fork, takeLatest } from 'redux-saga/effects';
-import { getListContract } from 'services/user/contract';
+import { getList, save as saveTask } from 'services/task/index';
+import { v4 as uuid } from 'uuid';
 import { actions } from './slice';
 
-export function* getContractListWatcher() {
-  yield takeLatest(actions.getContractList, getContractListTask);
+export function* getTaskListWatcher() {
+  yield takeLatest(actions.getTaskList, getTaskListTask);
 }
 
-export function* getContractListTask() {
-  const { response, error } = yield call(getListContract);
+export function* getTaskListTask(action) {
+  const { times, userId } = action.payload;
+  const { response, error } = yield call(
+    getList,
+    times.map(item => item.format('YYYY-MM-DD')).join(','),
+    userId,
+  );
   if (response) {
-    yield put(actions.getContractListSuccess(response.obj));
+    const { tasks: allTasks, details: allDetails } = response.obj;
+    const groupData = times.map(monday => {
+      const tasks = allTasks.filter(
+        task => task.time === monday.format('YYYY-MM-DD'),
+      );
+      const taskIds = tasks.map(item => item.id);
+      const details = allDetails.filter(detail =>
+        taskIds.includes(detail.taskId),
+      );
+
+      return {
+        tasks:
+          tasks.length === 0
+            ? [{ id: uuid(), time: monday.format('YYYY-MM-DD') }]
+            : tasks,
+        details,
+      };
+    });
+
+    yield put(actions.getTaskListSuccess(groupData));
   } else {
-    yield put(actions.getContractListFailed(error));
+    yield put(actions.getTaskListFailed(error));
+  }
+}
+
+export function* saveTaskWatcher() {
+  yield takeLatest(actions.saveTask, saveTaskTask);
+}
+
+export function* saveTaskTask(action) {
+  const { tasks, userId, index, time } = action.payload;
+  const { response, error } = yield call(saveTask, tasks, userId, 'save', time);
+  if (response) {
+    yield put(actions.saveTaskSuccess({ index }));
+  } else {
+    yield put(actions.saveTaskFailed({ index, error }));
+  }
+}
+
+export function* submitTaskWatcher() {
+  yield takeLatest(actions.submitTask, submitTaskTask);
+}
+
+export function* submitTaskTask(action) {
+  const { tasks, userId, index } = action.payload;
+  const { response, error } = yield call(saveTask, tasks, userId, 'submit');
+  if (response) {
+    yield put(actions.submitTaskSuccess({ index }));
+  } else {
+    yield put(actions.submitTaskFailed({ index, error }));
   }
 }
 
 export default function* defaultSaga() {
-  yield all([fork(getContractListWatcher)]);
+  yield all([
+    fork(getTaskListWatcher),
+    fork(saveTaskWatcher),
+    fork(submitTaskWatcher),
+  ]);
 }

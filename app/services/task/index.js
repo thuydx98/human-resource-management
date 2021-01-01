@@ -4,7 +4,7 @@ const BASE_URL = process.env.API_URI;
 
 export function getList(times, userId) {
   return service(BASE_URL, {
-    url: `/users/${userId}/tasks?time=${times || ''}`,
+    url: `/users/${userId}/tasks?times=${times || ''}`,
     method: 'GET',
   })
     .then(response => response.data)
@@ -12,9 +12,9 @@ export function getList(times, userId) {
     .catch(handleGeneralError);
 }
 
-export function save(tasks, userId, saveType = 'save') {
+export function save(tasks, userId, saveType = 'save', time = '') {
   return service(BASE_URL, {
-    url: `/users/${userId}/tasks/${saveType}`,
+    url: `/users/${userId}/tasks/${saveType}?time=${time}`,
     method: 'POST',
     data: tasks,
   })

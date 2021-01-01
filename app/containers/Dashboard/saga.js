@@ -36,8 +36,8 @@ export function* saveTaskWatcher() {
 }
 
 export function* saveTaskTask(action) {
-  const { tasks, userId } = action.payload;
-  const { response, error } = yield call(saveTask, tasks, userId, 'save');
+  const { tasks, userId, time } = action.payload;
+  const { response, error } = yield call(saveTask, tasks, userId, 'save', time);
   if (response) {
     yield put(actions.saveTaskSuccess(response.obj));
   } else {

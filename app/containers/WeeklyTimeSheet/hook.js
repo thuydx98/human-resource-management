@@ -15,6 +15,7 @@ export const useHooks = props => {
     saveStatus,
     submitStatus,
     resetState,
+    index,
   } = props;
   const params = useParams();
   const notificationRef = useRef(null);
@@ -39,13 +40,14 @@ export const useHooks = props => {
     }
     if (submitStatus === ACTION_STATUS.SUCCESS) {
       notificationRef.current.notifySuccess('Submit time-sheet succeeded');
+      setTasks(tasks.map(item => ({ ...item, submitted: true })));
       resetState();
     }
     if (submitStatus === ACTION_STATUS.FAILED) {
       notificationRef.current.notifyError('Submit time-sheet failed');
       resetState();
     }
-  }, [saveStatus, submitStatus]);
+  }, [saveStatus, submitStatus, tasks]);
 
   const handleCreateTask = useCallback(() => {
     const time = monday.format('YYYY-MM-DD');
@@ -128,25 +130,26 @@ export const useHooks = props => {
     const list = tasks.filter(
       item => item.project || item.activity || item.task,
     );
-    setTasks(list);
     onSave({
       tasks: { tasks: list, details },
       userId: get('userId', params) || 'me',
+      index,
+      time: monday.format('YYYY-MM-DD'),
     });
-  }, [tasks, details]);
+  }, [tasks, details, index, monday]);
 
   const handleSubmit = useCallback(() => {
     if (window.confirm('Are you sure want to submit this time-sheet?')) {
       const list = tasks.filter(
         item => item.project || item.activity || item.task,
       );
-      setTasks(list);
       onSubmit({
         tasks: { tasks: list, details },
         userId: get('userId', params) || 'me',
+        index: get('index', props),
       });
     }
-  }, [tasks, details]);
+  }, [tasks, details, props]);
 
   return {
     states: {
