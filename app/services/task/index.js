@@ -11,3 +11,14 @@ export function getList(times, userId) {
     .then(data => ({ response: data }))
     .catch(handleGeneralError);
 }
+
+export function save(tasks, userId, saveType = 'save') {
+  return service(BASE_URL, {
+    url: `/users/${userId}/tasks/${saveType}`,
+    method: 'POST',
+    data: tasks,
+  })
+    .then(response => response.data)
+    .then(data => ({ response: data }))
+    .catch(handleGeneralError);
+}

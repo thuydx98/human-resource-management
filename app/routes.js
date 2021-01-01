@@ -22,9 +22,9 @@ const routes = [
     component: TimeSheet,
   },
   {
-    path: '/leave',
-    name: 'Leave',
-    icon: 'tim-icons icon-send',
+    path: '/day-off',
+    name: 'Day off',
+    icon: 'tim-icons icon-calendar-60',
     component: Leave,
   },
   {
@@ -41,8 +41,8 @@ const routes = [
     component: UserList,
   },
   {
-    path: '/seating-management',
-    name: 'Seating plan',
+    path: '/positions',
+    name: 'Position',
     icon: 'tim-icons icon-molecule-40',
     component: SeatingPlan,
   },

@@ -7,6 +7,8 @@ import {
   selectListLeaveData,
   selectListTaskData,
   selectListTaskState,
+  selectSaveTaskState,
+  selectSubmitTaskState,
 } from './selectors';
 
 export const useHooks = () => {
@@ -14,10 +16,21 @@ export const useHooks = () => {
   const leaves = useSelector(selectListLeaveData);
   const taskData = useSelector(selectListTaskData);
   const getTaskState = useSelector(selectListTaskState);
-  const { getListLeave, getListTask } = useActions(
+  const saveTaskState = useSelector(selectSaveTaskState);
+  const submitTaskState = useSelector(selectSubmitTaskState);
+  const {
+    getListLeave,
+    getListTask,
+    saveTask,
+    submitTask,
+    resetState,
+  } = useActions(
     {
       getListLeave: actions.getListLeave,
       getListTask: actions.getListTask,
+      saveTask: actions.saveTask,
+      submitTask: actions.submitTask,
+      resetState: actions.resetState,
     },
     [actions],
   );
@@ -34,7 +47,15 @@ export const useHooks = () => {
   }, []);
 
   return {
-    states: { leaves, taskData, getTaskState, monday },
+    states: {
+      leaves,
+      taskData,
+      getTaskState,
+      monday,
+      saveTaskState,
+      submitTaskState,
+    },
+    handlers: { saveTask, submitTask, resetState },
   };
 };
 

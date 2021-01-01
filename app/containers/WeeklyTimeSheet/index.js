@@ -13,14 +13,32 @@ import {
   UncontrolledTooltip,
 } from 'reactstrap';
 import { ACTION_STATUS } from 'utils/constants';
+import Notification from 'components/Notification';
+import SubmitButton from 'components/Buttons/SubmitButton';
 import moment from 'moment';
 import useHooks from './hook';
 import './styles/style.scss';
 
 const WeeklyTimeSheet = props => {
   const { states, handlers } = useHooks(props);
-  const { monday, tasks, details, loadStatus } = states;
-  const { getWorkingHour, updateWorkingHour } = handlers;
+  const {
+    monday,
+    tasks,
+    details,
+    loadStatus,
+    notificationRef,
+    saveStatus,
+    submitStatus,
+  } = states;
+  const {
+    getWorkingHour,
+    updateWorkingHour,
+    handleCreateTask,
+    handleDeleteTask,
+    handleUpdateTask,
+    handleSave,
+    handleSubmit,
+  } = handlers;
   const startDate = monday ? monday.format('MMMM DD') : '';
   const endDate = monday
     ? moment(monday)
@@ -33,6 +51,7 @@ const WeeklyTimeSheet = props => {
 
   return (
     <Card className="weekly-time-sheet my-3">
+      <Notification ref={notificationRef} />
       {loadStatus === ACTION_STATUS.SUCCESS && (
         <>
           <CardBody>
@@ -72,37 +91,37 @@ const WeeklyTimeSheet = props => {
                   <th className="text-center" width="45">
                     Tue <br />
                     {moment(monday)
-                      .add('d', 1)
+                      .add(1, 'd')
                       .format('MM/DD')}
                   </th>
                   <th className="text-center" width="45">
                     Wed <br />
                     {moment(monday)
-                      .add('d', 2)
+                      .add(2, 'd')
                       .format('MM/DD')}
                   </th>
                   <th className="text-center" width="45">
                     Thu <br />
                     {moment(monday)
-                      .add('d', 3)
+                      .add(3, 'd')
                       .format('MM/DD')}
                   </th>
                   <th className="text-center" width="45">
                     Fri <br />
                     {moment(monday)
-                      .add('d', 4)
+                      .add(4, 'd')
                       .format('MM/DD')}
                   </th>
                   <th className="text-center text-warning" width="45">
                     {moment(monday)
-                      .add('d', 5)
+                      .add(5, 'd')
                       .format('MM/DD')}
                     {'12/07'}
                   </th>
                   <th className="text-center text-warning" width="45">
                     Sun <br />
                     {moment(monday)
-                      .add('d', 6)
+                      .add(6, 'd')
                       .format('MM/DD')}
                   </th>
                   <th width="20" />
@@ -116,18 +135,33 @@ const WeeklyTimeSheet = props => {
                         <Input
                           placeholder="Enter a project"
                           value={item.project}
+                          onChange={e =>
+                            handleUpdateTask({
+                              ...item,
+                              project: e.target.value,
+                            })
+                          }
                         />
                       </td>
                       <td>
                         <Input
                           placeholder="Enter an activity"
                           value={item.activity}
+                          onChange={e =>
+                            handleUpdateTask({
+                              ...item,
+                              activity: e.target.value,
+                            })
+                          }
                         />
                       </td>
                       <td>
                         <Input
                           placeholder="Enter your tasks"
                           value={item.task}
+                          onChange={e =>
+                            handleUpdateTask({ ...item, task: e.target.value })
+                          }
                         />
                       </td>
                       <td>
@@ -140,70 +174,118 @@ const WeeklyTimeSheet = props => {
                       </td>
                       <td>
                         <Input
+                          type="number"
                           className="text-center"
                           value={getWorkingHour(
                             item.id,
-                            moment(monday).add('d', 1),
+                            moment(monday).add(1, 'd'),
                           )}
+                          onChange={e =>
+                            updateWorkingHour(
+                              item.id,
+                              moment(monday).add(1, 'd'),
+                              e,
+                            )
+                          }
                         />
                       </td>
                       <td>
                         <Input
+                          type="number"
                           className="text-center"
                           value={getWorkingHour(
                             item.id,
-                            moment(monday).add('d', 2),
+                            moment(monday).add(2, 'd'),
                           )}
+                          onChange={e =>
+                            updateWorkingHour(
+                              item.id,
+                              moment(monday).add(2, 'd'),
+                              e,
+                            )
+                          }
                         />
                       </td>
                       <td>
                         <Input
+                          type="number"
                           className="text-center"
                           value={getWorkingHour(
                             item.id,
-                            moment(monday).add('d', 3),
+                            moment(monday).add(3, 'd'),
                           )}
+                          onChange={e =>
+                            updateWorkingHour(
+                              item.id,
+                              moment(monday).add(3, 'd'),
+                              e,
+                            )
+                          }
                         />
                       </td>
                       <td>
                         <Input
+                          type="number"
                           className="text-center"
                           value={getWorkingHour(
                             item.id,
-                            moment(monday).add('d', 4),
+                            moment(monday).add(4, 'd'),
                           )}
+                          onChange={e =>
+                            updateWorkingHour(
+                              item.id,
+                              moment(monday).add(4, 'd'),
+                              e,
+                            )
+                          }
                         />
                       </td>
                       <td>
                         <Input
+                          type="number"
                           className="text-center"
                           value={getWorkingHour(
                             item.id,
-                            moment(monday).add('d', 5),
+                            moment(monday).add(5, 'd'),
                           )}
+                          onChange={e =>
+                            updateWorkingHour(
+                              item.id,
+                              moment(monday).add(5, 'd'),
+                              e,
+                            )
+                          }
                         />
                       </td>
                       <td>
                         <Input
+                          type="number"
                           className="text-center"
                           value={getWorkingHour(
                             item.id,
-                            moment(monday).add('d', 6),
+                            moment(monday).add(6, 'd'),
                           )}
+                          onChange={e =>
+                            updateWorkingHour(
+                              item.id,
+                              moment(monday).add(6, 'd'),
+                              e,
+                            )
+                          }
                         />
                       </td>
                       <td className="text-right">
                         <Button
                           color="link"
-                          id="tooltip636901683"
+                          id={`tooltip${item.id}`}
                           type="button"
                           className="px-0"
+                          onClick={() => handleDeleteTask(item.id)}
                         >
-                          <i className="tim-icons icon-trash-simple p-0 pt-2" />
+                          <i className="tim-icons icon-trash-simple text-info p-0 pt-2" />
                         </Button>
                         <UncontrolledTooltip
-                          delay={0}
-                          target="tooltip636901683"
+                          target={`tooltip${item.id}`}
                           placement="right"
                         >
                           Delete
@@ -217,7 +299,7 @@ const WeeklyTimeSheet = props => {
                       size="sm"
                       color="info"
                       className="btn-simple mt-1"
-                      // onClick={() => toggleAddModal(true)}
+                      onClick={handleCreateTask}
                     >
                       + New task
                     </Button>
@@ -225,31 +307,64 @@ const WeeklyTimeSheet = props => {
                   <td />
                   <td className="total-text">Total hours</td>
                   <td>
-                    <Input className="text-center" value={8} disabled />
-                  </td>
-                  <td>
-                    <Input className="text-center" value={8} disabled />
-                  </td>
-                  <td>
-                    <Input className="text-center" value={8} disabled />
-                  </td>
-                  <td>
-                    <Input className="text-center" value={8} disabled />
-                  </td>
-                  <td>
-                    <Input className="text-center" value={8} disabled />
+                    <Input
+                      className={`text-center ${getWorkingHour(null, monday) >
+                        8 && 'text-warning'}`}
+                      value={getWorkingHour(null, monday)}
+                      disabled
+                    />
                   </td>
                   <td>
                     <Input
-                      className="text-center text-warning"
-                      value={8}
+                      className={`text-center ${getWorkingHour(
+                        null,
+                        moment(monday).add(1, 'd'),
+                      ) > 8 && 'text-warning'}`}
+                      value={getWorkingHour(null, moment(monday).add(1, 'd'))}
+                      disabled
+                    />
+                  </td>
+                  <td>
+                    <Input
+                      className={`text-center ${getWorkingHour(
+                        null,
+                        moment(monday).add(2, 'd'),
+                      ) > 8 && 'text-warning'}`}
+                      value={getWorkingHour(null, moment(monday).add(2, 'd'))}
+                      disabled
+                    />
+                  </td>
+                  <td>
+                    <Input
+                      className={`text-center ${getWorkingHour(
+                        null,
+                        moment(monday).add(3, 'd'),
+                      ) > 8 && 'text-warning'}`}
+                      value={getWorkingHour(null, moment(monday).add(3, 'd'))}
+                      disabled
+                    />
+                  </td>
+                  <td>
+                    <Input
+                      className={`text-center ${getWorkingHour(
+                        null,
+                        moment(monday).add(4, 'd'),
+                      ) > 8 && 'text-warning'}`}
+                      value={getWorkingHour(null, moment(monday).add(4, 'd'))}
                       disabled
                     />
                   </td>
                   <td>
                     <Input
                       className="text-center text-warning"
-                      value={8}
+                      value={getWorkingHour(null, moment(monday).add(5, 'd'))}
+                      disabled
+                    />
+                  </td>
+                  <td>
+                    <Input
+                      className="text-center text-warning"
+                      value={getWorkingHour(null, moment(monday).add(6, 'd'))}
                       disabled
                     />
                   </td>
@@ -259,27 +374,38 @@ const WeeklyTimeSheet = props => {
             </Table>
           </CardBody>
           <CardFooter className="pt-0">
-            <Button
+            <SubmitButton
               color="primary"
               className="btn-sm float-right ml-2"
               disabled={
                 !tasks ||
                 tasks.length === 0 ||
                 tasks[0].submitted ||
-                moment(monday).endOf('isoweek') > moment()
+                moment(monday).endOf('isoweek') > moment() ||
+                saveStatus === ACTION_STATUS.PENDING ||
+                submitStatus === ACTION_STATUS.PENDING
               }
-              // onClick={onSubmit}
+              onClick={handleSubmit}
+              loading={submitStatus === ACTION_STATUS.PENDING}
+              btn="btn"
             >
               Submit
-            </Button>
-            <Button
+            </SubmitButton>
+            <SubmitButton
               color="info"
-              className="btn-sm float-right"
-              disabled={!tasks || (tasks.length > 0 && tasks[0].submitted)}
-              // onClick={onSubmit}
+              className="btn btn-sm float-right"
+              disabled={
+                !tasks ||
+                (tasks.length > 0 && tasks[0].submitted) ||
+                saveStatus === ACTION_STATUS.PENDING ||
+                submitStatus === ACTION_STATUS.PENDING
+              }
+              onClick={handleSave}
+              loading={saveStatus === ACTION_STATUS.PENDING}
+              btn="btn"
             >
               Save
-            </Button>
+            </SubmitButton>
           </CardFooter>
         </>
       )}

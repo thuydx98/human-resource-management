@@ -14,6 +14,14 @@ export const initialState = {
     state: null,
     error: null,
   },
+  saveTasks: {
+    state: null,
+    error: null,
+  },
+  submitTasks: {
+    state: null,
+    error: null,
+  },
 };
 
 const slice = createSlice({
@@ -58,6 +66,48 @@ const slice = createSlice({
       return flow(
         set('tasks.state', ACTION_STATUS.FAILED),
         set('tasks.error', action.payload),
+      )(state);
+    },
+    saveTask(state) {
+      return flow(
+        set('saveTasks.state', ACTION_STATUS.PENDING),
+        set('saveTasks.error', null),
+      )(state);
+    },
+    saveTaskSuccess(state) {
+      return flow(
+        set('saveTasks.state', ACTION_STATUS.SUCCESS),
+        set('saveTasks.error', null),
+      )(state);
+    },
+    saveTaskFailed(state, action) {
+      return flow(
+        set('saveTasks.state', ACTION_STATUS.FAILED),
+        set('saveTasks.error', action.payload),
+      )(state);
+    },
+    submitTask(state) {
+      return flow(
+        set('submitTasks.state', ACTION_STATUS.PENDING),
+        set('submitTasks.error', null),
+      )(state);
+    },
+    submitTaskSuccess(state) {
+      return flow(
+        set('submitTasks.state', ACTION_STATUS.SUCCESS),
+        set('submitTasks.error', null),
+      )(state);
+    },
+    submitTaskFailed(state, action) {
+      return flow(
+        set('submitTasks.state', ACTION_STATUS.FAILED),
+        set('submitTasks.error', action.payload),
+      )(state);
+    },
+    resetState(state) {
+      return flow(
+        set('saveTasks', initialState.saveTasks),
+        set('submitTasks', initialState.submitTasks),
       )(state);
     },
   },

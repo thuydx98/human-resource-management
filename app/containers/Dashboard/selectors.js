@@ -24,9 +24,21 @@ const selectListTaskState = createSelector(
   state => get('tasks.state', state),
 );
 
+const selectSaveTaskState = createSelector(
+  selectDashboard,
+  state => get('saveTasks.state', state),
+);
+
+const selectSubmitTaskState = createSelector(
+  selectDashboard,
+  state => get('submitTasks.state', state),
+);
+
 export {
   selectListLeaveData,
   selectListLeaveState,
   selectListTaskData,
   selectListTaskState,
+  selectSaveTaskState,
+  selectSubmitTaskState,
 };

@@ -22,8 +22,16 @@ export default function Dashboard() {
   useInjectReducer({ key: sliceKey, reducer });
 
   const history = useHistory();
-  const { states } = useHooks();
-  const { leaves, taskData, getTaskState, monday } = states;
+  const { states, handlers } = useHooks();
+  const {
+    leaves,
+    taskData,
+    getTaskState,
+    monday,
+    saveTaskState,
+    submitTaskState,
+  } = states;
+  const { saveTask, submitTask, resetState } = handlers;
 
   const annualLeaves = leaves.filter(
     item => item.type === 'ANNUAL' && item.status !== 'CANCEL',
@@ -39,6 +47,11 @@ export default function Dashboard() {
         monday={monday}
         data={taskData}
         loadStatus={getTaskState}
+        onSave={saveTask}
+        onSubmit={submitTask}
+        saveStatus={saveTaskState}
+        submitStatus={submitTaskState}
+        resetState={resetState}
       />
       <Row>
         <Col md={5}>
@@ -64,7 +77,7 @@ export default function Dashboard() {
               <Button
                 color="info"
                 className="btn-sm float-right ml-2"
-                onClick={() => history.push('/leave')}
+                onClick={() => history.push('/day-off')}
               >
                 Request leave
               </Button>

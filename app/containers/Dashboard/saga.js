@@ -1,6 +1,6 @@
 import { call, put, all, fork, takeLatest } from 'redux-saga/effects';
 import { getList } from 'services/leave/index';
-import { getList as getListTask } from 'services/task/index';
+import { getList as getListTask, save as saveTask } from 'services/task/index';
 import { actions } from './slice';
 
 export function* getListLeaveWatcher() {
@@ -31,6 +31,39 @@ export function* getListTaskTask(action) {
   }
 }
 
+export function* saveTaskWatcher() {
+  yield takeLatest(actions.saveTask, saveTaskTask);
+}
+
+export function* saveTaskTask(action) {
+  const { tasks, userId } = action.payload;
+  const { response, error } = yield call(saveTask, tasks, userId, 'save');
+  if (response) {
+    yield put(actions.saveTaskSuccess(response.obj));
+  } else {
+    yield put(actions.saveTaskFailed(error));
+  }
+}
+
+export function* submitTaskWatcher() {
+  yield takeLatest(actions.submitTask, submitTaskTask);
+}
+
+export function* submitTaskTask(action) {
+  const { tasks, userId } = action.payload;
+  const { response, error } = yield call(saveTask, tasks, userId, 'submit');
+  if (response) {
+    yield put(actions.submitTaskSuccess(response.obj));
+  } else {
+    yield put(actions.submitTaskFailed(error));
+  }
+}
+
 export default function* defaultSaga() {
-  yield all([fork(getListLeaveWatcher), fork(getListTaskWatcher)]);
+  yield all([
+    fork(getListLeaveWatcher),
+    fork(getListTaskWatcher),
+    fork(saveTaskWatcher),
+    fork(submitTaskWatcher),
+  ]);
 }

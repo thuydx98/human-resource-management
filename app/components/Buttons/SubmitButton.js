@@ -3,12 +3,12 @@ import { Button, Spinner } from 'reactstrap';
 import PropTypes from 'prop-types';
 
 export default function SubmitButton(props) {
-  const { onClick, loading, className, disabled, children } = props;
+  const { onClick, loading, className, disabled, children, btn, color } = props;
   return (
     <Button
       size="sm"
-      color="info"
-      className={`btn-simple d-flex ${className}`}
+      color={color || 'info'}
+      className={`${btn || 'btn-simple'} d-flex ${className}`}
       onClick={onClick}
       disabled={disabled}
     >
@@ -24,4 +24,6 @@ SubmitButton.propTypes = {
   loading: PropTypes.bool,
   className: PropTypes.string,
   disabled: PropTypes.bool,
+  btn: PropTypes.string,
+  color: PropTypes.string,
 };
