@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import useActions from 'utils/hooks/useActions';
 import { useSelector } from 'react-redux';
 import { actions } from './slice';
-import { selectUserListData } from './selectors';
+import { selectUserListData, selectUserListState } from './selectors';
 
 export const useHooks = () => {
   const [isOpenAddModal, toggleAddModal] = useState(false);
@@ -10,6 +10,7 @@ export const useHooks = () => {
   const [search, setSearch] = useState(null);
   const [searchResult, setSearchResult] = useState([]);
   const userList = useSelector(selectUserListData);
+  const getUserListState = useSelector(selectUserListState);
   const { getUserList } = useActions({ getUserList: actions.getUserList }, [
     actions,
   ]);
@@ -47,6 +48,7 @@ export const useHooks = () => {
       pageIndex,
       searchResult,
       search,
+      getUserListState,
     },
     handlers: {
       toggleAddModal,

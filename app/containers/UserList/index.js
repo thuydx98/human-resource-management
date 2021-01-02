@@ -15,6 +15,8 @@ import Pagination from 'components/TablePagination';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import AuthUtils from 'utils/authentication';
+import Loading from 'components/Loading';
+import { ACTION_STATUS } from 'utils/constants';
 import saga from './saga';
 import { sliceKey, reducer } from './slice';
 import useHooks from './hook';
@@ -27,7 +29,14 @@ export default function UserList() {
 
   const history = useHistory();
   const { states, handlers } = useHooks();
-  const { isOpenAddModal, userList, pageIndex, search, searchResult } = states;
+  const {
+    isOpenAddModal,
+    userList,
+    pageIndex,
+    search,
+    searchResult,
+    getUserListState,
+  } = states;
 
   const { toggleAddModal, getUserList, setPageIndex, handleSearch } = handlers;
   const { role } = AuthUtils.getAuthInfo();
@@ -136,6 +145,8 @@ export default function UserList() {
         </thead>
         <tbody>{userList && renderItems()}</tbody>
       </Table>
+
+      {getUserListState === ACTION_STATUS.PENDING && <Loading />}
 
       <Pagination
         total={get('length', search ? searchResult : userList)}

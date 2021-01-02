@@ -32,27 +32,32 @@ export default function LeaveHistory() {
                 const status = moment(item.date) < now ? 'Taken' : 'Planned';
                 return (
                   <tr key={item.id}>
-                    <td>{moment(item.date).format('MMM DD YYYY')}</td>
+                    <td>
+                      {moment(item.startDate).format('MMM DD YYYY')}
+                      {item.startDate !== item.endDate &&
+                        ` - ${moment(item.endDate).format('MMM DD YYYY')}`}
+                    </td>
                     <td>{moment(item.createdDate).format('MMM DD YYYY')}</td>
                     <td>{item.type === 'ANNUAL' ? 'Annual' : 'Non-paid'}</td>
                     <td>{item.status === 'CANCEL' ? 'Cancelled' : status}</td>
                     <td>{item.reason}</td>
                     <td className="text-right">
-                      {moment(item.date) > now && item.status !== 'CANCEL' && (
-                        <>
-                          <Button
-                            color="link"
-                            className="text-muted"
-                            id={`tooltip${item.id}`}
-                            onClick={() => handleCancelRequest(item.id)}
-                          >
-                            <i className="tim-icons icon-simple-remove" />
-                          </Button>
-                          <UncontrolledTooltip target={`tooltip${item.id}`}>
-                            Cancel
-                          </UncontrolledTooltip>
-                        </>
-                      )}
+                      {moment(item.startDate) >= now &&
+                        item.status !== 'CANCEL' && (
+                          <>
+                            <Button
+                              color="link"
+                              className="text-muted"
+                              id={`tooltip${item.id}`}
+                              onClick={() => handleCancelRequest(item.id)}
+                            >
+                              <i className="tim-icons icon-simple-remove" />
+                            </Button>
+                            <UncontrolledTooltip target={`tooltip${item.id}`}>
+                              Cancel
+                            </UncontrolledTooltip>
+                          </>
+                        )}
                     </td>
                   </tr>
                 );

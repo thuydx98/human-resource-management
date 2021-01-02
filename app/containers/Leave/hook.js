@@ -2,7 +2,7 @@ import { useState } from 'react';
 import useActions from 'utils/hooks/useActions';
 import { useSelector } from 'react-redux';
 import { actions } from './slice';
-import { selectSelectedYear } from './selectors';
+import { selectListLeaveState, selectSelectedYear } from './selectors';
 
 export const LEAVE_TABS = {
   requestTab: 'requestTab',
@@ -13,6 +13,8 @@ export const LEAVE_TABS = {
 export const useHooks = () => {
   const [selectedTab, setSelectedTab] = useState(LEAVE_TABS.requestTab);
   const selectedYear = useSelector(selectSelectedYear);
+  const getState = useSelector(selectListLeaveState);
+
   const { setSelectedYear } = useActions(
     {
       setSelectedYear: actions.setSelectedYear,
@@ -21,7 +23,7 @@ export const useHooks = () => {
   );
 
   return {
-    states: { selectedTab, selectedYear },
+    states: { selectedTab, selectedYear, getState },
     handlers: { setSelectedTab, setSelectedYear },
   };
 };

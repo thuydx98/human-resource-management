@@ -7,8 +7,11 @@ export function* requestLeaveWatcher() {
 }
 
 export function* requestLeaveTask(action) {
-  const { userId } = action.payload;
-  const { response, error } = yield call(create, action.payload, userId);
+  const { response, error } = yield call(
+    create,
+    action.payload,
+    action.payload[0].userId,
+  );
   if (response) {
     yield put(actions.requestLeaveSuccess(response.obj));
   } else {

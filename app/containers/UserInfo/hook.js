@@ -8,6 +8,7 @@ import {
   selectUserInfoData,
   uploadAvatarState,
   uploadAvatarData,
+  selectUserInfoState,
 } from './selectors';
 
 export const USER_INFO_TABS = {
@@ -24,6 +25,7 @@ export const useHooks = () => {
   const fileInput = useRef(null);
   const [selectedTab, setSelectedTab] = useState(USER_INFO_TABS.personalTab);
   const selectUserInfo = useSelector(selectUserInfoData);
+  const getUserInfoState = useSelector(selectUserInfoState);
   const selectUploadAvatarState = useSelector(uploadAvatarState);
   const selectUploadAvatarData = useSelector(uploadAvatarData);
   const { getUser, setUser, uploadAvatar, resetState } = useActions(
@@ -60,7 +62,7 @@ export const useHooks = () => {
   );
 
   return {
-    states: { selectedTab, selectUserInfo, fileInput },
+    states: { selectedTab, selectUserInfo, fileInput, getUserInfoState },
     handlers: { setSelectedTab, setUser, handleUploadAvatar },
   };
 };

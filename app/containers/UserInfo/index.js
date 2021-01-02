@@ -2,6 +2,8 @@ import React from 'react';
 import { Button, Card, CardBody, CardText, Row, Col } from 'reactstrap';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+import Loading from 'components/Loading';
+import { ACTION_STATUS } from 'utils/constants';
 import saga from './saga';
 import { sliceKey, reducer } from './slice';
 import useHooks, { USER_INFO_TABS } from './hook';
@@ -18,7 +20,7 @@ export default function UserInfo() {
 
   const { states, handlers } = useHooks();
 
-  const { selectedTab, selectUserInfo, fileInput } = states;
+  const { selectedTab, selectUserInfo, fileInput, getUserInfoState } = states;
   const { setSelectedTab, setUser, handleUploadAvatar } = handlers;
   const { avatar, firstname, lastname, permission } = selectUserInfo || {};
 
@@ -116,6 +118,8 @@ export default function UserInfo() {
             <ProjectInfo user={selectUserInfo} updateUser={setUser} />
           )}
         </Col>
+
+        {getUserInfoState === ACTION_STATUS.PENDING && <Loading />}
       </Row>
     </div>
   );

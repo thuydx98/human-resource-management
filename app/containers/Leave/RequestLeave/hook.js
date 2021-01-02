@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
@@ -5,6 +6,7 @@ import useActions from 'utils/hooks/useActions';
 import get from 'lodash/fp/get';
 import { useSelector } from 'react-redux';
 import { ACTION_STATUS } from 'utils/constants';
+import { addBusinessDays } from 'utils/datetime';
 import { actions } from '../slice';
 import { actions as requestActions } from './slice';
 import { selectListLeaveData } from '../selectors';
@@ -55,16 +57,44 @@ export const useHooks = () => {
     return () => resetRequestState();
   }, [requestState, leaves, setIsSubmitted, setListLeave]);
 
-  const onSubmit = useCallback(() => {
-    setIsSubmitted(true);
-    if (!payload.date || !payload.reason) return;
+  const onSubmit = useCallback(
+    (totalAnnual, totalNonPaid) => {
+      setIsSubmitted(true);
+      if (!payload.startDate || !payload.endDate || !payload.reason) return;
 
-    requestLeave({
-      ...payload,
-      type: payload.type || 'ANNUAL',
-      userId: get('userId', params) || 'me',
-    });
-  }, [payload, params]);
+      const data =
+        totalNonPaid > 0
+          ? [
+              {
+                ...payload,
+                type: payload.type || 'ANNUAL',
+                endDate: addBusinessDays(
+                  moment(payload.startDate),
+                  totalAnnual,
+                ),
+                userId: get('userId', params) || 'me',
+              },
+              {
+                ...payload,
+                type: payload.type || 'NON_PAID',
+                startDate: addBusinessDays(
+                  moment(payload.startDate),
+                  totalAnnual + 1,
+                ),
+                userId: get('userId', params) || 'me',
+              },
+            ]
+          : [
+              {
+                ...payload,
+                type: 'ANNUAL',
+                userId: get('userId', params) || 'me',
+              },
+            ];
+      requestLeave(data);
+    },
+    [payload, params],
+  );
 
   return {
     states: { payload, leaves, isSubmitted, notificationRef },

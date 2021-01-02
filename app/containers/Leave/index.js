@@ -12,19 +12,21 @@ import classNames from 'classnames';
 import moment from 'moment';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+import { ACTION_STATUS } from 'utils/constants';
 import saga from './saga';
 import { sliceKey, reducer } from './slice';
 import useHooks, { LEAVE_TABS } from './hook';
 import RequestLeave from './RequestLeave';
 import SummaryLeave from './SummaryLeave';
 import LeaveHistory from './LeaveHistory';
+import Loading from '../../components/Loading';
 
 export default function Leave() {
   useInjectSaga({ key: sliceKey, saga });
   useInjectReducer({ key: sliceKey, reducer });
 
   const { states, handlers } = useHooks();
-  const { selectedTab, selectedYear } = states;
+  const { selectedTab, selectedYear, getState } = states;
   const { setSelectedTab, setSelectedYear } = handlers;
 
   return (
@@ -124,9 +126,12 @@ export default function Leave() {
             </Col>
           </Row>
         </CardHeader>
+
         {selectedTab === LEAVE_TABS.requestTab && <RequestLeave />}
         {selectedTab === LEAVE_TABS.summaryTab && <SummaryLeave />}
         {selectedTab === LEAVE_TABS.historyTab && <LeaveHistory />}
+
+        {getState === ACTION_STATUS.PENDING && <Loading />}
       </Card>
     </div>
   );

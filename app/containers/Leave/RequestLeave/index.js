@@ -12,7 +12,9 @@ import {
   Label,
   FormFeedback,
 } from 'reactstrap';
+import moment from 'moment';
 import get from 'lodash/fp/get';
+import { getTotalWorkDays } from 'utils/datetime';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import Notification from 'components/Notification';
@@ -28,12 +30,30 @@ export default function RequestLeave() {
   const { leaves, payload, isSubmitted, notificationRef } = states;
   const { onSubmit, setPayload } = handlers;
 
-  const selectedType = get('type', payload) || 'ANNUAL';
-  const totalUsed = leaves
-    ? leaves.filter(
-        item => item.type === selectedType && item.status !== 'CANCEL',
-      ).length
+  const unPaidUsed = leaves
+    ? leaves
+        .filter(item => item.type === 'NON_PAID' && item.status !== 'CANCEL')
+        .map(item => getTotalWorkDays(item.startDate, item.endDate))
+        .reduce((a, b) => a + b, 0)
     : 0;
+  const annualUsed = leaves
+    ? leaves
+        .filter(item => item.type === 'ANNUAL' && item.status !== 'CANCEL')
+        .map(item => getTotalWorkDays(item.startDate, item.endDate))
+        .reduce((a, b) => a + b, 0)
+    : 0;
+
+  const totalDates = type => {
+    if (!payload.startDate || !payload.endDate) return undefined;
+    const total = getTotalWorkDays(
+      moment(payload.startDate),
+      moment(payload.endDate),
+    );
+    if (type === 'NON_PAID')
+      return total > 12 - annualUsed ? total - 12 + annualUsed : undefined;
+
+    return total > 12 - annualUsed ? 12 - annualUsed : total;
+  };
 
   return (
     <>
@@ -41,47 +61,55 @@ export default function RequestLeave() {
       <CardBody>
         <Form>
           <Row>
-            <Col className="pr-md-1" md="3">
-              <FormGroup>
-                <Label>Leave type</Label>
-                <Input
-                  name="gender"
-                  placeholder="Choose..."
-                  type="select"
-                  value={get('type', payload) || 'ANNUAL'}
-                  onChange={e =>
-                    setPayload({ ...payload, type: e.target.value })
-                  }
-                >
-                  <option value="ANNUAL">Annual Leave</option>
-                  <option value="NON_PAID">Non-paid Leave</option>
-                </Input>
-              </FormGroup>
-            </Col>
-            <Col className="px-md-1" md="2">
-              <Label>Remaining days</Label>
+            <Col className="pr-md-1" md="4">
               <p className="p-2">
-                {selectedType === 'ANNUAL' ? 12 - totalUsed : 30 - totalUsed}
+                Annual leaves:
+                <span className="pl-5">{12 - annualUsed}</span>
+                <span className="text-info pl-3">
+                  {totalDates() > 0 && `- ${totalDates()}`}
+                </span>
+              </p>
+              <p className="p-2">
+                Non-paid leaves:
+                <span className="pl-4">{30 - unPaidUsed}</span>
+                <span className="text-info pl-3">
+                  {totalDates('NON_PAID') && `- ${totalDates('NON_PAID')}`}
+                </span>
               </p>
             </Col>
             <Col className="pl-md-1">
               <FormGroup>
-                <Label>Leave date</Label>
+                <Label>From</Label>
                 <Input
                   type="date"
-                  value={get('date', payload)}
+                  value={get('startDate', payload)}
                   onChange={e =>
-                    setPayload({ ...payload, date: e.target.value })
+                    setPayload({ ...payload, startDate: e.target.value })
                   }
-                  invalid={isSubmitted && !payload.date}
+                  invalid={isSubmitted && !payload.startDate}
                 />
-                <FormFeedback>Leave date is required</FormFeedback>
+                <FormFeedback>Start date is required</FormFeedback>
+              </FormGroup>
+            </Col>
+            <Col className="pl-md-1">
+              <FormGroup>
+                <Label>To</Label>
+                <Input
+                  type="date"
+                  min={get('startDate', payload)}
+                  value={get('endDate', payload)}
+                  onChange={e =>
+                    setPayload({ ...payload, endDate: e.target.value })
+                  }
+                  invalid={isSubmitted && !payload.endDate}
+                />
+                <FormFeedback>End date is required</FormFeedback>
               </FormGroup>
             </Col>
           </Row>
           <Row>
-            <Col md={5} />
-            <Col className="pr-md-1 pl-1" md="7">
+            <Col md={4} />
+            <Col className="pl-1" md={8}>
               <FormGroup>
                 <Label>Reason</Label>
                 <Input
@@ -106,12 +134,8 @@ export default function RequestLeave() {
           color="info"
           type="submit"
           className="btn-sm float-right"
-          onClick={onSubmit}
-          disabled={
-            selectedType === 'ANNUAL'
-              ? 12 - totalUsed === 0
-              : 30 - totalUsed === 0
-          }
+          onClick={() => onSubmit(totalDates(), totalDates('NON_PAID'))}
+          disabled={annualUsed === 0 && unPaidUsed === 0}
         >
           Submit
         </Button>
