@@ -1,6 +1,7 @@
 import { call, put, all, fork, takeLatest } from 'redux-saga/effects';
 import { getList } from 'services/leave/index';
 import { getList as getListTask, save as saveTask } from 'services/task/index';
+import { v4 as uuid } from 'uuid';
 import { actions } from './slice';
 
 export function* getListLeaveWatcher() {
@@ -25,7 +26,13 @@ export function* getListTaskTask(action) {
   const { times, userId } = action.payload;
   const { response, error } = yield call(getListTask, times, userId);
   if (response) {
-    yield put(actions.getListTaskSuccess(response.obj));
+    const { tasks, details } = response.obj;
+    yield put(
+      actions.getListTaskSuccess({
+        tasks: tasks.length === 0 ? [{ id: uuid(), time: times }] : tasks,
+        details,
+      }),
+    );
   } else {
     yield put(actions.getListLeaveFailed(error));
   }

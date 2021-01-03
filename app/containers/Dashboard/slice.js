@@ -30,7 +30,7 @@ const slice = createSlice({
   reducers: {
     getListLeave(state) {
       return flow(
-        set('leaves.data', []),
+        set('leaves.data', null),
         set('leaves.state', ACTION_STATUS.PENDING),
         set('leaves.error', null),
       )(state);

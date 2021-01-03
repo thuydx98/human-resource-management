@@ -105,7 +105,6 @@ export default function SalaryManagement() {
             <th className="text-center">
               Working <br /> date
             </th>
-            <th className="text-right">Net salary</th>
             <th className="text-right">
               Social ins <br /> 8% + 17.5%
             </th>
@@ -134,6 +133,7 @@ export default function SalaryManagement() {
               </UncontrolledTooltip>
             </th>
             <th className="text-right">Other</th>
+            <th className="text-right">Net salary</th>
             <th className="text-right">Total paid</th>
           </tr>
         </thead>
@@ -159,19 +159,6 @@ export default function SalaryManagement() {
                       )} - ${moment(item.endDate).format('MMM DD YYYY')}`}
                       <br />
                       {`Leaves: ${item.leaves.length} days (non-paid)`}
-                    </UncontrolledTooltip>
-                  </td>
-                  <td className="text-right">
-                    <span
-                      id={`tooltip${item.id}_salary`}
-                      className="text-info cursor-pointer"
-                    >
-                      {formatCurrency(item.net)}
-                    </span>
-                    <UncontrolledTooltip target={`tooltip${item.id}_salary`}>
-                      {`Gross base: ${formatCurrency(item.gross)}`}
-                      <br />
-                      {`Actual salary: ${formatCurrency(item.actualGross)}`}
                     </UncontrolledTooltip>
                   </td>
                   <td className="text-right">
@@ -215,9 +202,9 @@ export default function SalaryManagement() {
                       target={`tooltip${item.id}_unemployment`}
                     >
                       <div className="text-left">
-                        {`Employee (8%): ${formatCurrency(item.unemployment)}`}
+                        {`Employee (1%): ${formatCurrency(item.unemployment)}`}
                       </div>
-                      {`Employer (17.5%): ${formatCurrency(item.unemployment)}`}
+                      {`Employer (1%): ${formatCurrency(item.unemployment)}`}
                     </UncontrolledTooltip>
                   </td>
                   <td className="text-right">{formatCurrency(item.tax)}</td>
@@ -242,6 +229,19 @@ export default function SalaryManagement() {
                         ))}
                       </UncontrolledTooltip>
                     )}
+                  </td>
+                  <td className="text-right">
+                    <span
+                      id={`tooltip${item.id}_salary`}
+                      className="text-info cursor-pointer"
+                    >
+                      {formatCurrency(item.net)}
+                    </span>
+                    <UncontrolledTooltip target={`tooltip${item.id}_salary`}>
+                      {`Gross base: ${formatCurrency(item.gross)}`}
+                      <br />
+                      {`Actual salary: ${formatCurrency(item.actualGross)}`}
+                    </UncontrolledTooltip>
                   </td>
                   <td className="text-right">{formatCurrency(item.total)}</td>
                 </tr>

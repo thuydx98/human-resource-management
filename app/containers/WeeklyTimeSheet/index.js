@@ -16,6 +16,7 @@ import { ACTION_STATUS } from 'utils/constants';
 import Notification from 'components/Notification';
 import SubmitButton from 'components/Buttons/SubmitButton';
 import moment from 'moment';
+import AuthUtils from 'utils/authentication';
 import useHooks from './hook';
 import './styles/style.scss';
 
@@ -39,6 +40,8 @@ const WeeklyTimeSheet = props => {
     handleSave,
     handleSubmit,
   } = handlers;
+  const { role } = AuthUtils.getAuthInfo();
+  const isAllow = role === 'Admin' || role === 'Manager';
   const startDate = monday ? monday.format('MMMM DD') : '';
   const endDate = monday
     ? moment(monday)
@@ -124,7 +127,7 @@ const WeeklyTimeSheet = props => {
                       .add(6, 'd')
                       .format('MM/DD')}
                   </th>
-                  <th width="20" />
+                  {isAllow && <th width="20" />}
                 </tr>
               </thead>
               <tbody>
@@ -135,6 +138,7 @@ const WeeklyTimeSheet = props => {
                         <Input
                           placeholder="Enter a project"
                           value={item.project}
+                          disabled={!isAllow}
                           onChange={e =>
                             handleUpdateTask({
                               ...item,
@@ -147,6 +151,7 @@ const WeeklyTimeSheet = props => {
                         <Input
                           placeholder="Enter an activity"
                           value={item.activity}
+                          disabled={!isAllow}
                           onChange={e =>
                             handleUpdateTask({
                               ...item,
@@ -159,6 +164,7 @@ const WeeklyTimeSheet = props => {
                         <Input
                           placeholder="Enter your tasks"
                           value={item.task}
+                          disabled={!isAllow}
                           onChange={e =>
                             handleUpdateTask({ ...item, task: e.target.value })
                           }
@@ -168,6 +174,7 @@ const WeeklyTimeSheet = props => {
                         <Input
                           type="number"
                           className="text-center"
+                          disabled={!isAllow}
                           value={getWorkingHour(item.id, monday)}
                           onChange={e => updateWorkingHour(item.id, monday, e)}
                         />
@@ -176,6 +183,7 @@ const WeeklyTimeSheet = props => {
                         <Input
                           type="number"
                           className="text-center"
+                          disabled={!isAllow}
                           value={getWorkingHour(
                             item.id,
                             moment(monday).add(1, 'd'),
@@ -193,6 +201,7 @@ const WeeklyTimeSheet = props => {
                         <Input
                           type="number"
                           className="text-center"
+                          disabled={!isAllow}
                           value={getWorkingHour(
                             item.id,
                             moment(monday).add(2, 'd'),
@@ -210,6 +219,7 @@ const WeeklyTimeSheet = props => {
                         <Input
                           type="number"
                           className="text-center"
+                          disabled={!isAllow}
                           value={getWorkingHour(
                             item.id,
                             moment(monday).add(3, 'd'),
@@ -227,6 +237,7 @@ const WeeklyTimeSheet = props => {
                         <Input
                           type="number"
                           className="text-center"
+                          disabled={!isAllow}
                           value={getWorkingHour(
                             item.id,
                             moment(monday).add(4, 'd'),
@@ -244,6 +255,7 @@ const WeeklyTimeSheet = props => {
                         <Input
                           type="number"
                           className="text-center"
+                          disabled={!isAllow}
                           value={getWorkingHour(
                             item.id,
                             moment(monday).add(5, 'd'),
@@ -261,6 +273,7 @@ const WeeklyTimeSheet = props => {
                         <Input
                           type="number"
                           className="text-center"
+                          disabled={!isAllow}
                           value={getWorkingHour(
                             item.id,
                             moment(monday).add(6, 'd'),
@@ -274,40 +287,43 @@ const WeeklyTimeSheet = props => {
                           }
                         />
                       </td>
-                      <td className="text-right">
-                        <Button
-                          color="link"
-                          id={`tooltip${item.id}`}
-                          type="button"
-                          className="px-0"
-                          onClick={() => handleDeleteTask(item.id)}
-                        >
-                          <i className="tim-icons icon-trash-simple text-info p-0 pt-2" />
-                        </Button>
-                        <UncontrolledTooltip
-                          target={`tooltip${item.id}`}
-                          placement="right"
-                        >
-                          Delete
-                        </UncontrolledTooltip>
-                      </td>
+                      {isAllow && (
+                        <td className="text-right">
+                          <Button
+                            color="link"
+                            id={`tooltip${item.id}`}
+                            type="button"
+                            className="px-0"
+                            onClick={() => handleDeleteTask(item.id)}
+                          >
+                            <i className="tim-icons icon-trash-simple text-info p-0 pt-2" />
+                          </Button>
+                          <UncontrolledTooltip
+                            target={`tooltip${item.id}`}
+                            placement="right"
+                          >
+                            Delete
+                          </UncontrolledTooltip>
+                        </td>
+                      )}
                     </tr>
                   ))}
                 <tr>
                   <td>
-                    {(!tasks || !tasks.length > 0 || !tasks[0].submitted) && (
-                      <Button
-                        size="sm"
-                        color="info"
-                        className="btn-simple mt-1"
-                        onClick={handleCreateTask}
-                        disabled={
-                          tasks && tasks.length > 0 && tasks[0].submitted
-                        }
-                      >
-                        + New task
-                      </Button>
-                    )}
+                    {isAllow &&
+                      (!tasks || !tasks.length > 0 || !tasks[0].submitted) && (
+                        <Button
+                          size="sm"
+                          color="info"
+                          className="btn-simple mt-1"
+                          onClick={handleCreateTask}
+                          disabled={
+                            tasks && tasks.length > 0 && tasks[0].submitted
+                          }
+                        >
+                          + New task
+                        </Button>
+                      )}
                   </td>
                   <td />
                   <td className="total-text">Total hours</td>
@@ -373,13 +389,13 @@ const WeeklyTimeSheet = props => {
                       disabled
                     />
                   </td>
-                  <td />
+                  {isAllow && <td />}
                 </tr>
               </tbody>
             </Table>
           </CardBody>
 
-          {(!tasks || !tasks.length > 0 || !tasks[0].submitted) && (
+          {isAllow && (!tasks || !tasks.length > 0 || !tasks[0].submitted) && (
             <CardFooter className="pt-0">
               <SubmitButton
                 color="primary"
