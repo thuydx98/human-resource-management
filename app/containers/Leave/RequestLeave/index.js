@@ -86,6 +86,7 @@ export default function RequestLeave() {
                   onChange={e =>
                     setPayload({ ...payload, startDate: e.target.value })
                   }
+                  min={moment().format('YYYY-MM-DD')}
                   invalid={isSubmitted && !payload.startDate}
                 />
                 <FormFeedback>Start date is required</FormFeedback>

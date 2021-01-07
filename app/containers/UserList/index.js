@@ -62,7 +62,7 @@ export default function UserList() {
                 {`${users[i].firstname || ''} ${users[i].lastname || ''}`}
               </div>
               {/* <div className="user-title">Software Engineering</div> */}
-              <div className="user-title">ID.{users[i].employee_code}</div>
+              <div className="user-title">{users[i].employee_code}</div>
             </div>
           </td>
           <td>

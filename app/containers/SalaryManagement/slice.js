@@ -149,7 +149,7 @@ const calculateSalaries = list => {
     item.health = item.actualGross * 0.015;
     item.companyHealth = item.actualGross * 0.03;
     item.unemployment = item.actualGross * 0.01;
-    item.other = item.others.reduce((a, b) => a + b.amount, 0);
+    item.other = item.others.reduce((a, b) => a + (b.isIncome ? b.amount : 0 - b.amount), 0);
     item.tax = calculateTax(
       item.actualGross +
         item.other -

@@ -9,6 +9,7 @@ import {
   Table,
   UncontrolledTooltip,
   Spinner,
+  Button,
 } from 'reactstrap';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -16,9 +17,11 @@ import moment from 'moment';
 import SubmitButton from 'components/Buttons/SubmitButton';
 import Notification from 'components/Notification';
 import { ACTION_STATUS } from 'utils/constants';
+import { v4 as uuid } from 'uuid';
 import saga from './saga';
 import { sliceKey, reducer } from './slice';
 import useHooks, { formatCurrency } from './hook';
+import OtherSalaryModal from './OtherSalaryModal';
 
 export default function SalaryManagement() {
   useInjectSaga({ key: sliceKey, saga });
@@ -31,12 +34,17 @@ export default function SalaryManagement() {
     saveSalaryListState,
     getListSalaryState,
     notificationRef,
+    isOpenOtherModal,
+    selectedOthers,
   } = states;
   const {
+    getSalaryList,
     setSelectedDate,
     handleSaveListSalary,
     handleExportListSalary,
     handleSendReport,
+    toggleOtherModal,
+    setSelectedOthers,
   } = handlers;
 
   return (
@@ -100,7 +108,7 @@ export default function SalaryManagement() {
       <Table>
         <thead>
           <tr>
-            <th>ID</th>
+            <th>Code</th>
             <th>Employee</th>
             <th className="text-center">
               Working <br /> date
@@ -218,11 +226,37 @@ export default function SalaryManagement() {
                       {item.other < 0 ? '- ' : '+ '}
                       {formatCurrency(item.other)}
                     </span>
+                    {!item.submitted && (
+                      <Button
+                        color="link"
+                        className="p-0 pl-2"
+                        onClick={() => {
+                          toggleOtherModal(true);
+                          setSelectedOthers(
+                            item.others.length > 0
+                              ? item.others
+                              : [
+                                  {
+                                    id: uuid(),
+                                    employeeId: item.employeeId,
+                                    time: selectedDate,
+                                    isIncome: true,
+                                  },
+                                ],
+                          );
+                        }}
+                      >
+                        <i
+                          className="tim-icons icon-pencil"
+                          style={{ fontSize: '1em' }}
+                        />
+                      </Button>
+                    )}
                     {item.other > 0 && (
                       <UncontrolledTooltip target={`tooltip${item.id}_other`}>
                         {item.others.map(otherItem => (
                           <div key={otherItem.id} className="text-left">
-                            {`${otherItem.amount < 0 ? '- ' : '+ '}
+                            {`${otherItem.isIncome ? '+ ' : '- '}
                                 ${formatCurrency(otherItem.amount)}: 
                                 ${otherItem.description}`}
                           </div>
@@ -265,6 +299,13 @@ export default function SalaryManagement() {
         )}
 
       <Notification ref={notificationRef} />
+
+      <OtherSalaryModal
+        isOpen={isOpenOtherModal}
+        toggleModal={toggleOtherModal}
+        others={selectedOthers}
+        updateList={() => getSalaryList(selectedDate)}
+      />
     </div>
   );
 }

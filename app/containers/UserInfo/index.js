@@ -87,12 +87,12 @@ export default function UserInfo() {
               >
                 Insurance
               </Button>
-              <Button
+              {/* <Button
                 className="card-description btn-link w-100 text-left m-0 mt-2"
                 onClick={() => setSelectedTab(USER_INFO_TABS.reportTab)}
               >
                 Feed back
-              </Button>
+              </Button> */}
               <Button
                 className="card-description btn-link w-100 text-left m-0 mt-2"
                 onClick={() => setSelectedTab(USER_INFO_TABS.projectTab)}

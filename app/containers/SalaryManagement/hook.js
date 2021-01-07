@@ -14,6 +14,8 @@ import {
 
 export const useHooks = () => {
   const notificationRef = useRef();
+  const [isOpenOtherModal, toggleOtherModal] = useState(false);
+  const [selectedOthers, setSelectedOthers] = useState([]);
   const [selectedDate, setSelectedDate] = useState(moment().format('YYYY-MM'));
   const salaries = useSelector(selectListSalaryData);
   const saveSalaryListState = useSelector(selectSaveSalaryListState);
@@ -93,12 +95,17 @@ export const useHooks = () => {
       saveSalaryListState,
       notificationRef,
       getListSalaryState,
+      isOpenOtherModal,
+      selectedOthers,
     },
     handlers: {
+      getSalaryList,
       setSelectedDate,
       handleSaveListSalary,
       handleExportListSalary,
       handleSendReport,
+      toggleOtherModal,
+      setSelectedOthers,
     },
   };
 };

@@ -17,9 +17,9 @@ import Loading from 'components/Loading';
 import saga from './saga';
 import { sliceKey, reducer } from './slice';
 import useHooks, { LEAVE_TABS } from './hook';
-import RequestLeave from './RequestLeave';
-import SummaryLeave from './SummaryLeave';
-import LeaveHistory from './LeaveHistory';
+import RequestLeave from './RequestLeave/Loadable';
+import SummaryLeave from './SummaryLeave/Loadable';
+import LeaveHistory from './LeaveHistory/Loadable';
 
 export default function Leave() {
   useInjectSaga({ key: sliceKey, saga });
