@@ -8,4 +8,18 @@ const selectUpdatePersonalState = createSelector(
   state => get('updatePersonalInfo.status', state),
 );
 
-export { selectUpdatePersonalState };
+const selectListDepartment = createSelector(
+  selectUserInfo,
+  state => get('departments.data', state),
+);
+
+const selectListDepartmentStatus = createSelector(
+  selectUserInfo,
+  state => get('departments.state', state),
+);
+
+export {
+  selectUpdatePersonalState,
+  selectListDepartment,
+  selectListDepartmentStatus,
+};

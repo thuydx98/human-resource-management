@@ -96,7 +96,7 @@ class Sidebar extends React.Component {
           <Nav>
             {routes.map((prop, key) => {
               const { role } = AuthUtils.getAuthInfo();
-              const isDisable = prop.requireAdmin && role !== 'Manager';
+              const isDisable = prop.requireAdmin && role !== 'Admin';
               if (prop.redirect || isDisable) return null;
               const uri = prop.uri ? prop.uri : prop.path;
               return (

@@ -4,8 +4,6 @@ import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import Loading from 'components/Loading';
 import { ACTION_STATUS } from 'utils/constants';
-import { useHistory } from 'react-router-dom';
-import AuthUtils from 'utils/authentication';
 import saga from './saga';
 import { sliceKey, reducer } from './slice';
 import useHooks, { USER_INFO_TABS } from './hook';
@@ -21,12 +19,9 @@ export default function UserInfo() {
   useInjectReducer({ key: sliceKey, reducer });
 
   const { states, handlers } = useHooks();
-  const history = useHistory();
   const { selectedTab, selectUserInfo, fileInput, getUserInfoState } = states;
   const { setSelectedTab, setUser, handleUploadAvatar } = handlers;
-  const { avatar, firstname, lastname, permission, id } = selectUserInfo || {};
-  const { role } = AuthUtils.getAuthInfo();
-  const isAllow = role === 'Admin' || role === 'Manager';
+  const { avatar, firstname, lastname, permission } = selectUserInfo || {};
 
   return (
     <div className="content">
@@ -99,14 +94,6 @@ export default function UserInfo() {
               >
                 Project info
               </Button>
-              {isAllow && (
-                <Button
-                  className="card-description btn-link w-100 text-left m-0 mt-2"
-                  onClick={() => history.push(`/time-sheet/${id}`)}
-                >
-                  Time-sheet
-                </Button>
-              )}
             </CardBody>
           </Card>
         </Col>

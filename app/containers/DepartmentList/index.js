@@ -1,13 +1,6 @@
 import React from 'react';
-import {
-  Button,
-  CardTitle,
-  Col,
-  Input,
-  Row,
-  Table,
-  UncontrolledTooltip,
-} from 'reactstrap';
+import { Button, Col, Row, Table, UncontrolledTooltip } from 'reactstrap';
+import moment from 'moment';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import saga from './saga';
@@ -19,13 +12,11 @@ export default function DepartmentList() {
   useInjectReducer({ key: sliceKey, reducer });
 
   const { states, handlers } = useHooks();
+  const { departments } = states;
 
   return (
     <div className="content">
       <Row>
-        <Col md={4}>
-          <Input placeholder="Search.." />
-        </Col>
         <Col>
           <Button size="sm" color="info" className="btn-simple float-right">
             <i className="tim-icons icon-simple-add" /> New
@@ -37,31 +28,52 @@ export default function DepartmentList() {
         <thead>
           <tr>
             <th>Name</th>
-            <th>Description</th>
-            <th>Total members</th>
+            <th>Location</th>
             <th>Created date</th>
             <th className="text-right">Action</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Neumann</td>
-            <td>Top department of company</td>
-            <th>100</th>
-            <th>Aug 12 2018</th>
-            <td className="text-right">
-              <Button color="link" id="tooltip636901683" title="" type="button">
-                <i className="tim-icons icon-pencil" />
-              </Button>
-              <UncontrolledTooltip
-                delay={0}
-                target="tooltip636901683"
-                placement="right"
-              >
-                Edit department
-              </UncontrolledTooltip>
-            </td>
-          </tr>
+          {departments &&
+            departments.map(item => (
+              <tr>
+                <td>{item.name}</td>
+                <td>{item.location}</td>
+                <th>{moment(item.createdAt).format('YYYY-MM-DD')}</th>
+                <td className="text-right">
+                  <Button
+                    color="link"
+                    id="tooltip636901683"
+                    title=""
+                    type="button"
+                  >
+                    <i className="tim-icons icon-pencil" />
+                  </Button>
+                  <UncontrolledTooltip
+                    delay={0}
+                    target="tooltip636901683"
+                    placement="top"
+                  >
+                    Edit
+                  </UncontrolledTooltip>
+                  <Button
+                    color="link"
+                    id={`tooltip${item.id}_delete`}
+                    title=""
+                    type="button"
+                  >
+                    <i className="tim-icons icon-trash-simple" />
+                  </Button>
+                  <UncontrolledTooltip
+                    delay={0}
+                    target={`tooltip${item.id}_delete`}
+                    placement="top"
+                  >
+                    Delete
+                  </UncontrolledTooltip>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </Table>
     </div>

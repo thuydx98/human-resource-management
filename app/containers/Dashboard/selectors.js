@@ -34,6 +34,16 @@ const selectSubmitTaskState = createSelector(
   state => get('submitTasks.state', state),
 );
 
+const selectUserListData = createSelector(
+  selectDashboard,
+  state => get('users.data', state),
+);
+
+const selectUserListState = createSelector(
+  selectDashboard,
+  state => get('users.state', state),
+);
+
 export {
   selectListLeaveData,
   selectListLeaveState,
@@ -41,4 +51,6 @@ export {
   selectListTaskState,
   selectSaveTaskState,
   selectSubmitTaskState,
+  selectUserListData,
+  selectUserListState,
 };

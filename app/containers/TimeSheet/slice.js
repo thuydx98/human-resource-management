@@ -103,6 +103,20 @@ const slice = createSlice({
         }),
       )(state);
     },
+    getUserList(state) {
+      return flow(
+        set('users.data', []),
+        set('users.state', ACTION_STATUS.PENDING),
+        set('users.error', null),
+      )(state);
+    },
+    getUserListSuccess(state, action) {
+      return flow(
+        set('users.data', action.payload),
+        set('users.state', ACTION_STATUS.SUCCESS),
+        set('users.error', null),
+      )(state);
+    },
   },
 });
 

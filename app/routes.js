@@ -2,7 +2,8 @@ import UserList from 'containers/UserList/Loadable';
 import DepartmentList from './containers/DepartmentList/Loadable';
 import Leave from './containers/Leave/Loadable';
 import SalaryManagement from './containers/SalaryManagement/Loadable';
-import SeatingPlan from './containers/SeatingPlan/Loadable';
+// import SeatingPlan from './containers/SeatingPlan/Loadable';
+import Position from './containers/Position/Loadable';
 import UserInfo from './containers/UserInfo/Loadable';
 import Dashboard from './containers/Dashboard/Loadable';
 import TimeSheet from './containers/TimeSheet/Loadable';
@@ -40,11 +41,17 @@ const routes = [
     icon: 'tim-icons icon-single-02',
     component: UserList,
   },
+  // {
+  //   path: '/seating-plan',
+  //   name: 'Position',
+  //   icon: 'tim-icons icon-molecule-40',
+  //   component: SeatingPlan,
+  // },
   {
     path: '/positions',
     name: 'Position',
     icon: 'tim-icons icon-molecule-40',
-    component: SeatingPlan,
+    component: Position,
   },
   {
     path: '/salaries',

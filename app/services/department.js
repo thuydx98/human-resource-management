@@ -2,7 +2,7 @@ import service, { handleGeneralError } from './index';
 
 const BASE_URL = process.env.API_URI;
 
-export function getListDepartment() {
+export function getList() {
   return service(BASE_URL, {
     url: '/manager/list-all-department',
     method: 'GET',

@@ -22,6 +22,11 @@ export const initialState = {
     state: null,
     error: null,
   },
+  users: {
+    data: [],
+    state: null,
+    error: null,
+  },
 };
 
 const slice = createSlice({
@@ -108,6 +113,20 @@ const slice = createSlice({
       return flow(
         set('saveTasks', initialState.saveTasks),
         set('submitTasks', initialState.submitTasks),
+      )(state);
+    },
+    getUserList(state) {
+      return flow(
+        set('users.data', []),
+        set('users.state', ACTION_STATUS.PENDING),
+        set('users.error', null),
+      )(state);
+    },
+    getUserListSuccess(state, action) {
+      return flow(
+        set('users.data', action.payload),
+        set('users.state', ACTION_STATUS.SUCCESS),
+        set('users.error', null),
       )(state);
     },
   },

@@ -20,6 +20,7 @@ export default function TimeSheet() {
     loadStatus,
     saveTaskStates,
     submitTaskStates,
+    assignees,
   } = states;
   const {
     setSelectedMonth,
@@ -50,6 +51,7 @@ export default function TimeSheet() {
             saveStatus={saveTaskStates[index].status}
             submitStatus={submitTaskStates[index].status}
             resetState={() => handleResetState(index)}
+            assignees={assignees}
           />
         ))}
     </div>

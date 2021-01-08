@@ -63,6 +63,21 @@ export const AddUserModal = props => {
               }
             />
           </FormGroup>
+          <FormGroup>
+            <Label>Role</Label>
+            <Input
+              type="select"
+              onChange={e =>
+                setPayload({ ...payload, roleId: +e.target.value })
+              }
+            >
+              <option value="2">Manager</option>
+              <option value="3" selected>
+                Employee
+              </option>
+              <option value="4">Deputy</option>
+            </Input>
+          </FormGroup>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={handleCloseModal}>

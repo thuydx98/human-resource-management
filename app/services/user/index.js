@@ -22,11 +22,11 @@ export function getUser(userId) {
     .catch(handleGeneralError);
 }
 
-export function createUser(email, password) {
+export function createUser(email, password, roleId) {
   return service(BASE_URL, {
     url: '/users',
     method: 'POST',
-    data: { email, password },
+    data: { email, password, roleId },
   })
     .then(response => response.data)
     .then(data => ({ response: data }))
@@ -55,6 +55,16 @@ export function uploadAvatar(image, userId) {
       'content-type': 'multipart/form-data',
     },
     data: form,
+  })
+    .then(response => response.data)
+    .then(data => ({ response: data }))
+    .catch(handleGeneralError);
+}
+
+export function deleteUser(userId) {
+  return service(BASE_URL, {
+    url: `/users/${userId}`,
+    method: 'DELETE',
   })
     .then(response => response.data)
     .then(data => ({ response: data }))

@@ -7,8 +7,8 @@ export function* addUserWatcher() {
 }
 
 export function* addUserTask(action) {
-  const { email, password } = action.payload;
-  const { response, error } = yield call(createUser, email, password);
+  const { email, password, roleId } = action.payload;
+  const { response, error } = yield call(createUser, email, password, roleId);
   if (response) {
     yield put(actions.addUserSuccess());
   } else {

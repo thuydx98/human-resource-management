@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /* eslint-disable jsx-a11y/alt-text */
 import React from 'react';
 import {
@@ -17,6 +18,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import AuthUtils from 'utils/authentication';
 import Loading from 'components/Loading';
 import { ACTION_STATUS } from 'utils/constants';
+import Notification from 'components/Notification';
 import saga from './saga';
 import { sliceKey, reducer } from './slice';
 import useHooks from './hook';
@@ -36,10 +38,17 @@ export default function UserList() {
     search,
     searchResult,
     getUserListState,
+    notificationRef,
   } = states;
 
-  const { toggleAddModal, getUserList, setPageIndex, handleSearch } = handlers;
-  const { role } = AuthUtils.getAuthInfo();
+  const {
+    toggleAddModal,
+    getUserList,
+    setPageIndex,
+    handleSearch,
+    handleDeleteUser,
+  } = handlers;
+  const { role, departmentId } = AuthUtils.getAuthInfo();
 
   const renderItems = () => {
     const users = search ? searchResult : userList;
@@ -59,7 +68,7 @@ export default function UserList() {
             </div>
             <div className="ml-4">
               <div className="user-name">
-                {`${users[i].firstname || ''} ${users[i].lastname || ''}`}
+                {`${users[i].firstname || ''} ${users[i].lastname || '-'}`}
               </div>
               {/* <div className="user-title">Software Engineering</div> */}
               <div className="user-title">{users[i].employee_code}</div>
@@ -87,23 +96,45 @@ export default function UserList() {
                 : '-'}
             </div>
           </td>
-          {role === 'Manager' && (
-            <td className="text-right">
-              <Button
-                color="link"
-                id={`tooltip${users[i].id}`}
-                onClick={() => history.push(`/information/${users[i].id}`)}
-              >
-                <i className="tim-icons icon-pencil" />
-              </Button>
-              <UncontrolledTooltip
-                target={`tooltip${users[i].id}`}
-                placement="right"
-              >
-                Edit User
-              </UncontrolledTooltip>
-            </td>
-          )}
+          <td className="text-right">
+            {(((role === 'Manager' || role === 'Deputy') &&
+              users[i].departmentId === departmentId) ||
+              role === 'Admin') &&
+              users[i].permission !== 'Admin' && (
+                <>
+                  <Button
+                    color="link"
+                    id={`tooltip${users[i].id}`}
+                    onClick={() => history.push(`/information/${users[i].id}`)}
+                  >
+                    <i className="tim-icons icon-pencil" />
+                  </Button>
+                  <UncontrolledTooltip
+                    target={`tooltip${users[i].id}`}
+                    placement="top"
+                  >
+                    Edit
+                  </UncontrolledTooltip>
+                  {role === 'Admin' && (
+                    <>
+                      <Button
+                        color="link"
+                        id={`tooltip${users[i].id}_delete`}
+                        onClick={() => handleDeleteUser(users[i].id)}
+                      >
+                        <i className="tim-icons icon-trash-simple" />
+                      </Button>
+                      <UncontrolledTooltip
+                        target={`tooltip${users[i].id}_delete`}
+                        placement="top"
+                      >
+                        Delete
+                      </UncontrolledTooltip>
+                    </>
+                  )}
+                </>
+              )}
+          </td>
         </tr>,
       );
     }
@@ -113,6 +144,7 @@ export default function UserList() {
 
   return (
     <div className="content directory">
+      <Notification ref={notificationRef} />
       <Row>
         <Col md={4}>
           <Input
@@ -121,7 +153,7 @@ export default function UserList() {
           />
         </Col>
 
-        {role === 'Manager' && (
+        {role === 'Admin' && (
           <Col>
             <Button
               size="sm"

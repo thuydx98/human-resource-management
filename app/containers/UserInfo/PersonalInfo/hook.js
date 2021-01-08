@@ -3,7 +3,7 @@ import useActions from 'utils/hooks/useActions';
 import { useSelector } from 'react-redux';
 import { ACTION_STATUS } from 'utils/constants';
 import { actions } from './slice';
-import { selectUpdatePersonalState } from './selectors';
+import { selectUpdatePersonalState, selectListDepartment } from './selectors';
 
 export const useHooks = props => {
   const notificationRef = useRef();
@@ -11,17 +11,22 @@ export const useHooks = props => {
   const [personalInfo, setPersonalInfo] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  const departments = useSelector(selectListDepartment);
   const updatePersonalState = useSelector(selectUpdatePersonalState);
 
-  const { updatePersonalInfo, resetState } = useActions(
+  const { getListDepartment, updatePersonalInfo, resetState } = useActions(
     {
+      getListDepartment: actions.getListDepartment,
       updatePersonalInfo: actions.updatePersonalInfo,
       resetState: actions.resetState,
     },
     [actions],
   );
 
-  useEffect(() => setPersonalInfo({ ...user }), [user]);
+  useEffect(() => {
+    if (!departments || departments.length === 0) getListDepartment();
+    setPersonalInfo({ ...user });
+  }, [user]);
 
   useEffect(() => {
     if (updatePersonalState === ACTION_STATUS.SUCCESS) {
@@ -52,7 +57,7 @@ export const useHooks = props => {
   }, [personalInfo, updateUser]);
 
   return {
-    states: { personalInfo, isSubmitted, notificationRef },
+    states: { personalInfo, isSubmitted, notificationRef, departments },
     handlers: { onSubmit, setPersonalInfo },
   };
 };

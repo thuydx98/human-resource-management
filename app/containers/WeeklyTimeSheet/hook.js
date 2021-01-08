@@ -16,11 +16,12 @@ export const useHooks = props => {
     submitStatus,
     resetState,
     index,
+    assignees,
   } = props;
-  const params = useParams();
   const notificationRef = useRef(null);
   const [tasks, setTasks] = useState([]);
   const [details, setDetails] = useState([]);
+  const [error, setError] = useState();
 
   useEffect(() => {
     if (data && data.tasks && data.details) {
@@ -65,6 +66,7 @@ export const useHooks = props => {
   const handleUpdateTask = useCallback(
     task => {
       setTasks(tasks.map(item => (item.id === task.id ? task : item)));
+      setError(null);
     },
     [tasks],
   );
@@ -128,26 +130,36 @@ export const useHooks = props => {
 
   const handleSave = useCallback(() => {
     const list = tasks.filter(
-      item => item.project || item.activity || item.task,
+      item => item.project && item.activity && item.task && item.employeeId,
     );
-    onSave({
-      tasks: { tasks: list, details },
-      userId: get('userId', params) || 'me',
-      index,
-      time: monday.format('YYYY-MM-DD'),
-    });
+    if (list.length === tasks.length) {
+      setError(null);
+      onSave({
+        tasks: { tasks: list, details },
+        userId: props.assignees.map(i => i.id).join(','),
+        index,
+        time: monday.format('YYYY-MM-DD'),
+      });
+    } else {
+      setError('Please fill to all information');
+    }
   }, [tasks, details, index, monday]);
 
   const handleSubmit = useCallback(() => {
     if (window.confirm('Are you sure want to submit this time-sheet?')) {
       const list = tasks.filter(
-        item => item.project || item.activity || item.task,
+        item => item.project || item.activity || item.task || item.employeeId,
       );
-      onSubmit({
-        tasks: { tasks: list, details },
-        userId: get('userId', params) || 'me',
-        index: get('index', props),
-      });
+      if (list.length === tasks.length) {
+        setError(null);
+        onSubmit({
+          tasks: { tasks: list, details },
+          userId: props.assignees.map(i => i.id).join(','),
+          index: get('index', props),
+        });
+      } else {
+        setError('Please fill all information');
+      }
     }
   }, [tasks, details, props]);
 
@@ -160,6 +172,8 @@ export const useHooks = props => {
       notificationRef,
       saveStatus,
       submitStatus,
+      assignees,
+      error,
     },
     handlers: {
       getWorkingHour,

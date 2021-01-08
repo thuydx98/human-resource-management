@@ -12,5 +12,9 @@ const selectUserListState = createSelector(
   selectUserList,
   state => get('userList.state', state),
 );
+const selectDeleteState = createSelector(
+  selectUserList,
+  state => get('deleteUser.state', state),
+);
 
-export { selectUserListData, selectUserListState };
+export { selectUserListData, selectUserListState, selectDeleteState };

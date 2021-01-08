@@ -8,7 +8,7 @@ export const useHooks = () => {
   const [isOpenAddModal, toggleAddModal] = useState(false);
   const [isOpenUpdateModal, setIsOpenUpdateModal] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState(null);
-  const DepartmentList = useSelector(selectDepartmentListData);
+  const departments = useSelector(selectDepartmentListData);
   const { getDepartmentList, setDepartmentList } = useActions(
     {
       getDepartmentList: actions.getDepartmentList,
@@ -29,17 +29,17 @@ export const useHooks = () => {
 
   const updateDepartmentInList = useCallback(
     user => {
-      const users = DepartmentList.map(item =>
+      const users = departments.map(item =>
         user.employee_id === item.employee_id ? user : item,
       );
       setDepartmentList(users);
     },
-    [DepartmentList, setDepartmentList],
+    [departments, setDepartmentList],
   );
 
   return {
     states: {
-      DepartmentList,
+      departments,
       isOpenAddModal,
       isOpenUpdateModal,
       selectedDepartment,

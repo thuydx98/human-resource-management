@@ -9,6 +9,10 @@ export const initialState = {
     state: null,
     error: null,
   },
+  deleteUser: {
+    state: null,
+    error: null,
+  },
 };
 
 const authenticationSlice = createSlice({
@@ -41,6 +45,27 @@ const authenticationSlice = createSlice({
 
     resetState(state) {
       return flow(set('userList', initialState.userList))(state);
+    },
+    deleteUser(state) {
+      return flow(
+        set('deleteUser.state', ACTION_STATUS.PENDING),
+        set('deleteUser.error', null),
+      )(state);
+    },
+    deleteUserSuccess(state) {
+      return flow(
+        set('deleteUser.state', ACTION_STATUS.SUCCESS),
+        set('deleteUser.error', null),
+      )(state);
+    },
+    deleteUserFailed(state, action) {
+      return flow(
+        set('deleteUser.state', ACTION_STATUS.FAILED),
+        set('deleteUser.error', action.payload),
+      )(state);
+    },
+    resetDeleteState(state) {
+      return flow(set('deleteUser', initialState.deleteUser))(state);
     },
   },
 });

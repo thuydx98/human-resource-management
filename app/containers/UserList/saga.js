@@ -1,5 +1,5 @@
 import { call, put, all, fork, takeLatest } from 'redux-saga/effects';
-import { getUsers } from 'services/user';
+import { getUsers, deleteUser } from 'services/user';
 import { actions } from './slice';
 
 export function* getUserListWatcher() {
@@ -15,6 +15,19 @@ export function* getUserListTask() {
   }
 }
 
+export function* deleteUserWatcher() {
+  yield takeLatest(actions.deleteUser, deleteUserTask);
+}
+
+export function* deleteUserTask(action) {
+  const { response, error } = yield call(deleteUser, action.payload);
+  if (response) {
+    yield put(actions.deleteUserSuccess(response.obj));
+  } else {
+    yield put(actions.deleteUserFailed(error));
+  }
+}
+
 export default function* defaultSaga() {
-  yield all([fork(getUserListWatcher)]);
+  yield all([fork(getUserListWatcher), fork(deleteUserWatcher)]);
 }

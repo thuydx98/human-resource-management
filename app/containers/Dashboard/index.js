@@ -32,6 +32,7 @@ export default function Dashboard() {
     monday,
     saveTaskState,
     submitTaskState,
+    assignees,
   } = states;
   const { saveTask, submitTask, resetState } = handlers;
 
@@ -59,6 +60,7 @@ export default function Dashboard() {
         saveStatus={saveTaskState}
         submitStatus={submitTaskState}
         resetState={resetState}
+        assignees={assignees}
       />
       {leaves && (
         <Row>

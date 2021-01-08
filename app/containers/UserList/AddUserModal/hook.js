@@ -41,7 +41,7 @@ export const useHooks = props => {
     event => {
       event.preventDefault();
       if (payload.email && payload.password) {
-        addUser(payload);
+        addUser({ ...payload, roleId: payload.roleId || 2 });
       }
     },
     [payload],

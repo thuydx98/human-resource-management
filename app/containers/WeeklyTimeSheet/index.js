@@ -30,6 +30,8 @@ const WeeklyTimeSheet = props => {
     notificationRef,
     saveStatus,
     submitStatus,
+    assignees,
+    error,
   } = states;
   const {
     getWorkingHour,
@@ -41,7 +43,7 @@ const WeeklyTimeSheet = props => {
     handleSubmit,
   } = handlers;
   const { role } = AuthUtils.getAuthInfo();
-  const isAllow = role === 'Admin' || role === 'Manager';
+  const isAllow = role === 'Admin' || role === 'Manager' || role === 'Deputy';
   const startDate = monday ? monday.format('MMMM DD') : '';
   const endDate = monday
     ? moment(monday)
@@ -87,6 +89,7 @@ const WeeklyTimeSheet = props => {
                   <th>Client/ Project</th>
                   <th>Activity</th>
                   <th>Task</th>
+                  {isAllow && <th>Assignee</th>}
                   <th className="text-center" width="45">
                     Mon <br />
                     {monday.format('MM/DD')}
@@ -127,7 +130,7 @@ const WeeklyTimeSheet = props => {
                       .add(6, 'd')
                       .format('MM/DD')}
                   </th>
-                  {isAllow && <th width="20" />}
+                  {isAllow && tasks && tasks.length > 0 && !tasks[0].submitted && <th width="20" />}
                 </tr>
               </thead>
               <tbody>
@@ -170,6 +173,30 @@ const WeeklyTimeSheet = props => {
                           }
                         />
                       </td>
+                      {isAllow && (
+                        <td>
+                          <Input
+                            type="select"
+                            value={item.employeeId}
+                            onChange={e =>
+                              handleUpdateTask({
+                                ...item,
+                                employeeId: e.target.value,
+                              })
+                            }
+                          >
+                            <option value="">Choose...</option>
+                            {assignees.map(emp => (
+                              <option key={emp.id} value={emp.id}>
+                                {emp.employee_code}
+                                {emp.firstname
+                                  ? ` - ${emp.firstname} ${emp.lastname}`
+                                  : ''}
+                              </option>
+                            ))}
+                          </Input>
+                        </td>
+                      )}
                       <td>
                         <Input
                           type="number"
@@ -287,7 +314,7 @@ const WeeklyTimeSheet = props => {
                           }
                         />
                       </td>
-                      {isAllow && (
+                      {isAllow && tasks && tasks.length > 0 && !tasks[0].submitted && (
                         <td className="text-right">
                           <Button
                             color="link"
@@ -326,51 +353,39 @@ const WeeklyTimeSheet = props => {
                       )}
                   </td>
                   <td />
+                  {isAllow && <td />}
                   <td className="total-text">Total hours</td>
                   <td>
                     <Input
-                      className={`text-center ${getWorkingHour(null, monday) >
-                        8 && 'text-warning'}`}
+                      className="text-center"
                       value={getWorkingHour(null, monday)}
                       disabled
                     />
                   </td>
                   <td>
                     <Input
-                      className={`text-center ${getWorkingHour(
-                        null,
-                        moment(monday).add(1, 'd'),
-                      ) > 8 && 'text-warning'}`}
+                      className="text-center"
                       value={getWorkingHour(null, moment(monday).add(1, 'd'))}
                       disabled
                     />
                   </td>
                   <td>
                     <Input
-                      className={`text-center ${getWorkingHour(
-                        null,
-                        moment(monday).add(2, 'd'),
-                      ) > 8 && 'text-warning'}`}
+                      className="text-center"
                       value={getWorkingHour(null, moment(monday).add(2, 'd'))}
                       disabled
                     />
                   </td>
                   <td>
                     <Input
-                      className={`text-center ${getWorkingHour(
-                        null,
-                        moment(monday).add(3, 'd'),
-                      ) > 8 && 'text-warning'}`}
+                      className="text-center"
                       value={getWorkingHour(null, moment(monday).add(3, 'd'))}
                       disabled
                     />
                   </td>
                   <td>
                     <Input
-                      className={`text-center ${getWorkingHour(
-                        null,
-                        moment(monday).add(4, 'd'),
-                      ) > 8 && 'text-warning'}`}
+                      className="text-center"
                       value={getWorkingHour(null, moment(monday).add(4, 'd'))}
                       disabled
                     />
@@ -397,6 +412,7 @@ const WeeklyTimeSheet = props => {
 
           {isAllow && (!tasks || !tasks.length > 0 || !tasks[0].submitted) && (
             <CardFooter className="pt-0">
+              <span className="text-danger">{error}</span>
               <SubmitButton
                 color="primary"
                 className="btn-sm float-right ml-2"

@@ -23,9 +23,21 @@ const selectSubmitTaskState = createSelector(
   state => get('submitTasks', state),
 );
 
+const selectUserListData = createSelector(
+  selectTimeSheet,
+  state => get('users.data', state),
+);
+
+const selectUserListState = createSelector(
+  selectTimeSheet,
+  state => get('users.state', state),
+);
+
 export {
   selectTaskListData,
   selectTaskListState,
   selectSaveTaskState,
   selectSubmitTaskState,
+  selectUserListData,
+  selectUserListState,
 };
