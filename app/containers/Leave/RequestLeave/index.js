@@ -136,7 +136,7 @@ export default function RequestLeave() {
           type="submit"
           className="btn-sm float-right"
           onClick={() => onSubmit(totalDates(), totalDates('NON_PAID'))}
-          disabled={annualUsed === 0 && unPaidUsed === 0}
+          disabled={12 - annualUsed === 0 && 30 - unPaidUsed === 0}
         >
           Submit
         </Button>
