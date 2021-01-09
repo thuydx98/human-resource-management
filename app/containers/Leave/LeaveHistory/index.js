@@ -29,7 +29,7 @@ export default function LeaveHistory() {
             </thead>
             <tbody>
               {leaves.map(item => {
-                const status = moment(item.date) < now ? 'Taken' : 'Planned';
+                const status = moment(item.date) <= now ? 'Taken' : 'Planned';
                 return (
                   <tr key={item.id}>
                     <td>
